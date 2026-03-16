@@ -1,0 +1,186 @@
+# Keyword Seed Lists — Indeed Flex
+# Organized by job category with search volume tiers
+# Last Updated: 2026-03-16
+
+categories:
+
+  warehouse:
+    high_volume:
+      - warehouse jobs
+      - warehouse jobs near me
+      - warehouse worker
+      - picker packer jobs
+      - fulfillment center jobs
+    medium_volume:
+      - warehouse associate
+      - forklift operator jobs
+      - warehouse helper
+      - shipping and receiving jobs
+      - loading dock jobs
+    long_tail:
+      - warehouse jobs no experience
+      - night shift warehouse jobs
+      - weekend warehouse jobs
+      - temp warehouse jobs near me
+      - warehouse jobs weekly pay
+    brand:
+      - indeed flex warehouse
+      - indeed flex warehouse jobs
+
+  delivery:
+    high_volume:
+      - delivery driver jobs
+      - delivery jobs near me
+      - courier jobs
+      - driver jobs
+    medium_volume:
+      - last mile delivery jobs
+      - package delivery jobs
+      - delivery helper jobs
+      - route driver jobs
+    long_tail:
+      - delivery driver jobs no experience
+      - same day delivery jobs
+      - delivery jobs weekly pay
+      - part time delivery driver
+    brand:
+      - indeed flex delivery
+      - indeed flex driver jobs
+
+  retail:
+    high_volume:
+      - retail jobs near me
+      - cashier jobs
+      - store associate jobs
+      - retail associate
+    medium_volume:
+      - merchandiser jobs
+      - stock clerk jobs
+      - sales floor associate
+      - retail stock jobs
+    long_tail:
+      - retail jobs no experience
+      - weekend retail jobs
+      - part time retail jobs near me
+      - temp retail jobs holidays
+    brand:
+      - indeed flex retail
+      - indeed flex store jobs
+
+  hospitality:
+    high_volume:
+      - hotel jobs near me
+      - housekeeping jobs
+      - front desk jobs
+      - hospitality jobs
+    medium_volume:
+      - banquet server jobs
+      - hotel housekeeper
+      - room attendant jobs
+      - bellman jobs
+    long_tail:
+      - hotel jobs no experience
+      - night shift hotel jobs
+      - temp housekeeping jobs
+      - weekend hospitality jobs
+    brand:
+      - indeed flex hotel jobs
+      - indeed flex hospitality
+
+  food_service:
+    high_volume:
+      - restaurant jobs near me
+      - cook jobs
+      - dishwasher jobs
+      - food service jobs
+    medium_volume:
+      - line cook jobs
+      - prep cook jobs
+      - catering jobs
+      - food runner jobs
+    long_tail:
+      - restaurant jobs no experience
+      - weekend restaurant jobs
+      - temp kitchen jobs
+      - food service jobs weekly pay
+    brand:
+      - indeed flex restaurant
+      - indeed flex food service
+
+  general_labor:
+    high_volume:
+      - temp jobs near me
+      - labor jobs
+      - general labor
+      - day labor jobs
+    medium_volume:
+      - construction helper jobs
+      - moving jobs
+      - cleanup crew jobs
+      - landscape labor
+    long_tail:
+      - temp jobs no experience needed
+      - same day pay labor jobs
+      - temp labor weekly pay
+      - general labor immediate start
+    brand:
+      - indeed flex temp jobs
+      - indeed flex labor
+
+  event_staffing:
+    high_volume:
+      - event staff jobs
+      - event jobs near me
+      - catering staff jobs
+    medium_volume:
+      - convention staff jobs
+      - event setup jobs
+      - promotional staff
+      - brand ambassador jobs
+    long_tail:
+      - weekend event jobs
+      - temp event staff
+      - event jobs no experience
+      - concert staff jobs
+    brand:
+      - indeed flex events
+      - indeed flex event staffing
+
+  cleaning:
+    high_volume:
+      - cleaning jobs near me
+      - janitor jobs
+      - janitorial jobs
+    medium_volume:
+      - office cleaning jobs
+      - commercial cleaning
+      - custodian jobs
+      - building maintenance
+    long_tail:
+      - night shift cleaning jobs
+      - part time janitor jobs
+      - temp cleaning jobs
+      - cleaning jobs no experience
+    brand:
+      - indeed flex cleaning
+      - indeed flex janitorial
+
+negative_keywords:
+  universal:
+    - salary
+    - full time permanent
+    - remote only
+    - work from home
+    - internship
+    - volunteer
+    - unpaid
+    - training program only
+    - career advice
+    - resume help
+    - interview tips
+    - how to get a job
+    - jobs abroad
+    - visa sponsorship
+    - CDL required
+    - bachelor degree required
+    - master degree required

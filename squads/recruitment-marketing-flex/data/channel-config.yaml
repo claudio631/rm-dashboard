@@ -1,0 +1,181 @@
+# Channel Configuration — Indeed Flex
+# Platform-specific settings, limits, and best practices
+# Last Updated: 2026-03-16
+
+channels:
+
+  indeed_ads:
+    status: active
+    priority: primary
+    account_type: employer
+    budget_share: 30-40%
+    campaign_types:
+      - sponsored_jobs
+      - indeed_ppc
+    bid_strategy: target_cpa
+    min_daily_budget: 10.00
+    conversion_event: application_submitted
+    tracking:
+      method: indeed_conversion_tracking
+      attribution_window: 30_days
+    best_practices:
+      - Use sponsored jobs for high-priority roles
+      - Optimize job titles for Indeed search algorithm
+      - Include salary range for better visibility
+      - Refresh postings every 7-14 days
+      - Use Indeed Resume for proactive candidate outreach
+    limitations:
+      - Limited creative control (job posting format)
+      - No audience targeting beyond job category and location
+      - Reporting less granular than Google/Meta
+
+  google_ads:
+    status: active
+    priority: primary
+    account_type: mcc
+    budget_share: 20-30%
+    campaign_types:
+      - search
+      - performance_max
+      - display_remarketing
+      - youtube
+    bid_strategies:
+      search: target_cpa
+      pmax: maximize_conversions
+      display: target_cpa
+      youtube: target_cpv
+    min_daily_budget: 20.00
+    conversion_events:
+      primary: application_submitted
+      secondary: apply_page_view
+    tracking:
+      method: google_ads_conversion_tracking
+      enhanced_conversions: true
+      offline_conversion_import: true
+      attribution_model: data_driven
+      attribution_window: 30_days
+    best_practices:
+      - Use location + job title keyword strategy
+      - Implement negative keyword lists aggressively
+      - Use ad extensions (location, callout, sitelink)
+      - Import offline conversions (application → hire)
+      - Set up Performance Max with strong audience signals
+    limitations:
+      - Higher CPC than Indeed for generic job terms
+      - Requires 50+ conversions/month for smart bidding
+
+  meta_ads:
+    status: active
+    priority: primary
+    account_type: business_manager
+    budget_share: 15-20%
+    campaign_types:
+      - lead_generation
+      - traffic
+      - awareness
+      - retargeting
+    bid_strategy: lowest_cost
+    min_daily_budget: 10.00
+    conversion_events:
+      primary: lead_form_submission
+      secondary: landing_page_view
+    tracking:
+      method: meta_pixel
+      capi: true
+      attribution_window: 7_day_click_1_day_view
+    best_practices:
+      - Use lead gen forms (lower CPA than landing page)
+      - Build lookalike audiences from top workers
+      - Use dynamic creative optimization
+      - Instagram Stories/Reels for younger demographics
+      - Advantage+ campaigns for automated optimization
+    limitations:
+      - Lead quality can be lower than search intent
+      - iOS privacy changes reduce targeting precision
+      - Requires creative refresh every 2-3 weeks
+
+  bing_ads:
+    status: active
+    priority: secondary
+    account_type: manager
+    budget_share: 5-10%
+    campaign_types:
+      - search
+      - audience
+    bid_strategy: target_cpa
+    min_daily_budget: 10.00
+    tracking:
+      method: bing_uet_tag
+      attribution_window: 30_days
+    best_practices:
+      - Import campaigns from Google Ads
+      - Leverage LinkedIn profile targeting
+      - Typically 20-30% lower CPC than Google
+      - Good for incremental reach
+    limitations:
+      - Smaller audience volume
+      - Less advanced automation than Google
+
+  reddit_ads:
+    status: active
+    priority: secondary
+    account_type: self_serve
+    budget_share: 3-5%
+    campaign_types:
+      - promoted_posts
+      - conversation_ads
+    bid_strategy: cpc
+    min_daily_budget: 5.00
+    tracking:
+      method: reddit_pixel
+      attribution_window: 28_days
+    best_practices:
+      - Match community tone (authentic, not corporate)
+      - Target relevant subreddits (r/jobs, local city subs)
+      - Use conversational ad format
+      - Highlight flexibility and weekly pay
+    limitations:
+      - Smaller scale than Google/Meta
+      - Community sensitive to hard-sell advertising
+      - Limited conversion optimization
+
+  craigslist:
+    status: active
+    priority: secondary
+    account_type: direct
+    budget_share: 2-5%
+    campaign_types:
+      - job_postings
+    pricing: per_posting
+    tracking:
+      method: utm_parameters
+      attribution: last_click
+    best_practices:
+      - Post in correct metro area category
+      - Refresh listings every 48 hours for visibility
+      - Include pay rate in title
+      - Keep formatting simple (Craigslist strips HTML)
+      - Include direct apply link with UTM
+    limitations:
+      - No programmatic management
+      - Manual posting and refresh required
+      - Limited reporting (views and replies only)
+      - Variable cost by market ($0-$75 per posting)
+
+  programmatic:
+    status: optional
+    priority: tertiary
+    platforms:
+      - appcast
+      - joveo
+      - pandologic
+    budget_share: 0-10%
+    bid_strategy: cpa_target
+    best_practices:
+      - Set CPA targets per job category
+      - Use for volume scaling
+      - Monitor source quality closely
+      - Good for backfill and broad distribution
+    limitations:
+      - Less control over placement
+      - Requires minimum conversion volume for optimization

@@ -1,0 +1,89 @@
+name: recruitment-marketing-flex
+version: 1.0.0
+description: Recruitment marketing specialists squad for Indeed Flex staffing agency — manages multi-channel paid media, SEO, CRM, analytics, and AI automation for candidate acquisition
+author: Claudio Santos
+license: MIT
+slashPrefix: rmf
+
+aiox:
+  minVersion: "2.1.0"
+  type: squad
+
+components:
+  agents:
+    - ppc-paid-media-specialist.md
+    - seo-content-strategist.md
+    - crm-email-specialist.md
+    - analytics-performance-lead.md
+    - ai-automation-specialist.md
+  tasks:
+    - ppc-campaign-management.md
+    - seo-job-optimization.md
+    - crm-candidate-nurturing.md
+    - analytics-reporting.md
+    - ai-workflow-automation.md
+    - multi-channel-launch.md
+  workflows:
+    - campaign-launch-workflow.md
+  checklists:
+    - campaign-launch-checklist.md
+  templates:
+    - campaign-brief-tmpl.md
+    - weekly-report-tmpl.md
+    - ab-test-plan-tmpl.md
+    - job-posting-tmpl.md
+  tools:
+    - cpa-calculator.js
+    - ad-copy-generator.js
+    - channel-comparator.js
+    - audience-builder.js
+  scripts:
+    - utm-builder.js
+    - budget-pacer.js
+    - report-aggregator.js
+    - keyword-expander.js
+
+data:
+  - industry-benchmarks.yaml
+  - keyword-seed-lists.yaml
+  - audience-definitions.yaml
+  - channel-config.yaml
+
+config:
+  extends: extend
+  coding-standards: config/coding-standards.md
+  tech-stack: config/tech-stack.md
+  source-tree: config/source-tree.md
+
+channels:
+  primary:
+    - Indeed Ads
+    - Google Ads
+    - Meta Ads (Facebook & Instagram)
+  secondary:
+    - Bing Ads (Microsoft Advertising)
+    - Reddit Ads
+    - Craigslist
+    - LinkedIn Ads
+  programmatic:
+    - Appcast
+    - Joveo
+    - PandoLogic
+
+industry:
+  vertical: Staffing & Recruitment
+  client: Indeed Flex
+  focus: Temporary & flexible workforce candidate acquisition
+
+dependencies:
+  node: []
+  python: []
+  squads: []
+
+tags:
+  - recruitment-marketing
+  - staffing
+  - ppc
+  - candidate-acquisition
+  - multi-channel
+  - indeed-flex

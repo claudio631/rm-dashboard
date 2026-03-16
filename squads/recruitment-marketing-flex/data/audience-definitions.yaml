@@ -1,0 +1,162 @@
+# Audience Definitions — Indeed Flex
+# Pre-built audience segments for campaign targeting
+# Last Updated: 2026-03-16
+
+audiences:
+
+  # === PROSPECTING AUDIENCES ===
+
+  warehouse_seekers:
+    type: prospecting
+    name: "Warehouse Job Seekers"
+    description: "People actively searching for warehouse and fulfillment work"
+    demographics:
+      age: 18-55
+      gender: all
+      education: any
+    interests:
+      - warehouse work
+      - logistics
+      - fulfillment
+      - Amazon warehouse
+      - distribution center
+    behaviors:
+      - active job seekers
+      - recently searched warehouse keywords
+    geo_targeting: within 25 miles of job site
+    channels:
+      google: "In-market: Employment > Warehouse & Logistics"
+      meta: "Interests: Warehouse work, Amazon.com, UPS, FedEx"
+      reddit: "r/warehouse, r/AmazonFC, r/FASCAmazon"
+
+  delivery_gig_workers:
+    type: prospecting
+    name: "Delivery & Gig Workers"
+    description: "Current or aspiring delivery drivers and gig economy participants"
+    demographics:
+      age: 21-55
+      gender: all
+    interests:
+      - gig economy
+      - delivery driving
+      - DoorDash
+      - Uber Eats
+      - Instacart
+    behaviors:
+      - gig app users
+      - rideshare drivers
+      - food delivery drivers
+    geo_targeting: metro areas
+    channels:
+      google: "Custom Intent: gig economy + delivery keywords"
+      meta: "Interests: Gig economy, DoorDash, Uber, Lyft"
+      reddit: "r/couriersofreddit, r/doordash_drivers, r/UberEATS"
+
+  flex_work_seekers:
+    type: prospecting
+    name: "Flexible Work Seekers"
+    description: "People seeking flexible, part-time, or non-traditional schedules"
+    demographics:
+      age: 18-65
+      gender: all
+    interests:
+      - flexible work
+      - part-time jobs
+      - side hustle
+      - work-life balance
+    behaviors:
+      - part-time workers
+      - multiple job holders
+      - parents returning to work
+      - students
+    geo_targeting: any Indeed Flex market
+    channels:
+      google: "In-market: Employment > Part-time & Temporary"
+      meta: "Interests: Part-time work, Flexible scheduling, Side hustle"
+
+  students_seasonal:
+    type: prospecting
+    name: "Students & Seasonal Workers"
+    description: "College students and seasonal workers seeking temp opportunities"
+    demographics:
+      age: 18-28
+      gender: all
+      education: in-school or recent grad
+    interests:
+      - college jobs
+      - summer jobs
+      - holiday temp work
+      - student employment
+    behaviors:
+      - college students
+      - seasonal workers
+    geo_targeting: near college campuses and seasonal employers
+    seasonal_peak: May-August, November-December
+    channels:
+      google: "Custom Intent: summer jobs, college jobs, holiday temp"
+      meta: "Interests: College life, Student jobs; Age: 18-24"
+      reddit: "r/college, r/jobs, r/personalfinance"
+
+  # === RETARGETING AUDIENCES ===
+
+  website_visitors:
+    type: retargeting
+    name: "Career Site Visitors"
+    description: "People who visited Indeed Flex career pages but didn't apply"
+    window: 30 days
+    exclusions:
+      - completed application
+      - active workers
+    channels:
+      google: "Remarketing list: All career page visitors, exclude converters"
+      meta: "Custom Audience: Website visitors > apply page, exclude leads"
+
+  abandoned_applicants:
+    type: retargeting
+    name: "Abandoned Applications"
+    description: "Started application but did not complete"
+    window: 14 days
+    exclusions:
+      - completed application
+    urgency: high
+    channels:
+      google: "Remarketing: Apply page visitors who didn't convert (7-14 days)"
+      meta: "Custom Audience: Apply start event, exclude Apply complete"
+
+  dormant_workers:
+    type: retargeting
+    name: "Dormant Workers"
+    description: "Previously active workers who haven't taken a shift in 30+ days"
+    window: 30-90 days inactive
+    exclusions:
+      - deactivated accounts
+      - banned workers
+    channels:
+      google: "CRM list: dormant workers > Customer Match"
+      meta: "Custom Audience: CRM upload - dormant segment"
+
+  # === LOOKALIKE AUDIENCES ===
+
+  lookalike_top_workers:
+    type: lookalike
+    name: "Lookalike: Top Workers"
+    description: "People similar to highest-rated, most-active Indeed Flex workers"
+    seed_criteria:
+      - 50+ shifts completed
+      - 4.5+ average rating
+      - active in last 60 days
+    seed_size: "Top 10% of active workers"
+    expansion:
+      meta: "1% lookalike (tight), 1-3% lookalike (broad)"
+      google: "Similar audiences from top worker CRM list"
+
+  lookalike_fast_hires:
+    type: lookalike
+    name: "Lookalike: Fast Converters"
+    description: "People similar to applicants who were hired within 48 hours"
+    seed_criteria:
+      - applied and hired within 48 hours
+      - completed first shift
+    expansion:
+      meta: "1-2% lookalike"
+      google: "Similar audiences"
