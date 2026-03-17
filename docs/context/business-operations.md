@@ -21,7 +21,7 @@ Indeed Flex is a **W-2 staffing agency** (not 1099/gig). All workers are hired a
 2. DOWNLOAD      → Downloads the Indeed Flex app
 3. ACCOUNT       → Creates account in the app
 4. VERIFICATION  → Verified role / identity verification
-5. INTERVIEW     → AI-conducted interview (reviewed by human recruiter after)
+5. INTERVIEW     → AI-conducted interview in English or Spanish (job seeker chooses), reviewed by human recruiter after
 6. ONBOARDING    → W-2 compliance (all required before first shift):
                     - I-9 form (employment eligibility)
                     - Conditional offer letter
