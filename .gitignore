@@ -17,6 +17,13 @@ build/
 *.log
 logs/
 
+# Next.js
+.next/
+out/
+
+# Package lock
+package-lock.json
+
 # IDE & OS (AIOX)
 .DS_Store
 Thumbs.db
