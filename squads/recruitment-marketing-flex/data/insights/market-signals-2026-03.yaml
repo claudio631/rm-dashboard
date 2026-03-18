@@ -1,0 +1,125 @@
+# Market Signals — Extracted from 8 Meetings (March 2026)
+# Source: docs/meetings/2026-03-1*.md
+# Extracted by: Dara (@data-engineer) · 2026-03-18
+
+signals:
+
+  # === CRITICAL ===
+
+  - market: Dallas
+    signal_type: quality_issue
+    severity: critical
+    date: "2026-03-18"
+    description: "Hospitality quality crisis — client (Culinaire) explicitly says quality > quantity. 10 good workers with advance notice preferred over 50 bad last-minute. Success with Dallas opens US Open, Washington, NYC."
+    recommended_action: "Multi-channel strategy with quality filters: $100 referral, bi-weekly events, supply ops follow-up, training videos"
+    source: "2026-03-18 US RM Ops Sync"
+
+  - market: all_markets
+    signal_type: process_blocker
+    severity: critical
+    date: "2026-03-17"
+    description: "Apply-to-verified rate crashed from 56% to 22% after Mason's departure. At $61K/month spend, this means ~$26K more per month to achieve the same verified worker count."
+    recommended_action: "Urgent: clarify verification criteria with recruitment leadership. Quantify financial impact for Angela."
+    source: "2026-03-17 Craig-Claudio sync"
+
+  - market: all_markets
+    signal_type: process_blocker
+    severity: critical
+    date: "2026-03-13"
+    description: "No centralized weekly priority guidance after Mason's departure. Team feels 'lost'. $40K+/month estimated waste without direction on where to focus spend."
+    recommended_action: "Build consolidated priority reporting tool. Use ACP 7-14 day outlook as interim guide."
+    source: "2026-03-13 Carlos strategy review + 2026-03-17 Craig-Claudio sync"
+
+  # === HIGH ===
+
+  - market: Logan_Township_NJ
+    signal_type: deadline_pressure
+    severity: high
+    date: "2026-03-18"
+    description: "130 flex workers needed by 2026-04-06 for OnTrac expansion. 50% flex share target. Leah presenting to client 2026-03-19."
+    recommended_action: "Surge recruitment for NJ warehouse roles. Coordinate with Olivia for NJ support."
+    source: "2026-03-18 US RM Ops Sync"
+
+  - market: Dallas
+    signal_type: demand_spike
+    severity: high
+    date: "2026-03-12"
+    description: "Dos Equis Pavilion: 39 consecutive days, ~35 workers/day. FIFA credentialing windows open — front-load candidates. Johnstone Supply forklift pool insufficient (only 11 drivers)."
+    recommended_action: "Three concurrent Dallas demands — Culinaire hospitality + Dos Equis + Johnstone. Prioritize by deadline."
+    source: "2026-03-12 Weekly Regional Ops"
+
+  - market: Atlanta
+    signal_type: churn_alert
+    severity: high
+    date: "2026-03-18"
+    description: "~300 Atlanta candidates eligible to return. 400+ total across all store locations. List cleanup in progress before CRM campaign can deploy."
+    recommended_action: "Complete list cleanup → Braze churn re-engagement to all store locations (not just ATL)."
+    source: "2026-03-18 US RM Ops Sync"
+
+  - market: Austin
+    signal_type: competition_change
+    severity: high
+    date: "2026-03-13"
+    description: "SoHo hospitality underperforming (7 conversions). SXSW volunteer competition offering $2,000 badge value — workers prefer volunteering. 453 offers sent at SoHo with only 1 needed."
+    recommended_action: "Cannot compete with SXSW badge value. Focus SoHo ads post-SXSW when volunteer option expires."
+    source: "2026-03-13 Carlos 1:1"
+
+  - market: UK
+    signal_type: expansion
+    severity: high
+    date: "2026-03-18"
+    description: "UK enterprise clients begin receiving flex workers 2026-04-01 (OCS, Shun, others). Olivia is sole UK RM person — bandwidth concern. Food safety training (Mapal) has very low conversion."
+    recommended_action: "Olivia to meet Roxy immediately. Activate dormant UK workers. Allow Olivia to flag priority conflicts."
+    source: "2026-03-18 US RM Ops Sync"
+
+  # === MEDIUM ===
+
+  - market: Las_Vegas
+    signal_type: positive_momentum
+    severity: medium
+    date: "2026-03-18"
+    description: "Hiring events working well — 48% show rate, 96% DT pass rate, 91 total cleared from 2 events. But organized with only 3 days notice — needs structured calendar."
+    recommended_action: "Create monthly/bi-weekly event calendar. Consolidate to best time slots (9 AM, 2 PM)."
+    source: "2026-03-18 US RM Ops Sync"
+
+  - market: Chicago
+    signal_type: positive_momentum
+    severity: medium
+    date: "2026-03-12"
+    description: "PowerStop fill rate fixed: 5/20 → 20/20 after switching from block to individual bookings. Bath Concepts new pipeline (30-40 call center reps). Forklift capacity check needed."
+    recommended_action: "Maintain Chicago momentum. New recruitment pool needed for Bath Concepts (no existing clerical staff)."
+    source: "2026-03-12 Weekly Regional Ops"
+
+  - market: Nashville
+    signal_type: expansion
+    severity: medium
+    date: "2026-03-12"
+    description: "CTDI ramp-up April (20-30 workers). AQL new client in LaVergne (~30 workers/day eventual). Two concurrent Nashville ramps."
+    recommended_action: "Monitor LaVergne area capacity — Ingram also ramping. Coordinate Nashville pipeline."
+    source: "2026-03-12 Weekly Regional Ops"
+
+  - market: all_markets
+    signal_type: process_blocker
+    severity: medium
+    date: "2026-03-13"
+    description: "ACP not integrated with anything — not even CRM. Worker IDs require manual email-by-email lookup. Flex hiring tool unchanged in 2 years."
+    recommended_action: "Escalate to Angela/leadership. Push product team for system integration."
+    source: "2026-03-13 Carlos strategy review"
+
+  - market: New_York
+    signal_type: expansion
+    severity: medium
+    date: "2026-03-18"
+    description: "US Open (Aug-Sep 2026) with Restaurant Associates. Credentialing process required. High-profile attractive event. Planning starts now."
+    recommended_action: "Begin credentialing early. This is a premium event that attracts high-quality hospitality workers."
+    source: "2026-03-18 US RM Ops Sync"
+
+  # === LOW ===
+
+  - market: Las_Vegas
+    signal_type: venue_issue
+    severity: low
+    date: "2026-03-11"
+    description: "Venue change caused confusion — FHS automated message sent old address. QR code deep links break when app not installed. Resolved for these events but systemic issue."
+    recommended_action: "Standardize QRfy process. Fix FHS address automation. Implement venue confirmation gate."
+    source: "2026-03-11 meetings (3 meetings)"

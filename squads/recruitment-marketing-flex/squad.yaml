@@ -11,6 +11,7 @@ aiox:
 
 components:
   agents:
+    - rm-coordinator.md
     - ppc-paid-media-specialist.md
     - seo-content-strategist.md
     - crm-email-specialist.md
@@ -31,6 +32,7 @@ components:
     - google-ads-ad-copy-creation.md
     - google-ads-performance-analysis.md
     - google-ads-optimization-cycle.md
+    - hospitality-campaign-launch.md
   workflows:
     - campaign-launch-workflow.md
   checklists:
@@ -38,6 +40,7 @@ components:
     - google-ads-setup-checklist.md
     - google-ads-optimization-checklist.md
     - google-ads-audit-checklist.md
+    - google-ads-pre-launch-verification.md
   templates:
     - campaign-brief-tmpl.md
     - weekly-report-tmpl.md
@@ -47,6 +50,7 @@ components:
     - google-ads-campaign-brief-tmpl.md
     - google-ads-performance-review-tmpl.md
     - google-ads-ab-test-plan-tmpl.md
+    - spanish-ad-copy-tmpl.md
   tools:
     - cpa-calculator.js
     - ad-copy-generator.js

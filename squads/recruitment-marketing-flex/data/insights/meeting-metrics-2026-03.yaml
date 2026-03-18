@@ -1,0 +1,205 @@
+# Meeting-Extracted Metrics — March 2026
+# Source: 8 meetings (2026-03-11 to 2026-03-18)
+# Extracted by: Dara (@data-engineer) · 2026-03-18
+
+funnel_metrics:
+  apply_to_verified_rate:
+    current: 22.0
+    previous: 56.0
+    delta: -34.0
+    unit: percent
+    context: "56% when Mason was actively verifying workers; crashed to 22% after his departure"
+    source: "2026-03-17 Craig-Claudio sync"
+    severity: critical
+
+  hospitality_interview_pass_rate:
+    current: 53.0
+    previous: 75.0
+    delta: -22.0
+    unit: percent
+    context: "75% was abnormally high 2 weeks ago; 53% is normalizing. 30 questions (vs 17 industrial)"
+    source: "2026-03-18 US RM Ops Sync"
+    severity: medium
+
+  hospitality_interview_questions: 30
+  industrial_interview_questions: 17
+  average_interview_questions: 21
+
+  sxsw_30day_funnel:
+    accounts_created: 200
+    verified: 148
+    ready_to_book: 68
+    conversion_account_to_ready: 34.0
+    context: "Strong top-of-funnel but workers not booking shifts"
+    source: "2026-03-13 Carlos 1:1"
+
+  soho_performance:
+    weekly_interviews: 15
+    conversions: 7
+    indeed_weekly_spend: 1000
+    spend_vs_competition: "95% above competition"
+    indeed_saturation: true
+    source: "2026-03-13 Carlos 1:1"
+
+  soho_offer_waste:
+    offers_sent: 453
+    positions_needed: 1
+    waste_ratio: 453.0
+    context: "Workers not picking up shifts despite hundreds of offers"
+    source: "2026-03-13 Carlos 1:1"
+
+spend_metrics:
+  monthly_total:
+    amount: 61000
+    unit: usd
+    period: monthly
+    source: "2026-03-13 Carlos 1:1"
+
+  monthly_by_channel:
+    indeed: 36000
+    google: 20000
+    reddit: 5000
+    total: 61000
+    unit: usd
+
+  estimated_monthly_waste:
+    amount: 40000
+    unit: usd
+    waste_percentage: 65.6
+    context: "Carlos estimate — conservative. Represents a full lower-level salary"
+    source: "2026-03-13 Strategy Review"
+
+  sxsw_google_daily: 400
+  reddit_vs_google_ratio: 0.05
+  soho_indeed_weekly: 1000
+
+hiring_event_metrics:
+  las_vegas_combined:
+    events_count: 2
+    dates: ["2026-03-12", "2026-03-16"]
+    total_invited: 187
+    total_arrived: 89
+    show_rate: 47.6
+    dt_passed: 85
+    dt_pass_rate_of_arrivals: 95.5
+    walk_ins: 6
+    total_cleared: 91
+    no_shows: 98
+    source: "2026-03-18 US RM Ops Sync + LV event data"
+
+  las_vegas_event_1:
+    date: "2026-03-12"
+    invited: 104
+    arrived: 43
+    show_rate: 41.3
+    dt_passed: 40
+
+  las_vegas_event_2:
+    date: "2026-03-16"
+    invited: 83
+    arrived: 46
+    show_rate: 55.4
+    dt_passed: 45
+
+  time_slot_performance:
+    best_slots:
+      - slot: "2:00 PM"
+        show_rate: 67
+      - slot: "9:00 AM"
+        show_rate: 59
+    worst_slots:
+      - slot: "10:00 AM"
+        show_rate: 17
+      - slot: "3:00 PM"
+        show_rate: 20
+    walk_ins:
+      show_rate: 100
+      context: "Highest intent — came on their own initiative"
+
+  march_12_rsvps: 92
+  expected_show_rate_range: [20, 30]
+  actual_show_rate: 48
+
+outreach_metrics:
+  security_role:
+    contacted: 96
+    rsvps: 40
+    conversion_rate: 41.7
+    context: "Very strong conversion — continue approach"
+    source: "2026-03-18 US RM Ops Sync"
+
+  fifa_credentialing:
+    previous_list: 87
+    current_list: 215
+    growth: 147.1
+    unit: percent
+    source: "2026-03-18 US RM Ops Sync"
+
+  atlanta_churn:
+    eligible_atlanta: 300
+    eligible_total: 400
+    context: "Store location churn — candidates eligible to return"
+    source: "2026-03-18 US RM Ops Sync"
+
+  austin_hospitality_interviews:
+    weekly_count: 150
+    trend: "Improvement from previous month"
+    source: "2026-03-18 US RM Ops Sync"
+
+market_demand:
+  logan_township_nj:
+    target_workers: 130
+    deadline: "2026-04-06"
+    client: "OnTrac"
+    context: "50% flex share target"
+
+  dos_equis_pavilion:
+    duration_days: 39
+    workers_per_day: 35
+    context: "Primary supplier, secondary vendor being brought in"
+
+  powerstop_bedford_park:
+    previous_fill: 5
+    current_fill: 20
+    total_shifts: 20
+    fix: "Switched from block to individual bookings"
+
+  bath_concepts:
+    headcount: 40
+    role: "Call center representatives"
+    market: "Illinois"
+    pay: "$17/hr → $14.50 training → $15/hr"
+    status: "New pipeline — fresh recruitment pool needed"
+
+  ctdi_nashville:
+    target: 30
+    start: "April 2026"
+    status: "New recs expected week of 2026-03-16"
+
+  aql_nashville:
+    target_eventual: 30
+    starting_with: 5
+    market: "LaVergne, TN"
+    displacing: "Instawork"
+    status: "Proposal stage"
+
+reddit_platform:
+  account_manager_assigned: true
+  reddit_max_results:
+    cpa_reduction: 17
+    results_increase: 28
+    test_companies: 17
+    unit: percent
+  current_tracking: "Page visits only — no event tracking"
+  needed:
+    - "AppsFlyer integration"
+    - "Event tracking (download → account → interview → hire)"
+    - "Community targeting (currently missing)"
+    - "Video creatives (30-45s max)"
+  creative_specs:
+    recommended_ratios: ["4:4", "4:5"]
+    avoid: "9:6 (gets cut in comment section)"
+    video_max: 45
+    video_unit: seconds
+  algorithm_learning_period: 14
+  learning_unit: days

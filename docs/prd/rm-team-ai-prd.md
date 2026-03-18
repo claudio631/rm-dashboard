@@ -24,6 +24,7 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 |------|---------|-------------|--------|
 | 2026-03-16 | 0.1 | Initial PRD draft — Goals, Requirements, Epic List | Morgan (PM) |
 | 2026-03-17 | 0.2 | Major rewrite after context discovery — file-upload architecture, real funnel, real systems | Morgan (PM) |
+| 2026-03-18 | 0.3 | Added: Google Ads KB (12 guides), Reddit Ads KB, hiring events data, data insights capability, 2025 benchmarks by market/client, squad expansion (7 agents, 72 files), 5S data reorganization, new FRs (FR19-FR24), new Epic 4 (Channel Intelligence), updated reference docs | Pax (PO) |
 
 ---
 
@@ -86,15 +87,43 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 | Nashville | 4,646 | 841 | 18.1% |
 | Cincinnati | 4,179 | 763 | 18.3% |
 
-### Ad Channels (by priority)
+### Ad Channels (by priority and budget share)
 
-1. **Indeed Ads** — Primary (sponsored jobs via FHS)
-2. **Google Ads** — Second most used (search, PMax)
-3. **Meta Ads** — Third (Facebook, Instagram)
-4. **TikTok Ads** — Video-first candidate acquisition
-5. **Bing Ads** — Incremental reach
-6. **Craigslist** — Local job postings
-7. **Referrals** — Worker referral programs
+| # | Channel | Budget Share | CPC (Median) | CPA (Median) | Status |
+|---|---------|:-----------:|:------------:|:------------:|--------|
+| 1 | **Indeed Ads** | 30-40% | $0.50 | $15 | Primary — sponsored jobs via FHS |
+| 2 | **Google Ads** | 20-30% | $2.50 | $35 | Active — Search, PMax, Display, YouTube |
+| 3 | **Meta Ads** | 15-20% | $1.50 | $20 | Active — Facebook, Instagram lead gen |
+| 4 | **Bing Ads** | 5-10% | $1.80 | $30 | Active — incremental reach |
+| 5 | **Reddit Ads** | 3-5% | $1.00 | N/A | Active — community-driven recruitment |
+| 6 | **Craigslist** | 2-5% | N/A | $10-75/post | Active — local job postings |
+| 7 | **Programmatic** | 0-10% | $0.40 | $12 | Optional — Appcast, Joveo, PandoLogic |
+
+*Source: `squads/recruitment-marketing-flex/data/benchmarks/industry-benchmarks.yaml`*
+
+### Market Performance Tiers (2025 Baseline)
+
+| Tier | Markets | Account → 1st Shift CR% |
+|------|---------|:----------------------:|
+| Elite | Columbus, Reno | 23.5-23.7% |
+| Strong | Cincinnati, Phoenix, Nashville, Fort Mill, Chicago | 16.3-18.3% |
+| On Target | Atlanta | 15.1% |
+| Below Average | Las Vegas, Charlotte, Dallas, Austin, Middleburg Hts, Orlando | 9.7-12.7% |
+| Critical | Houston | 3.2% |
+
+*Source: `docs/context/2025-conversion-rate-benchmarks.md`*
+
+### Key Data Insights (March 2026 Analysis)
+
+1. **Biggest funnel leak:** 44% of accounts never complete AI interview (23,294 people lost in 2025)
+2. **Landing page gap:** 12 high-volume roles (21,355 shifts/year) land on generic LP instead of role-specific pages
+3. **Market spread:** 7.4x difference between best (Columbus 23.7%) and worst (Houston 3.2%) markets
+4. **Google Ads under-leveraged:** Has 20-30% budget share but offers AI Max (+14% conversions), PMax (+18% incremental), and remarketing capabilities not available on Indeed
+5. **Unfilled shifts:** 825 real unfilled per week (65% fill rate), Warehouse Operative = 52% of all gaps
+6. **Hiring events:** 48% show rate, 96% DT pass rate — high-intent channel for pre-qualified candidates
+7. **Seasonality:** Q1 has 0.9x cost modifier (cheapest quarter to buy traffic)
+
+*Source: `squads/recruitment-marketing-flex/data/insights/top-funnel-levers-2026-03.md`*
 
 ---
 
@@ -132,6 +161,15 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 - **FR16:** The system shall provide a UTM builder that generates tracking parameters following the Indeed Flex naming convention (`{country}-B2C-{vertical}-{client}-{role}-{market}`) with pre-populated channel and role dropdowns
 - **FR17:** The system shall provide an AI-assisted ad copy generator that produces channel-specific recruitment ad variants (Indeed, Google, Meta, TikTok, Bing) respecting character limits, with cobranding toggle for client name inclusion
 - **FR18:** The system shall auto-select the correct landing page URL per role from the published landing page registry (24 published role-specific LPs)
+
+### Channel Intelligence & Knowledge Base (v0.3)
+
+- **FR19:** The system shall provide channel-specific knowledge bases (Google Ads, Reddit Ads, and future channels) accessible to AI agents for context-aware campaign recommendations
+- **FR20:** The system shall surface market-level performance insights comparing conversion rates across the 21 markets with tier classification (Elite/Strong/On Target/Below Average/Critical)
+- **FR21:** The system shall track hiring event performance (invites, show rate, DT pass rate, time slot analysis) and integrate event costs into the unified cost-per-hire calculation
+- **FR22:** The system shall display a weekly unfilled shifts analysis showing persistent gaps by venue, role, and shift time — with recommended actions (re-engagement vs. more ad spend)
+- **FR23:** The system shall provide data-driven budget reallocation recommendations based on market-level conversion rates and unfilled shift demand signals
+- **FR24:** The system shall track incentive program costs ($28,725/month Dec 2025 example) alongside ad spend for true cost-per-hire calculations including bonus payouts
 
 ## Non-Functional Requirements
 
@@ -183,6 +221,20 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 | 3.1 | UTM Builder | Pre-populated channels/roles, naming convention enforcement, batch mode |
 | 3.2 | Ad Copy Generator | Template + AI variants for all 7 channels, cobranding, character limits |
 
+### Epic 4: Channel Intelligence & Market Optimization (v0.3)
+**Goal:** Provide channel-specific knowledge bases, market performance benchmarking, hiring event tracking, and demand-aware budget recommendations.
+**FRs:** FR19, FR20, FR21, FR22, FR23, FR24
+**NFRs:** NFR1, NFR5, NFR6
+
+**Stories:**
+| # | Title | Description |
+|---|-------|-------------|
+| 4.1 | Channel Knowledge Base System | Searchable KB per channel (Google Ads: 12 guides, Reddit: playbook) with agent-accessible context |
+| 4.2 | Market Performance Dashboard | 21-market tier view, CR% benchmarks, year-over-year trends, budget reallocation suggestions |
+| 4.3 | Hiring Event Tracker | Invite/show/pass tracking, time slot analysis, cost-per-cleared-worker, show-rate optimization |
+| 4.4 | Unfilled Shifts Intelligence | Weekly gap analysis by venue/role/shift, persistent vs. one-off classification, re-engagement vs. ad spend recommendations |
+| 4.5 | Budget Reallocation Engine | Demand-signal-driven budget suggestions factoring market CR%, unfilled shifts, seasonality, and incentive costs |
+
 ---
 
 ## Key Metrics (Success Criteria)
@@ -211,45 +263,110 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 
 ## Future Enhancements (Post-MVP)
 
-| # | Enhancement | Trigger |
-|---|-------------|---------|
-| 1 | Google Ads API integration | OAuth available outside Okta |
-| 2 | Meta Ads API integration | OAuth available outside Okta |
-| 3 | AppsFlyer API for per-campaign attribution | API key access obtained |
-| 4 | Braze integration for re-engagement triggers | API access obtained |
-| 5 | Keyword expander tool | Team requests it |
-| 6 | Audience builder tool | Team requests it |
-| 7 | Budget pacer with alerts | After sufficient historical data |
-| 8 | Scheduled cron-based Slack report | After stable daily usage |
-| 9 | Incentive program tracker | Volume warrants dedicated view |
-| 10 | Spanish-language ad copy variants | Hispanic market expansion |
+| # | Enhancement | Trigger | Priority |
+|---|-------------|---------|----------|
+| 1 | Google Ads API integration | OAuth available outside Okta | High |
+| 2 | Meta Ads API integration | OAuth available outside Okta | High |
+| 3 | AppsFlyer API for per-campaign attribution | API key access obtained | High |
+| 4 | Braze integration for re-engagement triggers | API access obtained | High — 44% funnel leak at verification |
+| 5 | Dedicated LPs for 12 high-volume roles | UX team availability | High — 21K shifts/year on generic LP |
+| 6 | Keyword expander tool | Team requests it | Medium |
+| 7 | Audience builder tool | Team requests it | Medium |
+| 8 | Budget pacer with alerts | After sufficient historical data | Medium |
+| 9 | Scheduled cron-based Slack report | After stable daily usage | Medium |
+| 10 | Meta Ads / Bing Ads / TikTok knowledge bases | Channel expansion | Medium |
+| 11 | Incentive program tracker | Volume warrants dedicated view | Medium — $28K+/month |
+| 12 | Spanish-language ad copy variants | Hispanic market expansion | Low |
+| 13 | Hiring event walk-in acquisition (Google Local/Meta Events) | Event program scales | Low |
 
 ---
+
+## Squad Capabilities (v0.3)
+
+The recruitment-marketing-flex squad provides an AI agent team with 72 files organized across 7 specialist agents:
+
+| Agent | Persona | Focus |
+|-------|---------|-------|
+| @ppc-paid-media-specialist | Pixel | Google Ads, Indeed Ads, Bing, campaign management |
+| @seo-content-strategist | Atlas | SEO, job posting optimization, content |
+| @crm-email-specialist | Relay | Braze campaigns, email/SMS/push sequences |
+| @analytics-performance-lead | Metric | Reporting, KPIs, dashboards |
+| @ai-automation-specialist | Auto | Workflow automation, AI integrations |
+| @funnel-specialist | Flow | Onboarding funnel optimization, conversion |
+| @data-scientist | Nova | Statistical analysis, insights, A/B test design |
+
+### Channel Knowledge Bases
+
+| Channel | Files | Coverage |
+|---------|:-----:|----------|
+| Google Ads | 12 | Campaign types, keywords, ad copy, PMax, YouTube, Display, budget, conversions, AI automation, mobile, lead gen |
+| Reddit Ads | 1 | Full playbook — formats, targeting, creative, bidding, measurement |
+| *Meta Ads* | — | *Planned* |
+| *Indeed Ads* | — | *Planned* |
+
+### Operational Playbooks
+
+| Playbook | Location | Contents |
+|----------|----------|----------|
+| Hiring Events | `data/hiring-events/` | Master playbook, Las Vegas post-mortem, ideas backlog |
+| Top-Funnel Insights | `data/insights/` | 8 actionable levers with estimated impact |
+| Industry Benchmarks | `data/benchmarks/` | CPC/CPA/CTR by 7 channels + seasonal adjustments |
+| Audience Targeting | `data/targeting/` | 10 audience segments + 7 channel configs |
+
+### Task Library (Google Ads)
+
+| Task | Workflow |
+|------|----------|
+| Campaign Setup | End-to-end campaign creation (8 steps) |
+| Keyword Research | Discovery, match types, ad group structure |
+| Ad Copy Creation | Headlines, descriptions, extensions, A/B plan |
+| Performance Analysis | 10-step analysis with recommendations |
+| Weekly Optimization | 8-step recurring optimization cycle (~2 hrs/week) |
 
 ## Sections Pending
 
 - [ ] User Interface Design Goals (delegate to @ux-design-expert)
 - [ ] Detailed acceptance criteria per epic (in story files)
+- [ ] Meta Ads knowledge base (delegate to @ppc-paid-media-specialist)
+- [ ] Indeed Ads knowledge base (delegate to @ppc-paid-media-specialist)
 
 ---
 
 ## Reference Documents
 
+### Core Context
 | Document | Location |
 |----------|----------|
 | MVP Architecture | `docs/architecture/mvp-architecture.md` |
-| Clients & Markets | `docs/context/clients-and-markets.md` |
 | Business Operations | `docs/context/business-operations.md` |
-| Job Categories | `docs/context/job-categories.md` |
 | Systems & Platforms | `docs/context/systems-and-platforms.md` |
-| SOP: Indeed Ad Request | `docs/context/sop-indeed-ad-request.md` |
-| Daily Tracking Spreadsheet | `docs/context/daily-tracking-spreadsheet.md` |
-| Daily Slack Report | `docs/context/daily-slack-report.md` |
-| OB Funnel Deep Dive | `docs/context/ob-funnel-deep-dive.md` |
-| Incentive Programs | `docs/context/incentive-programs.md` |
+| Job Categories | `docs/context/job-categories.md` |
 | Landing Pages | `docs/context/landing-pages.md` |
 | AI Interview Questions (TACO) | `docs/context/ai-interview-questions-taco.md` |
 | Job Templates | `docs/context/job-templates/` |
 
+### Operational Data
+| Document | Location |
+|----------|----------|
+| Daily Tracking Spreadsheet | `docs/context/daily-tracking-spreadsheet.md` |
+| Daily Slack Report | `docs/context/daily-slack-report.md` |
+| SOP: Indeed Ad Request | `docs/context/sop-indeed-ad-request.md` |
+| OB Funnel Deep Dive | `docs/context/ob-funnel-deep-dive.md` |
+| 2025 Conversion Rate Benchmarks | `docs/context/2025-conversion-rate-benchmarks.md` |
+| Las Vegas Hiring Events (Mar 2026) | `docs/context/las-vegas-hiring-events-march-2026.md` |
+| Weekly Unfilled Shifts Template | `docs/context/weekly-unfilled-shifts-report-template.md` |
+| Incentive Programs | `docs/context/incentive-programs.md` |
+
+### Squad Knowledge Bases (v0.3)
+| Document | Location |
+|----------|----------|
+| Google Ads Knowledge Base (12 guides) | `squads/recruitment-marketing-flex/data/google-ads/` |
+| Reddit Ads Playbook | `squads/recruitment-marketing-flex/data/reddit-ads/` |
+| Hiring Events Playbook | `squads/recruitment-marketing-flex/data/hiring-events/` |
+| Top-Funnel Levers Analysis | `squads/recruitment-marketing-flex/data/insights/` |
+| Industry Benchmarks | `squads/recruitment-marketing-flex/data/benchmarks/` |
+| Audience & Channel Config | `squads/recruitment-marketing-flex/data/targeting/` |
+| Squad Manifest | `squads/recruitment-marketing-flex/squad.yaml` |
+
 ---
-*RM Team AI PRD v0.2 — Morgan (PM) — 2026-03-17*
+*RM Team AI PRD v0.3 — Pax (PO) — 2026-03-18*
