@@ -59,11 +59,13 @@ components:
     - keyword-expander.js
 
 data:
-  - industry-benchmarks.yaml
-  - keyword-seed-lists.yaml
-  - audience-definitions.yaml
-  - channel-config.yaml
-  - reddit-ads-playbook.md
+  # benchmarks/ — Industry reference data
+  - benchmarks/industry-benchmarks.yaml
+  - benchmarks/keyword-seed-lists.yaml
+  # targeting/ — Audience & channel configuration
+  - targeting/audience-definitions.yaml
+  - targeting/channel-config.yaml
+  # google-ads/ — Google Ads knowledge base
   - google-ads/knowledge-base.md
   - google-ads/campaign-types-reference.md
   - google-ads/keyword-strategy-guide.md
@@ -76,6 +78,14 @@ data:
   - google-ads/ai-automation-guide.md
   - google-ads/mobile-optimization-guide.md
   - google-ads/lead-generation-guide.md
+  # reddit-ads/ — Reddit Ads knowledge base
+  - reddit-ads/playbook.md
+  # insights/ — Periodic analysis reports
+  - insights/top-funnel-levers-2026-03.md
+  # hiring-events/ — Event playbooks & post-mortems
+  - hiring-events/playbook.md
+  - hiring-events/las-vegas-march-2026.md
+  - hiring-events/ideas.md
 
 config:
   extends: extend
