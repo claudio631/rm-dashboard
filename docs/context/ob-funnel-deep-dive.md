@@ -151,7 +151,7 @@ Platform Verified              160      38.9%
 
 ---
 
-## What This Means for PPC Manager AI
+## What This Means for RM Team AI
 
 ### The real funnel is 7 stages deep (not 3)
 
@@ -184,7 +184,7 @@ Indeed Flex reality: Click → Download → Account → Verified → OB Task →
 | Ready → Booked | 5,596 (37%) | "Shifts available near you now" | Push + SMS |
 | Booked → Completed | 1,482 (15%) | "Don't forget your shift tomorrow" | Push + SMS |
 
-### Integration priority for PPC Manager AI:
+### Integration priority for RM Team AI:
 
 | Data | Source | Priority | Value |
 |------|--------|----------|-------|

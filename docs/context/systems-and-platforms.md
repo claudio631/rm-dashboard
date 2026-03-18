@@ -19,7 +19,7 @@
 |--------|---------|----------|
 | **Braze** | Customer engagement platform | Email, SMS, Push notifications |
 
-**Braze capabilities relevant to PPC Manager AI:**
+**Braze capabilities relevant to RM Team AI:**
 - Candidate nurture sequences (email + SMS + push)
 - Onboarding drip campaigns
 - Re-engagement for dormant Flexers
@@ -33,7 +33,7 @@
 |--------|---------|
 | **AppsFlyer** | Mobile attribution & app analytics — tracks app installs, in-app events, and campaign attribution |
 
-**AppsFlyer data relevant to PPC Manager AI:**
+**AppsFlyer data relevant to RM Team AI:**
 - Which ad channel/campaign drove each app download
 - In-app event tracking (account created, interview started, interview completed, onboarded, first shift booked)
 - Attribution window and model (first-touch, multi-touch)
@@ -74,7 +74,7 @@ Redash ───→ Specific data views
 AppsFlyer → Campaign attribution
 ```
 
-## Data Flow for PPC Manager AI
+## Data Flow for RM Team AI
 
 ```
 Ad Platforms (spend, clicks, impressions)
@@ -95,21 +95,21 @@ Tableau / Redash (reporting, dashboards)
 Braze (re-engagement based on funnel stage)
 ```
 
-**PPC Manager AI sits on top of this stack** — pulling from ad platforms + AppsFlyer for attribution, and potentially feeding Braze for smarter re-engagement triggers.
+**RM Team AI sits on top of this stack** — pulling from ad platforms + AppsFlyer for attribution, and potentially feeding Braze for smarter re-engagement triggers.
 
 ## Key Integration Points
 
 | Integration | Data Direction | Priority |
 |-------------|---------------|----------|
-| Indeed Ads → PPC Manager AI | Pull spend, impressions, clicks, applies | P0 |
-| Google Ads → PPC Manager AI | Pull campaign metrics | P0 |
-| Meta Ads → PPC Manager AI | Pull campaign metrics | P0 |
-| AppsFlyer → PPC Manager AI | Pull attribution data (install → events) | P0 |
-| TikTok Ads → PPC Manager AI | Pull campaign metrics | P1 |
-| Bing Ads → PPC Manager AI | Pull campaign metrics | P1 |
-| Braze ← PPC Manager AI | Push segments, trigger campaigns | P1 |
-| Tableau/Redash ← PPC Manager AI | Export/feed data | P2 |
-| ACP → PPC Manager AI | Pull shift booking data for full-funnel | P2 |
+| Indeed Ads → RM Team AI | Pull spend, impressions, clicks, applies | P0 |
+| Google Ads → RM Team AI | Pull campaign metrics | P0 |
+| Meta Ads → RM Team AI | Pull campaign metrics | P0 |
+| AppsFlyer → RM Team AI | Pull attribution data (install → events) | P0 |
+| TikTok Ads → RM Team AI | Pull campaign metrics | P1 |
+| Bing Ads → RM Team AI | Pull campaign metrics | P1 |
+| Braze ← RM Team AI | Push segments, trigger campaigns | P1 |
+| Tableau/Redash ← RM Team AI | Export/feed data | P2 |
+| ACP → RM Team AI | Pull shift booking data for full-funnel | P2 |
 
 ## Platform Updates Needed
 
@@ -118,5 +118,5 @@ Based on this discovery, the squad and stories need updates:
 1. **Add TikTok Ads** as a channel (missing from original squad)
 2. **Replace generic "CRM/Email"** with Braze specifically
 3. **Add AppsFlyer** as the attribution source (replaces GA4 assumption)
-4. **Add Tableau/Redash** as existing BI (PPC Manager AI complements, doesn't replace)
+4. **Add Tableau/Redash** as existing BI (RM Team AI complements, doesn't replace)
 5. **Primary CTA is app download** — not "apply on website" (changes conversion tracking fundamentally)

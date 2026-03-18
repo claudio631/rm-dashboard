@@ -1,11 +1,11 @@
-# PPC Manager AI — MVP Architecture
+# RM Team AI — MVP Architecture
 
 > Version: 1.0 — 2026-03-17
 > Architect: Aria (@architect)
 
 ## Executive Summary
 
-PPC Manager AI MVP is an **AI-powered data analyst** that replaces the manual daily workflow of downloading reports from 3 systems, joining them in spreadsheets, and compiling a Slack report using Gemini. It also includes productivity tools for campaign management.
+RM Team AI MVP is an **AI-powered data analyst** that replaces the manual daily workflow of downloading reports from 3 systems, joining them in spreadsheets, and compiling a Slack report using Gemini. It also includes productivity tools for campaign management.
 
 **Constraint:** Internal tools (FHS, ACP, Tableau) are behind Okta SSO with MFA, preventing browser automation. Data ingestion is file-upload based.
 
@@ -145,11 +145,11 @@ PPC Manager AI MVP is an **AI-powered data analyst** that replaces the manual da
 8. Answer follow-up questions from team                      [10 min]
 ```
 
-### With PPC Manager AI (5 minutes)
+### With RM Team AI (5 minutes)
 
 ```
 1. Download 3 files from FHS, Indeed, Tableau               [5 min]
-2. Drop files into PPC Manager AI                            [30 sec]
+2. Drop files into RM Team AI                            [30 sec]
 3. System auto-parses, joins, analyzes                       [10 sec]
 4. Review dashboard + AI insights                            [1 min]
 5. Click "Post to Slack" → done                              [5 sec]

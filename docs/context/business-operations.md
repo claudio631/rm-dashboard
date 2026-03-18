@@ -39,7 +39,7 @@ Indeed Flex is a **W-2 staffing agency** (not 1099/gig). All workers are hired a
 | **Indeed Flex App** | Worker-facing mobile app | Download → Account → Onboarding → Shift booking |
 | **ACP** | Demand processing & shift management | Processes client demand, manages shift availability, worker booking |
 
-## Key Implications for PPC Manager AI
+## Key Implications for RM Team AI
 
 ### Conversion Funnel (Marketing Perspective)
 

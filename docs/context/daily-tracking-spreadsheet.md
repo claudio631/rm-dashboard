@@ -143,7 +143,7 @@ Each daily sheet captures the ads placed that day, combining FHS requisition dat
 | Housekeeping | Hospitality | Raines |
 | Electronics Repair Technician | Other | CTDI |
 
-## What PPC Manager AI Must Replace/Automate
+## What RM Team AI Must Replace/Automate
 
 This spreadsheet is the **#1 automation target.** The daily manual workflow is:
 
@@ -155,4 +155,4 @@ This spreadsheet is the **#1 automation target.** The daily manual workflow is:
 6. Update General Base with cumulative data
 7. Analyze cost per interview, cost per location, cost per client
 
-**PPC Manager AI should do all of this automatically** by integrating with FHS and Indeed APIs, with the dashboard replacing the spreadsheet.
+**RM Team AI should do all of this automatically** by integrating with FHS and Indeed APIs, with the dashboard replacing the spreadsheet.

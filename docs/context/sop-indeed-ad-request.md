@@ -126,7 +126,7 @@ Track in the Indeed Budget Request and Campaign Performance spreadsheet.
 - Dummy shift expiration causes ads to stop — must monitor
 - Manual process across multiple systems (Monday → ACP → FHS → Indeed → Spreadsheet)
 
-## Automation Opportunities for PPC Manager AI
+## Automation Opportunities for RM Team AI
 
 | Current Manual Step | Automation Potential |
 |--------------------|---------------------|

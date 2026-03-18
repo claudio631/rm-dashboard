@@ -16,6 +16,8 @@ components:
     - crm-email-specialist.md
     - analytics-performance-lead.md
     - ai-automation-specialist.md
+    - funnel-specialist.md
+    - data-scientist.md
   tasks:
     - ppc-campaign-management.md
     - seo-job-optimization.md
@@ -23,15 +25,28 @@ components:
     - analytics-reporting.md
     - ai-workflow-automation.md
     - multi-channel-launch.md
+    - reddit-campaign-launch.md
+    - google-ads-campaign-setup.md
+    - google-ads-keyword-research.md
+    - google-ads-ad-copy-creation.md
+    - google-ads-performance-analysis.md
+    - google-ads-optimization-cycle.md
   workflows:
     - campaign-launch-workflow.md
   checklists:
     - campaign-launch-checklist.md
+    - google-ads-setup-checklist.md
+    - google-ads-optimization-checklist.md
+    - google-ads-audit-checklist.md
   templates:
     - campaign-brief-tmpl.md
     - weekly-report-tmpl.md
     - ab-test-plan-tmpl.md
     - job-posting-tmpl.md
+    - reddit-campaign-brief-tmpl.md
+    - google-ads-campaign-brief-tmpl.md
+    - google-ads-performance-review-tmpl.md
+    - google-ads-ab-test-plan-tmpl.md
   tools:
     - cpa-calculator.js
     - ad-copy-generator.js
@@ -48,6 +63,19 @@ data:
   - keyword-seed-lists.yaml
   - audience-definitions.yaml
   - channel-config.yaml
+  - reddit-ads-playbook.md
+  - google-ads/knowledge-base.md
+  - google-ads/campaign-types-reference.md
+  - google-ads/keyword-strategy-guide.md
+  - google-ads/ad-copywriting-playbook.md
+  - google-ads/performance-max-playbook.md
+  - google-ads/budget-optimization-guide.md
+  - google-ads/conversion-tracking-guide.md
+  - google-ads/youtube-ads-playbook.md
+  - google-ads/display-network-guide.md
+  - google-ads/ai-automation-guide.md
+  - google-ads/mobile-optimization-guide.md
+  - google-ads/lead-generation-guide.md
 
 config:
   extends: extend

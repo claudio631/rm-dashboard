@@ -1,4 +1,4 @@
-# Indeed Flex — Daily Slack Report (EOD RM Update)
+# Indeed Flex — EOD Update Key Clients
 
 > Source: Stakeholder interview + sample report — 2026-03-17
 > This report is posted daily to a Slack channel by the Recruitment Marketing team.
@@ -6,78 +6,151 @@
 ## Report Overview
 
 **Channel:** Slack (team channel, @here mention)
-**Frequency:** Daily (end of day)
+**Frequency:** Daily (end of day, weekdays only — no reports Saturday/Sunday)
 **Author:** Claudio (currently compiled manually using Gemini AI)
 **Data Sources:** 3 separate systems, manually combined
 
 | Source | Data Provided |
 |--------|--------------|
-| **FHS** | Requisition report (open campaigns, roles, clients) |
-| **Indeed Analytics** | Campaign spend and cost metrics |
 | **Tableau** | OB (Onboarding) funnel split report — unique accounts created vs verified |
+| **Indeed Analytics** | Campaign spend (JobsCampaigns CSV) |
+| **FHS** | Requisition report (open campaigns, roles, clients) |
 
 ## Report Structure
 
 ### Section 1: Key Client Unique Accounts
 
+**Data Source:** Tableau — OB (Onboarding) funnel split report (`OB Funnel Custom Viewer.xlsx`)
+
 Organized by **client → location**, showing:
-- **Created** = total unique accounts created (people who signed up)
-- **Verified** = total accounts that completed verification (role verified)
-- **(+N)** = daily delta (new verified since yesterday)
+- **Created** = sum of "Worker Accounts Created" for the **last 30 rolling days** per client/location
+- **Verified** = sum of "1st Role Verified (# Workers)" for the **last 30 rolling days** per client/location
+- **(+N)** = yesterday's (D-1) single-day "1st Role Verified (# Workers)" count — this is a **single day value**, NOT a cumulative difference
 
-**Example format:**
-```
-CORT:
-  Las Vegas: 405 Created → 240 Verified (+12)
-  Chicago: 311 Created → 165 Verified (+7)
-  Atlanta: 160 Created → 107 Verified (+4)
-```
+**Comparison logic (D-1 rule):**
+- **Tuesday → Friday:** `(+N)` = yesterday's (D-1) single-day "1st Role Verified" count from Tableau
+- **Monday:** `(+N)` = **Friday's** (D-3) single-day "1st Role Verified" count (weekends are skipped)
 
-**Key metric:** Created → Verified conversion rate and daily velocity (+N)
+**Header day reference:** Always "(last update yesterday)" regardless of day of week.
+
+**Key clients and named locations** (all other locations aggregated as "Other Locations"):
+
+| Client | Named Locations | Other Locations |
+|--------|----------------|-----------------|
+| **CORT** | Las Vegas, Chicago, Atlanta, Orlando, Phoenix, Austin, Nashville | All remaining grouped |
+| **Stord, Inc** | Las Vegas, Reno, Atlanta, Erlanger | All shown individually |
+| **OnTrac Final Mile** | Logan Township, Columbus, Middleburg Heights, Reno | All remaining grouped |
+| **CTDI** | Dallas, Columbus, Nashville | All shown individually |
+
+Named locations are sorted by Created count (descending). "Other Locations" always appears last.
 
 ### Section 2: Indeed Spend Comparison
 
-Monthly spend-to-date on Indeed Ads.
+**Data Source:** Indeed Analytics — `JobsCampaigns_YYYYMMDD_YYYYMMDD.csv`
 
-**Example:** `Indeed March so far: $44,673.43`
+Shows the **month-to-date (MTD) spend** on Indeed Ads for the current calendar month (sum of "Spend" column).
+
+Includes a delta comparison vs the **last report generated**: `(+$X,XXX.XX since last report)`.
 
 ### Section 3: Open Campaigns
 
-List of all campaigns with status "Open", organized by **client → locations**.
+**Data Source:** FHS — Requisition report (`requisitions-YYYY-MM-DD-NNNNNN.csv`)
 
-Shows the current portfolio of active advertising across all markets.
+List of all campaigns with status **"Open"** in the Requisition report, organized by **client → locations**.
 
-## Sample Report (March 2026)
+**Filter rules:**
+- **Include:** Only requisitions with status = "Open"
+- **Exclude:** Any client name containing "Indeed Flex" — only direct client requisitions are shown
+- **Normalize:** Fix trailing spaces and inconsistent comma spacing in location names
+- **Deduplicate:** Remove duplicate locations per client
+- **Sort:** Clients alphabetically, locations alphabetically within each client
 
-### Clients in Report (with market count)
+## Slack Formatting Rules
 
-| Client | Markets | Vertical |
-|--------|---------|----------|
-| **CORT** | 8 (LV, CHI, ATL, ORL, PHX, AUS, NSH, Other) | Industrial |
-| **Stord** | 4 (LV, Reno, Erlanger, ATL) | Industrial |
-| **OnTrac Final Mile** | 4 (Logan Twp, Columbus, Middleburg Hts, Reno, Other) | Logistics |
-| **CTDI** | 3 (Dallas, Nashville, Columbus) | Electronics |
+- Use `*text*` (single asterisks) for **bold** — Slack format, NOT markdown `**text**`
+- **No blank line** between client name and first location row
+- **One blank line** between client blocks
+- Client names are bold: `*CORT:*`
+- Section headers are bold: `*Indeed Spend Comparison:*`, `*Open Campaigns (Status: Open Only)*`
 
-### Additional Active Clients (from Open Campaigns)
+## Output Template (Slack-ready)
 
-| Client | Markets | Vertical |
-|--------|---------|----------|
-| Bon Appetit Management | Chicago | Hospitality/Food |
-| Continental Battery Systems | Reno | Industrial |
-| Culinaire | Dallas | Hospitality/Food |
-| Foxconn | Fort Worth | Industrial |
-| Johnstone Supply | Lancaster, TX | Industrial |
-| Legends Hospitality | Dallas | Hospitality/Events |
-| Lettuce Entertain You | Austin | Hospitality/Food |
-| Power Stop | Bedford Park, Hodgkins (IL) | Industrial |
-| Ryerson | Carrolton, TX | Industrial |
-| SXSW | Austin | Events |
-| Soho House | Austin | Hospitality |
-| Tennant Solutions | Cincinnati | Industrial |
-| Vestals Catering | Austin | Hospitality/Food |
-| BTX | Austin | Industrial |
+```
+@here EOD RM Update Key client unique accounts: (last update yesterday)
 
-**Total:** 18+ unique clients across 20+ markets (larger than initial clients list)
+*{Client}:*
+{Location}: {Created} Created → {Verified} Verified (+{N})
+{Location}: {Created} Created → {Verified} Verified (+{N})
+Other Locations: {Created} Created → {Verified} Verified (+{N})
+
+*{Client}:*
+{Location}: {Created} Created → {Verified} Verified (+{N})
+...
+
+
+*Indeed Spend Comparison:* Indeed {Month} so far: ${MTD} (+${delta} since last report)
+
+*Open Campaigns (Status: Open Only)*
+
+{Client}: {Location 1}; {Location 2}; {Location 3}
+{Client}: {Location 1}; {Location 2}
+...
+```
+
+## Sample Report (March 17, 2026 — Tuesday)
+
+```
+@here EOD RM Update Key client unique accounts: (last update yesterday)
+
+*CORT:*
+Las Vegas: 413 Created → 242 Verified (+3)
+Chicago: 320 Created → 174 Verified (+8)
+Atlanta: 158 Created → 105 Verified (+4)
+Orlando: 121 Created → 76 Verified (+6)
+Phoenix: 115 Created → 78 Verified (+0)
+Austin: 95 Created → 63 Verified (+1)
+Nashville: 100 Created → 53 Verified (+2)
+Other Locations: 169 Created → 69 Verified (+10)
+
+*Stord, Inc:*
+Las Vegas: 298 Created → 192 Verified (+8)
+Reno: 188 Created → 126 Verified (+6)
+Atlanta: 120 Created → 67 Verified (+7)
+Erlanger: 97 Created → 65 Verified (+0)
+
+*OnTrac Final Mile:*
+Logan Township: 165 Created → 101 Verified (+3)
+Columbus: 95 Created → 77 Verified (+1)
+Middleburg Heights: 49 Created → 29 Verified (+0)
+Reno: 12 Created → 11 Verified (+1)
+Other Locations: 260 Created → 165 Verified (+3)
+
+*CTDI:*
+Dallas: 146 Created → 65 Verified (+2)
+Columbus: 40 Created → 17 Verified (+5)
+Nashville: 2 Created → 2 Verified (+0)
+
+
+*Indeed Spend Comparison:* Indeed March so far: $51,154.98 (+$6,481.55 since last report)
+
+*Open Campaigns (Status: Open Only)*
+
+Bon Appetit Management Company, Inc: Chicago, IL
+CORT: Atlanta, GA; Austin, TX; Charlotte, NC; Chicago, IL; Houston, TX; Las Vegas, NV; Nashville, TN; Orlando, FL; Washington, DC, WA
+Continental Battery Systems, Inc.: Reno, NV
+CTDI: Flower Mound, TX; Grove City, OH; Haslet, TX
+Culinaire: Dallas, TX
+Foxconn: Fort Worth, TX
+Legends Hospitality: Dallas, TX
+Lettuce Entertain You Enterprises, Inc: Austin, TX
+OnTrac Final Mile: Logan Township, NJ; Orlando, FL; South Brunswick, NJ
+Power Stop: Bedford Park, IL
+SXSW: Austin, TX
+Soho House Austin: Austin, TX
+Stord, Inc: Atlanta, GA; Hebron, KY; Las Vegas, NV; McCarran, NV; Reno, NV; Sparks, NV
+Tennant Solutions: Cincinnati, OH
+Vestals Catering: Austin, TX
+```
 
 ## Key Observations
 
@@ -94,13 +167,13 @@ Shows the current portfolio of active advertising across all markets.
 4. **No historical tracking** — report is ephemeral (posted in Slack, lost in history)
 5. **No alerts** — if a market shows 0 velocity (+0) for days, no automatic flag
 
-### What PPC Manager AI Should Automate
+### What RM Team AI Should Automate
 
 | Current Step | Automation |
 |-------------|------------|
-| Export FHS requisition data | API pull from FHS |
-| Export Indeed cost data | Indeed Analytics API |
 | Export Tableau OB funnel | Tableau API or direct data source |
+| Export Indeed cost data | Indeed Analytics API |
+| Export FHS requisition data | API pull from FHS |
 | Combine in Gemini | Automated report generation |
 | Format for Slack | Slack webhook with formatted message |
 | Post to channel | Scheduled daily post (or on-demand) |
@@ -123,3 +196,7 @@ Ad Impression → Click → Apply Start → Apply Complete → RSVP (AI Intervie
 - **Indeed Analytics:** Impression → Click → Apply Start → Apply Complete
 - **FHS:** RSVP (AI Interview) → Target RSVPs
 - **Tableau OB Funnel:** Account Created → Verified
+
+## Generation Prompt
+
+The reusable prompt for generating this report is saved at: `src/data/eod-report-prompt.md`

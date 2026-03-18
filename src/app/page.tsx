@@ -3,7 +3,7 @@ export default function HomePage() {
     <div className="space-y-8">
       <div className="text-center space-y-4 py-12">
         <h1 className="text-4xl font-bold tracking-tight">
-          PPC Manager AI
+          RM Team AI
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           AI-powered recruitment marketing analytics for Indeed Flex.
@@ -41,7 +41,7 @@ export default function HomePage() {
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
           <span className="text-sm text-gray-700">
-            PPC Manager AI v0.1.0 — Ready
+            RM Team AI v0.1.0 — Ready
           </span>
         </div>
       </div>

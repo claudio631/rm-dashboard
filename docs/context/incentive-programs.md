@@ -70,7 +70,7 @@ Each incentive record tracks:
 - `US Festive Prize Draw Sweepstakes October - December` ($12,500 payout)
 - `US Flexer Reactivation Incentive` ($700 payout)
 
-## Implications for PPC Manager AI
+## Implications for RM Team AI
 
 ### Incentives as a Marketing Lever
 
@@ -83,7 +83,7 @@ High demand → Ads + Braze + Bonus incentives
 Critical demand → All of above + hiring events
 ```
 
-### What PPC Manager AI Should Track
+### What RM Team AI Should Track
 
 1. **Incentive cost per market** — total bonus payouts alongside ad spend
 2. **True cost-per-hire including incentives** — ad spend + bonus payouts / hires

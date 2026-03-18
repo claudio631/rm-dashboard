@@ -59,7 +59,7 @@ All roles are shift-based, booked via the Indeed Flex app:
 - **Weekend shifts**
 - **Event-based** (variable schedule, hospitality)
 
-## Implications for PPC Manager AI
+## Implications for RM Team AI
 
 ### Campaign Structure
 - Campaigns should be organized by **vertical (Industrial vs Hospitality)** first, then by market

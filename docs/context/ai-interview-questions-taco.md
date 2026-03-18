@@ -99,7 +99,7 @@ These questions appear in most/all roles as initial screening:
 - Team collaboration
 - Handling stressful service situations
 
-## Implications for PPC Manager AI
+## Implications for RM Team AI
 
 1. **Interview questions define role requirements** — these map to what should be in job descriptions and ad copy
 2. **Skill tags** determine which shifts a Flexer can book — important for understanding the verified → booked conversion

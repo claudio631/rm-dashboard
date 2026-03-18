@@ -89,7 +89,7 @@ With UTM parameters:
 | Other | 1 | 10+ | 1,006 |
 | **Total** | **24 published** | **15+ generic** | **310,359** |
 
-## Implications for PPC Manager AI
+## Implications for RM Team AI
 
 1. **UTM Builder** must use the correct LP URL per role — the role-to-LP mapping is critical
 2. **12 high-volume roles** without dedicated LPs are using the generic page (conversion opportunity)

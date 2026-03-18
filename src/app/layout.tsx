@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: "PPC Manager AI",
+  title: "RM Team AI",
   description:
     "AI-powered recruitment marketing analytics for Indeed Flex",
 };
@@ -40,7 +40,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-14 items-center justify-between">
               <a href="/" className="text-lg font-bold tracking-tight">
-                PPC Manager AI
+                RM Team AI
               </a>
               <div className="flex items-center gap-6">
                 <NavLink href="/dashboard">Dashboard</NavLink>

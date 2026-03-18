@@ -1,4 +1,4 @@
-# PPC Manager AI — Product Requirements Document (PRD)
+# RM Team AI — Product Requirements Document (PRD)
 
 ## Goals
 
@@ -252,4 +252,4 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 | Job Templates | `docs/context/job-templates/` |
 
 ---
-*PPC Manager AI PRD v0.2 — Morgan (PM) — 2026-03-17*
+*RM Team AI PRD v0.2 — Morgan (PM) — 2026-03-17*
