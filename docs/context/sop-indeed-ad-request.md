@@ -87,7 +87,31 @@
 - Evaluation link (if client requests)
 - For hiring events: in-person session with time slots
 
-**Campaign naming convention:** `{client name} - {role} - {city} - {state}`
+**Campaign naming convention:**
+
+```
+{Country} - {Market Type} - {Industry} - {Client Name} - {Role} - {Metro} - {State} - {Period}
+```
+
+| Segment | Description | Examples |
+|---------|-------------|---------|
+| Country | Country code | US, UK |
+| Market Type | Business model | B2C, B2B |
+| Industry | Client industry vertical | Hospitality, Industrial, Logistics, Events |
+| Client Name | Client company name | Culinaire, CORT, Stord, OnTrac |
+| Role | Job title being recruited | Servers, Loader / Crew, Warehouse Operative, Picker Packer |
+| Metro | Metro area / city | DFW, Las Vegas, Chicago, Austin |
+| State | State abbreviation | TX, NV, IL, OH |
+| Period | Campaign date range (Month Day to Month Day, Year) | March 16 to March 30, 2026 |
+
+**Example:**
+`US - B2C - Hospitality - Culinaire - Servers - DFW - TX - March 16 to March 30, 2026`
+
+**Rules:**
+- Use hyphens ` - ` (space-hyphen-space) as separators
+- Metro should match the market name used in funnel reports
+- Period always includes start date, end date, and year
+- For evergreen campaigns, use "Evergreen" as the period
 
 **For Hiring Events:**
 - Create in-person hiring session
@@ -97,7 +121,8 @@
 
 ### Step 6: Create Indeed Campaign
 
-**Naming:** `{client name} - {role} - {city} - {state}`
+**Naming:** `{Country} - {Market Type} - {Industry} - {Client Name} - {Role} - {Metro} - {State} - {Period}`
+(see Step 5 for full convention and examples)
 
 ### Step 7: Update Campaign Spreadsheet
 

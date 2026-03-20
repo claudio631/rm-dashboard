@@ -1,5 +1,8 @@
 # Campaign Brief: {{campaign_name}}
 
+> **Naming Convention:** `{Country} - {Market Type} - {Industry} - {Client} - {Role} - {Metro} - {State} - {Period}`
+> Full reference: `docs/context/campaign-naming-convention.md`
+
 ## Overview
 
 | Field | Value |
