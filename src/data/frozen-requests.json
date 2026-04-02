@@ -1,0 +1,1702 @@
+{
+  "Sigma|2025-04-01": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "CORT - Orlando - Loader/Crew|2026-01-31": {
+    "fhs": {
+      "count": 4,
+      "rsvps": 506
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 476.02
+    },
+    "ob": {
+      "created": 205,
+      "verified": 102,
+      "rtb": 89
+    },
+    "priority": 0,
+    "frozen_date": "2026-04-01"
+  },
+  "San Antonio & Austin|2026-01-21": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 207
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 11,
+      "verified": 10,
+      "rtb": 9
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Cort - Las Vegas - Assembler|2026-01-26": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 412
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 40,
+      "verified": 33,
+      "rtb": 32
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Advanced Spice & Trading, Inc.- Dallas-Administrative Assistant|2026-01-19": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1140,
+      "verified": 424,
+      "rtb": 350
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "CTDI - Columbus OH|2026-02-04": {
+    "fhs": {
+      "count": 4,
+      "rsvps": 327
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 138,
+      "verified": 81,
+      "rtb": 67
+    },
+    "priority": 2,
+    "frozen_date": "2026-04-01"
+  },
+  "SXSW - Austin - Event Staff|2026-02-05": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 481
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 237,
+      "verified": 164,
+      "rtb": 152
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Bon Appetit Management Company, Inc - Bon Appetit - Obama Presidential Center - Hospitality General Labor|2026-02-14": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Innovative Solution Advisors, LLC, dba Stadium People - Georgia World Congress Center - 285 Andrew Young International Blvd NE, Atlanta, 30303, GA - FM General Labor|2026-02-16": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 700,
+      "verified": 344,
+      "rtb": 300
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Advanced Spice & Trading, Inc. - Dallas, TX, Warehouse Operative|2026-01-21": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 104
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 395,
+      "verified": 182,
+      "rtb": 149
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn|2026-01-06": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 415
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 64,
+      "verified": 23,
+      "rtb": 21
+    },
+    "priority": 2,
+    "frozen_date": "2026-04-01"
+  },
+  "Flexco - Downers Grove, IL - Forklift Driver|2025-12-04": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "FLIK Hospitality Group - NCR Voyix - Global Headquarters - Bartender|2025-12-08": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Tennant Solutions-Warehouse Operative|2025-12-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Bon Appetit - The Obama Foundation -|2025-12-15": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 649
+    },
+    "indeed": {
+      "count": 8,
+      "spend": 1582.55
+    },
+    "ob": {
+      "created": 153,
+      "verified": 56,
+      "rtb": 55
+    },
+    "priority": 1,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn|2025-12-18": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 186
+    },
+    "indeed": {
+      "count": 2,
+      "spend": 892.79
+    },
+    "ob": {
+      "created": 19,
+      "verified": 8,
+      "rtb": 7
+    },
+    "priority": 3,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn - Fort Worth - Soldering Technician|2025-12-18": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 463
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 64,
+      "verified": 23,
+      "rtb": 21
+    },
+    "priority": 3,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn, Fort Worth, Soldering Technician|2026-01-06": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 415
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 64,
+      "verified": 23,
+      "rtb": 21
+    },
+    "priority": 2,
+    "frozen_date": "2026-04-01"
+  },
+  "AFC - West Chester - Forklift Driver|2026-01-19": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 15
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 2,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn, Fort Worth, Quality Team Member|2026-01-07": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 415
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 64,
+      "verified": 23,
+      "rtb": 21
+    },
+    "priority": 2,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn - Fort Worth - Production Line Lead|2026-01-07": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 91,
+      "verified": 32,
+      "rtb": 30
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Tennant Solutions 10132 Business Center Warehouse Operative|2026-01-08": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "All - Dallas/Austin - Line Cook and Prep Cook|2026-02-26": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 68,
+      "verified": 24,
+      "rtb": 20
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Legends Hospitality - AT&T Stadium - Parking Lots F, H, & G - Concession Stand Worker|2025-12-02": {
+    "fhs": {
+      "count": 5,
+      "rsvps": 351
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 139,
+      "verified": 43,
+      "rtb": 35
+    },
+    "priority": 2,
+    "frozen_date": "2026-04-01"
+  },
+  "BTX Global Logistics- 2519 Scarbrough Dr #260, Austin, TX 78728- Picker Packers, Forklift Drivers & General Warehouse Labor|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 3,
+      "verified": 5,
+      "rtb": 2
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Uplift - Austin - Assembler|2026-02-26": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 91
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 31,
+      "verified": 21,
+      "rtb": 17
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Vestals Catering- Banquet Servers, Bartenders, Prep Cooks, & BarBacks|2026-03-05": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 50
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 25,
+      "verified": 10,
+      "rtb": 9
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Lettuce Entertainment - Austin - Dishwasher/Busser|2026-03-04": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 234
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 53,
+      "verified": 22,
+      "rtb": 21
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Austin Club - Austin - Server, bar back, line cook, dishwasher|2026-03-05": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 52,
+      "verified": 25,
+      "rtb": 18
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Soho House - Austin - Hospitality General Labor|2026-03-06": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 103
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 60,
+      "verified": 36,
+      "rtb": 34
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "HCS - Lancaster, TX - Forklift Driver|2025-12-03": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 92,
+      "verified": 34,
+      "rtb": 24
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Terminus 330 - Atlanta - Bartender|2025-12-02": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 65
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Stord - Atlanta - Forklift Operator|2025-04-01": {
+    "fhs": {
+      "count": 2,
+      "rsvps": 1258
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 1101.98
+    },
+    "ob": {
+      "created": 55,
+      "verified": 16,
+      "rtb": 14
+    },
+    "priority": 0,
+    "frozen_date": "2026-04-01"
+  },
+  "Smurfit Kappa-Arlington-Forklift|2025-05-21": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 338
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 241.75
+    },
+    "ob": {
+      "created": 23,
+      "verified": 5,
+      "rtb": 1
+    },
+    "priority": 0,
+    "frozen_date": "2026-04-01"
+  },
+  "Manchester Arms - Atlanta, GA - Line Cook|2025-05-22": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 28
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 63,
+      "verified": 28,
+      "rtb": 27
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "HEI Hotels MSA - Le Meridien Dallas - Room Attendant - Housekeeper|2025-05-27": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 577
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 2,
+      "verified": 3,
+      "rtb": 1
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Central Woodwork - Nashville - Fl Driver|2025-05-27": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 34
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 6,
+      "verified": 9,
+      "rtb": 5
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Stord ATL Forklift Operator|2025-06-06": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "KEX Express - Bensenville, IL - Warehouse Operative|2025-06-13": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "[HEI] The Whitle, Atlanta Buckhead [Laundry Attendant - Housekeeping]|2025-06-13": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 3,
+      "verified": 2,
+      "rtb": 1
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "[HEI] The Whitley Atlanta Buclhead [Line Cook/Bnaquet Cook]|2025-06-13": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 63,
+      "verified": 28,
+      "rtb": 27
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn - Building 1&2 - Quality Team Memeber|2025-06-17": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Johnstone Supply|2025-07-10": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "AFC - Kennesaw|2025-07-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 637
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "AFC/Atlanta/Assembler|2025-06-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 188,
+      "verified": 112,
+      "rtb": 98
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Papa Johns Dallas Picker Packer|2025-05-15": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 408,
+      "verified": 184,
+      "rtb": 149
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "ONTRAC - Chicago Sort Center (HUB) - Admin AssistantPtU|2025-07-08": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 25,
+      "verified": 16,
+      "rtb": 13
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "G Texas- Gilleys and Dallas Museum of Art-Server|2025-04-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 750
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 8,
+      "verified": 3,
+      "rtb": 2
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Vacasun - Nashville, TN - Brand Ambassador|2025-04-07": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 357,
+      "verified": 212,
+      "rtb": 167
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Assurant-Mount Juliet-Materials Control Technician|2025-04-16": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 18,
+      "verified": 5,
+      "rtb": 4
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Sigma|2025-04-16": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "ROKA - Austin - Warehouse Associate and Assembler|2025-04-18": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 141,
+      "verified": 92,
+      "rtb": 78
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Stord - ATL - Picker Packer (A1 Shift)|2025-04-21": {
+    "fhs": {
+      "count": 2,
+      "rsvps": 25585
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 782.0
+    },
+    "ob": {
+      "created": 249,
+      "verified": 131,
+      "rtb": 117
+    },
+    "priority": 0,
+    "frozen_date": "2026-04-01"
+  },
+  "Hanover Cold Storage- Lancaster-Forklift Operator|2025-04-28": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 973
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 92,
+      "verified": 34,
+      "rtb": 24
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "KEX - Bensenville, IL - Warehouse Operative|2025-05-15": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Legends Hospitality-Dallas-Line Cook|2025-04-29": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 1481
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 3,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Stadium People - Atlanta, GA - Event Staff|2025-05-02": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 700,
+      "verified": 344,
+      "rtb": 300
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "ROKA, Austin, Assembler|2025-05-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 3,
+      "verified": 5,
+      "rtb": 2
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Stord - Inventory Control and Quality Audit - Union City|2025-05-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Stord - Union City, GA - Quality Assurance|2025-05-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "AFC Industries - West Chester, OH - FL Driver|2025-05-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 485
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 2,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Jayna|2025-05-13": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Administration Assistant|2025-07-08": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Assurant-Mount Juliet-Electronic Repair Associate|2025-07-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 18,
+      "verified": 5,
+      "rtb": 4
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Uplift Desk - Austin - Warehouse Operative|2025-10-29": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 333
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 31,
+      "verified": 21,
+      "rtb": 17
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Tennant Solutions, 10132 Business Center, Warehouse Operative|2025-09-30": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "LowCountry Catering|2025-10-03": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "STORD ATL1|2025-10-06": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Eurest- Bell Helicopter- Barista|2025-10-10": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "LowCountry Catering - Atlanta and surrounding areas - Servers and prep cooks|2025-10-14": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 984
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 3,
+      "rtb": 1
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Lettuce Entertain You - Austin & Chicago [Line Cook & Dishwasher|2025-10-20": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 36
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 833,
+      "verified": 362,
+      "rtb": 340
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Austin - The Domain [NEW OPENING]|2025-10-22": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 363
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 62,
+      "verified": 36,
+      "rtb": 34
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Legends - Dos Equis Pavilion - Bartender|2025-10-23": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 79
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 3,
+      "rtb": 1
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Tennant Solutions, 10132 Business Center, Warehouse Operative|2025-10-30": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Green Worldwide - Irving, TX - Forklift Operator|2025-11-03": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 122
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Assurant- Mt Juliet TN- Reach Truck Forklift Operator|2025-11-13": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 18,
+      "verified": 5,
+      "rtb": 4
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "CTDI - Monroe, OH - Warehouse Operative|2025-11-14": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 113
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Legends Hospitality - AT&T Stadium - Parking Lots F, H, & G - Concession Stand Worker|2025-11-19": {
+    "fhs": {
+      "count": 5,
+      "rsvps": 351
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 139,
+      "verified": 43,
+      "rtb": 35
+    },
+    "priority": 3,
+    "frozen_date": "2026-04-01"
+  },
+  "Hinsdale Gold Club- Hinsdale, IL- Hospitality|2025-11-20": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Legends Hospitality - AT&T Stadium - Parking Lots F, H, & G - Concession Stand Worker|2025-11-20": {
+    "fhs": {
+      "count": 5,
+      "rsvps": 351
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 139,
+      "verified": 43,
+      "rtb": 35
+    },
+    "priority": 3,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn|2025-11-24": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 654
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 64,
+      "verified": 23,
+      "rtb": 21
+    },
+    "priority": 3,
+    "frozen_date": "2026-04-01"
+  },
+  "Texas Women's Chartwells|2025-09-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Townplace Suites Lewisville LLC - Lewisville, TX - Front Desk Attendant|2025-07-14": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn - Fort Worth - OP3|2025-08-29": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 91,
+      "verified": 32,
+      "rtb": 30
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "AFC - Kennesaw - Inventory Control w/stand up Forklift experience|2025-07-16": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 305
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Mitsubishi Logisnext-Houston-Industrial General Labor|2025-07-23": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 34
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 3,
+      "rtb": 1
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "AFC - West Chester|2025-07-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 407
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 2,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Sigma-Irving, TX, Forklift Operator|2025-08-06": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 23
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Line Cook|2025-08-08": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Capital One Cafe - Eurest - Part of Compass|2025-08-27": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Foxconn - Fort Worth - OP3|2025-08-28": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 948
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 64,
+      "verified": 23,
+      "rtb": 21
+    },
+    "priority": 2,
+    "frozen_date": "2026-04-01"
+  },
+  "Stord ATL -  Inventory Control and Quality Assurance (Cycle Counter)|2025-09-03": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Texas Women\u2019s University Chartwells - Hubbard Hall- Catering - 303 Administration Dr, Denton, TX 76201, USA|2025-09-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "The Beautiful Restaurant|2025-09-04": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Uplift Desk - Austin - Warehouse Operative|2025-09-10": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 604
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 31,
+      "verified": 21,
+      "rtb": 17
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Housekeepers|2025-09-10": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 5,
+    "frozen_date": "2026-04-01"
+  },
+  "Compass Group (Chartwells Higher Education - St Edwards) - Austin - Cashier|2025-09-22": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 3,
+      "rtb": 1
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "S&S Active Wear- 8586 Trade Center Rd, Suite 100, West Chester, OH 45065|2025-09-23": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 166,
+      "verified": 97,
+      "rtb": 81
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "OnTrac - Atlanta Hub - Janitor/Cleaner|2025-09-24": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 101
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 35,
+      "verified": 19,
+      "rtb": 15
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  },
+  "Texas Women's University- Chartwells|2025-09-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "priority": 4,
+    "frozen_date": "2026-04-01"
+  }
+}

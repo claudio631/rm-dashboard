@@ -2,7 +2,7 @@
 
 > **Date:** 2026-03-13
 > **Attendees:** Carlos, Claudio, Craig Freeman
-> **Referenced:** Amira, David, Angela, Summer, Leah, Malik, Alexa Ringler, Gina, Jogga Santiago, Megan, Natalie, Mason, Azul
+> **Referenced:** Amira, David, Angela, Summer, Leah, Malik, Alexa Ringler, Gina, Jogga Santiago, Natalie, Mason, Azul
 > **Type:** Strategic review — team structure, processes, recruiting operations
 
 ## Key Takeaways
@@ -14,8 +14,8 @@
 - SXSW volunteer competition: workers prefer $2,000 badge value + platinum access over hourly pay
 
 ### Team Structure Crisis
-- Craig now managing Megan's areas — "very overwhelmed"
-- Previous peak team: Natalie (CL/FB groups), Megan, Claudio + Carlos replacing Mason
+- Craig now managing additional areas — "very overwhelmed"
+- Previous peak team: Natalie (CL/FB groups), Claudio + Carlos replacing Mason
 - Operating with reduced headcount vs. peak season
 - Recruiters siloed — told to stay in their specific roles
 - Carlos wants to empower recruiters more
@@ -68,5 +68,5 @@
 ### Ads Planning Process (Documented by Claudio)
 - Two key input calls: Strategy call with Azul + Revenue call
 - Three key reports: Capacity map, Job funnels, Pipeline (Salesforce)
-- Previously: weekly call with Mason + Megan to align on which locations need ads
+- Previously: weekly call with Mason and team to align on which locations need ads
 - Now: no centralized guidance on weekly priorities

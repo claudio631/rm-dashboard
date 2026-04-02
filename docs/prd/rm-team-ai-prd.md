@@ -12,7 +12,7 @@
 
 Indeed Flex is a **W-2 staffing agency** that hires flexible workers (Flexers) across Industrial and Hospitality verticals. Unlike gig platforms, every worker must complete a full onboarding process: app download → account creation → AI interview (English or Spanish) → recruiter review → I-9 form → conditional offer → pay details → legal agreements → shift booking.
 
-The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) manages advertising across **7 channels** (Indeed Ads, Google Ads, Meta Ads, TikTok Ads, Bing Ads, Craigslist, and referrals) for **147 clients** across **21 US markets**. In 2025, the team generated **52,987 worker accounts** resulting in **8,146 first shifts completed** (15.4% overall conversion).
+The Recruitment Marketing team (Claudio, Craig — US; Olivia — UK) manages advertising across **7 channels** (Indeed Ads, Google Ads, Meta Ads, TikTok Ads, Bing Ads, Craigslist, and referrals) for **147 clients** across **21 US markets**. In 2025, the team generated **52,987 worker accounts** resulting in **8,146 first shifts completed** (15.4% overall conversion).
 
 **The core problem:** Campaign data lives in 3 separate systems — FHS (ATS with requisitions and RSVPs), Indeed Analytics (campaign spend and metrics), and Tableau (onboarding funnel by client × market). Every day, the team manually downloads Excel exports from each system, joins the data in a 41-column spreadsheet, calculates derived metrics, and compiles a Slack report using Gemini AI. This process takes 60+ minutes daily per specialist.
 
@@ -36,7 +36,6 @@ The Recruitment Marketing team (Claudio, Craig, Megan — US; Olivia — UK) man
 |------|------|---------|
 | Claudio Santos | Recruitment Marketing Specialist | Austin, Houston, Washington DC, Charlotte, Fort Mill, Orlando, Phoenix, Reno, Las Vegas, Monroe |
 | Craig Freeman | Recruitment Marketing Specialist | Columbus, Cincinnati, Hebron, Chicago, Atlanta, Dallas, Logan Township, NJ cluster, North Haven |
-| Megan Georgevich | Recruitment Marketing Specialist | US markets (shared) |
 | Olivia Smith | Recruitment Marketing Manager | UK |
 
 ### Systems Landscape

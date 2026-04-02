@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Requests Cross-Reference Dashboard — 2026-03-25</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; font-size: 14px; color: #111827; }
+        .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); color: white; padding: 24px 32px; }
+        .header h1 { font-size: 22px; font-weight: 700; }
+        .header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; padding: 20px 32px; }
+        .kpi-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        .kpi-card .number { font-size: 32px; font-weight: 800; line-height: 1.2; }
+        .kpi-card .label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .kpi-card.red .number { color: #ef4444; }
+        .kpi-card.amber .number { color: #f59e0b; }
+        .kpi-card.blue .number { color: #2563eb; }
+        .kpi-card.green .number { color: #22c55e; }
+        .table-container { margin: 0 32px 32px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .table-scroll { overflow-y: auto; max-height: calc(100vh - 220px); }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { position: sticky; top: 0; z-index: 10; background: #1e3a5f; color: white; padding: 8px 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+        th.group-header { background: #0f2540; padding: 6px 10px; font-size: 11px; text-align: center; border-left: 2px solid rgba(255,255,255,0.15); }
+        th.sub-header { background: #1e3a5f; font-size: 11px; }
+        th:first-child { border-left: none; }
+        td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; font-size: 14px; vertical-align: middle; }
+        tr:hover { filter: brightness(0.97); }
+        .legend { margin: 12px 32px; display: flex; gap: 24px; font-size: 12px; color: #6b7280; }
+        .legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .legend .dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Revenue Requests Cross-Reference Dashboard</h1>
+        <p>Generated 2026-03-25 | Source order preserved from Revenue Team submissions | Data: FHS Requisitions, Indeed Campaign Report, OB Funnel</p>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card blue">
+            <div class="number">49</div>
+            <div class="label">Live Requests</div>
+        </div>
+        <div class="kpi-card blue">
+            <div class="number">1,556</div>
+            <div class="label">Total HC</div>
+        </div>
+        <div class="kpi-card red">
+            <div class="number">4</div>
+            <div class="label">High Priority</div>
+        </div>
+        <div class="kpi-card red">
+            <div class="number">1</div>
+            <div class="label">No FHS</div>
+        </div>
+        <div class="kpi-card amber">
+            <div class="number">24</div>
+            <div class="label">No Indeed</div>
+        </div>
+        <div class="kpi-card amber">
+            <div class="number">10</div>
+            <div class="label">Shifts TBD</div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <span><span class="dot" style="background:#fee2e2;border:1px solid #fca5a5;"></span> Priority >= 7 (Critical)</span>
+        <span><span class="dot" style="background:#fef3c7;border:1px solid #fcd34d;"></span> Priority 4-6 (Watch)</span>
+        <span><span class="dot" style="background:#ffffff;border:1px solid #d1d5db;"></span> Priority 0-3 (On track)</span>
+        <span>Sorted by original revenue team submission order</span>
+    </div>
+
+    <div class="table-container">
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="min-width:40px;">P</th>
+                        <th rowspan="2" style="min-width:160px;">Client</th>
+                        <th rowspan="2" style="min-width:70px;">Owner</th>
+                        <th rowspan="2" style="min-width:120px;">Role</th>
+                        <th rowspan="2" style="min-width:40px;">HC</th>
+                        <th rowspan="2" style="min-width:90px;">Start</th>
+                        <th rowspan="2" style="min-width:55px;">Shifts</th>
+                        <th colspan="3" class="group-header">FHS Requisitions</th>
+                        <th colspan="3" class="group-header">Indeed Ads</th>
+                        <th colspan="3" class="group-header">OB Funnel</th>
+                        <th class="group-header">Fulfillment</th>
+                    </tr>
+                    <tr>
+                        <th class="sub-header" style="text-align:center;">Open</th>
+                        <th class="sub-header" style="text-align:center;">RSVPs</th>
+                        <th class="sub-header" style="text-align:center;">Target</th>
+                        <th class="sub-header" style="text-align:center;">St</th>
+                        <th class="sub-header" style="text-align:center;">#Camps</th>
+                        <th class="sub-header" style="text-align:right;">Spend</th>
+                        <th class="sub-header" style="text-align:center;">Created</th>
+                        <th class="sub-header" style="text-align:center;">Verified</th>
+                        <th class="sub-header" style="text-align:center;">RTB</th>
+                        <th class="sub-header" style="text-align:center;">RTB/Target</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>Bon Appetit</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Claudio</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">2026-02-03</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2551</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">17656</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,030</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">224</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">94</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">42</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.2378794743996375%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Megan</td>
+        <td>Team Lead/Captain/Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-02-21</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8805</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">17318</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$3,391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.3522346691303846%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">4</span></td>
+        <td><strong>San Antonio &amp; Austin</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Megan</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">2026-01-30</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">85</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1170</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">29</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:2.4786324786324787%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Las Vegas</span></td>
+        <td>Megan</td>
+        <td>Assembler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">2026-01-26</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1607</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5640</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">560</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">299</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">115</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:2.039007092198582%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Megan</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">2026-01-07</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">9</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3057</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">17135</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,131</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">340</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">177</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">58</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.33848847388386344%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>Bon Appetit</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Megan</td>
+        <td>Dishwasher</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-size:13px;">2026-02-17</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">618</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4521</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,030</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">224</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">94</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">42</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.92899800928998%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>Foxconn</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Megan</td>
+        <td>Repair Technician</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">9</td>
+        <td style="text-align:center;font-size:13px;">2026-01-19</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10068</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10243</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$180</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">329</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">102</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">52</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.5076637703797715%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Megan</td>
+        <td>Line Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">9</td>
+        <td style="text-align:center;font-size:13px;">2026-02-21</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4619</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">9514</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$3,391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.6411603952070632%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Orlando</span></td>
+        <td>Craig</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">2026-02-10</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1151</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6880</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$637</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">164</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">102</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.3488372093023256%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Craig</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">18</td>
+        <td style="text-align:center;font-size:13px;">2026-02-10</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">804</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2840</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$791</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">114</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">59</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">15</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.528169014084507%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Ingram</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Craig</td>
+        <td>Industrial General Labore</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">120</td>
+        <td style="text-align:center;font-size:13px;">2026-02-16</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">967</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7680</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$663</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">67</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">27</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.09114583333333333%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">6</span></td>
+        <td><strong>SXSW</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Megan</td>
+        <td>Event Staff</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">300</td>
+        <td style="text-align:center;font-size:13px;">2026-03-09</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1133</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">12850</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">342</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">224</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">143</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.11284046692607%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">5</span></td>
+        <td><strong>Assurant</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Craig</td>
+        <td>Material Handler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">2026-02-17</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3307</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5330</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.01876172607879925%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>Foxconn</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Megan</td>
+        <td>Assembler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-size:13px;">2026-01-13</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10056</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10075</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$180</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">329</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">102</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">52</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.5161290322580645%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">6</span></td>
+        <td><strong>Rhino Staging</strong><br><span style="color:#6b7280;font-size:12px;">Charlotte</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">2026-01-24</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">171</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">300</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Megan</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">100</td>
+        <td style="text-align:center;font-size:13px;">2026-02-02</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8805</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">17318</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$3,391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.3522346691303846%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Barista</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">2026-04-27</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">179</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2100</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.4761904761904763%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fee2e2;">
+        <td style="text-align:center;"><span style="background:#ef4444;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">7</span></td>
+        <td><strong>Bath Concepts- 1800 Industrial Drive Libertyv</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">70</td>
+        <td style="text-align:center;font-size:13px;">2026-04-07</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1933</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">13335</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.02249718785151856%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>BTX Global Logistics- 2519 Scarbrough Dr #260</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Claudio</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">2026-03-24</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3168</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">21230</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">29</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.1365991521431936%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">4</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-04-28</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">231</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2100</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.4761904761904763%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Dishwasher</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">2026-04-28</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">266</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2300</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.3478260869565217%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">23</td>
+        <td style="text-align:center;font-size:13px;">2026-04-28</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">199</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2150</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.441860465116279%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">2026-04-28</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">199</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2150</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.441860465116279%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">2</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Cashier</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5</td>
+        <td style="text-align:center;font-size:13px;">2026-08-03</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">219</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2100</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.4761904761904763%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">5</span></td>
+        <td><strong>Power Stop- Bedford Park</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Forklift Driver</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">2026-03-16</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">355</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3350</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.08955223880597014%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">4</span></td>
+        <td><strong>Legends Hospitality</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">2026-06-11</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">15</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16519</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">48590</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">344</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">101</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">48</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.09878575838649928%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>CTDI</strong><br><span style="color:#6b7280;font-size:12px;">Columbus</span></td>
+        <td>Craig</td>
+        <td>NA</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-03-13</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">273</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1580</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$694</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">112</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">58</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.2658227848101267%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fee2e2;">
+        <td style="text-align:center;"><span style="background:#ef4444;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">7</span></td>
+        <td><strong>Ingram-LaVergne</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Craig</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-04-01</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3040</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fee2e2;">
+        <td style="text-align:center;"><span style="background:#ef4444;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">7</span></td>
+        <td><strong>Solaren Risk Management- Downtown Nashville, </strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Angela</td>
+        <td>Event Staff</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">150</td>
+        <td style="text-align:center;font-size:13px;">2026-04-25</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">375</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">320</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>CTDI</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-size:13px;">2026-03-30</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">25</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">12995</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">55905</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,960</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">463</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">175</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">74</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.13236740899740632%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">6</span></td>
+        <td><strong>Levy</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Cashier</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="text-align:center;font-size:13px;">2026-03-31</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">98</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1460</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.2054794520547945%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">4</span></td>
+        <td><strong>Legends Hospitality</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Craig</td>
+        <td>Hospitality Team Lead</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-size:13px;">2026-06-11</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5736</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16425</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">344</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">101</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">48</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.2922374429223744%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">6</span></td>
+        <td><strong>Legends Hospitality</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Craig</td>
+        <td>Concession Stand Worker</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">35</td>
+        <td style="text-align:center;font-size:13px;">2026-06-14</td>
+        <td style="text-align:center;"><span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7752</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">22050</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">344</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">101</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">48</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.21768707482993196%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-03-05</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">453</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4070</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,038</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">245</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">106</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">53</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.3022113022113022%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">4</span></td>
+        <td><strong>Uplift</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Craig</td>
+        <td>Assembler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">15</td>
+        <td style="text-align:center;font-size:13px;">2026-03-23</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">822</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2540</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">29</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.141732283464567%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Washington</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">2026-02-27</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">166</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2000</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,103</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">289</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">90</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">31</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.55%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Ryerson</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Craig</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-size:13px;">2026-03-16</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">385</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4523</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">212</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">68</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">35</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.7738226840592527%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">5</span></td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Las Vegas</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">69</td>
+        <td style="text-align:center;font-size:13px;">2026-03-03</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1773</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6780</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">560</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">299</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">115</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.696165191740413%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">6</span></td>
+        <td><strong>Lettuce Entertainment</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Claudio</td>
+        <td>Busser.  May need some ex</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-size:13px;">2026-03-12</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">155</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3250</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">29</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.8923076923076922%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#fee2e2;">
+        <td style="text-align:center;"><span style="background:#ef4444;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">10</span></td>
+        <td><strong>CORT- Orlando</strong><br><span style="color:#6b7280;font-size:12px;">32819</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-03-16</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Craig</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">15</td>
+        <td style="text-align:center;font-size:13px;">2026-03-27</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4459</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8569</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$3,391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.7118683627027658%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Austin Club</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Claudio</td>
+        <td>Bar back</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">2026-03-05</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">72</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">29</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:40.27777777777778%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">40%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">1</span></td>
+        <td><strong>Johnstone</strong><br><span style="color:#6b7280;font-size:12px;">DFW</span></td>
+        <td>Claudio</td>
+        <td>Forklift Driver</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-size:13px;">2026-03-06</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1048</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2212</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$659</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">255</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">81</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.8083182640144666%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">5</span></td>
+        <td><strong>Vestals Catering- Banquet Servers, Bartenders</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Claudio</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">2026-03-13</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3246</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">22050</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">29</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.13151927437641725%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Soho House</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span></td>
+        <td>Claudio</td>
+        <td>Hospitality General Labor</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">2026-03-13</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">687</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4390</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">129</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">70</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">44</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:1.0022779043280183%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>HYATT PLACE ATLANTA CENTENNIAL PARK</strong><br><span style="color:#6b7280;font-size:12px;">Atlanta</span></td>
+        <td>Craig</td>
+        <td>Bartender</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">2026-03-24</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">394</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">580</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">194</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">74</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">25</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:4.310344827586207%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">4%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Claudio</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">45</td>
+        <td style="text-align:center;font-size:13px;">2026-03-16</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2288</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16685</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,038</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">245</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">106</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">53</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.31765058435720706%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#ffffff;">
+        <td style="text-align:center;"><span style="background:#10b981;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">3</span></td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">45</td>
+        <td style="text-align:center;font-size:13px;">2026-04-06</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2288</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16685</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,038</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">245</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">106</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">53</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.31765058435720706%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef3c7;">
+        <td style="text-align:center;"><span style="background:#f59e0b;color:white;padding:2px 8px;border-radius:10px;font-weight:bold;font-size:13px;">6</span></td>
+        <td><strong>Levy</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">25</td>
+        <td style="text-align:center;font-size:13px;">2026-03-31</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">363</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3260</td>
+        <td style="text-align:center;">🔴</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0.09202453987730061%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

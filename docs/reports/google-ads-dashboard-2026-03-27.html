@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Ads Dashboard — 2026-03-27</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; font-size: 14px; color: #111827; }
+        .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); color: white; padding: 24px 32px; }
+        .header h1 { font-size: 22px; font-weight: 700; }
+        .header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+
+        /* KPI Cards */
+        .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 20px 32px; }
+        .kpi-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        .kpi-card .number { font-size: 28px; font-weight: 800; line-height: 1.2; }
+        .kpi-card .label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .kpi-card.blue .number { color: #2563eb; }
+        .kpi-card.green .number { color: #22c55e; }
+        .kpi-card.amber .number { color: #f59e0b; }
+        .kpi-card.red .number { color: #ef4444; }
+        .kpi-card.purple .number { color: #7c3aed; }
+
+        /* Sections */
+        .section { margin: 0 32px 24px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .section-title { background: #1e3a5f; color: white; padding: 12px 20px; font-size: 15px; font-weight: 600; }
+
+        /* Type bars */
+        .type-chart { padding: 20px; }
+        .type-row { margin-bottom: 16px; }
+        .type-label { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .type-count { font-weight: 400; color: #6b7280; font-size: 12px; }
+        .type-bar-container { background: #e5e7eb; border-radius: 6px; height: 32px; overflow: hidden; }
+        .type-bar { height: 100%; border-radius: 6px; color: white; font-weight: 700; font-size: 13px; display: flex; align-items: center; padding-left: 12px; min-width: 80px; transition: width 0.5s; }
+        .type-metrics { display: flex; gap: 16px; font-size: 12px; color: #6b7280; margin-top: 4px; }
+        .type-metrics span { white-space: nowrap; }
+
+        /* Tables */
+        .table-scroll { overflow-y: auto; max-height: 600px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { position: sticky; top: 0; z-index: 10; background: #1e3a5f; color: white; padding: 8px 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; text-align: left; }
+        td { padding: 7px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
+        tr:hover { background: #f9fafb; }
+
+        /* State rows */
+        .state-row { background: #eff6ff; }
+        .state-row td { border-bottom: 2px solid #2563eb; }
+
+        /* Spend coloring */
+        .high-spend td:nth-child(4) { color: #dc2626; font-weight: 600; }
+        .mid-spend td:nth-child(4) { color: #d97706; }
+        .low-spend td:nth-child(4) { color: #6b7280; }
+
+        /* Budget flags */
+        .underspend td { background: #fef3c7; }
+        .underspend-flag { color: #d97706; font-weight: 700; }
+        .maxed td { background: #fee2e2; }
+        .maxed-flag { color: #dc2626; font-weight: 700; }
+
+        /* Gap analysis */
+        .gap-red td { background: #fef2f2; }
+        .gap-yellow td { background: #fffbeb; }
+        .gap-green td { background: #f0fdf4; }
+
+        /* Legend */
+        .legend { margin: 8px 20px 16px; display: flex; gap: 20px; font-size: 12px; color: #6b7280; flex-wrap: wrap; }
+        .legend span { display: inline-flex; align-items: center; gap: 4px; }
+        .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+        .footer { text-align: center; padding: 16px; color: #9ca3af; font-size: 11px; }
+
+        /* Filter Bar */
+        .filter-bar { display: flex; gap: 20px; padding: 16px 32px 0; align-items: flex-end; flex-wrap: wrap; }
+        .filter-group { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+        .filter-group label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; }
+        .filter-group select { font-size: 14px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; background: white; color: #111827; min-width: 260px; cursor: pointer; }
+        .filter-group select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+        .filter-note { font-size: 11px; color: #9ca3af; font-style: italic; margin-top: 2px; }
+
+        /* ===== PRINT / PDF STYLES ===== */
+        @media print {
+            @page {
+                size: landscape;
+                margin: 12mm 10mm;
+            }
+            body { background: white; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            /* Remove scroll constraints — show full tables */
+            .table-scroll { overflow: visible; max-height: none; }
+
+            /* Each section starts on a new page */
+            .section { break-inside: avoid; page-break-inside: avoid; margin: 0 0 12px; box-shadow: none; border: 1px solid #d1d5db; }
+            .section:nth-child(n+2) { break-before: page; page-break-before: always; }
+
+            /* Keep header compact */
+            .header { padding: 12px 16px; }
+            .header h1 { font-size: 18pt; }
+            .header p { font-size: 9pt; }
+
+            /* KPI grid: force single row, readable sizes */
+            .kpi-grid { padding: 12px 16px; gap: 10px; }
+            .kpi-card { padding: 10px 12px; box-shadow: none; border: 1px solid #d1d5db; }
+            .kpi-card .number { font-size: 20pt; }
+            .kpi-card .label { font-size: 8pt; }
+
+            /* Tables: readable column sizing */
+            table { font-size: 9pt; width: 100%; table-layout: auto; }
+            th { font-size: 8pt; padding: 5px 6px; background: #1e3a5f !important; color: white !important; }
+            td { padding: 4px 6px; font-size: 9pt; }
+
+            /* Sticky headers off for print */
+            th { position: static; }
+
+            /* Don't break rows across pages */
+            tr { break-inside: avoid; page-break-inside: avoid; }
+
+            /* Legend readable */
+            .legend { font-size: 9pt; }
+
+            /* Type chart bars */
+            .type-label { font-size: 10pt; }
+            .type-bar { font-size: 9pt; min-width: 60px; }
+            .type-metrics { font-size: 9pt; }
+
+            /* Footer */
+            .footer { font-size: 8pt; }
+
+            /* Hide filters in print */
+            .filter-bar { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Google Ads Dashboard — Indeed Flex US</h1>
+        <p>Generated 2026-03-27 | Account: 723-610-0723 | MTD data (27 days elapsed) | Cross-referenced with Revenue Requests + FHS Requisitions</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-group">
+            <label>Account</label>
+            <select id="accountFilter">
+                <option value="us" selected>Indeed Flex US (723-610-0723)</option>
+                <option value="uk">Indeed Flex UK (794-310-5605)</option>
+            </select>
+            <span class="filter-note">UK data requires re-running with UK account</span>
+        </div>
+        <div class="filter-group">
+            <label>State Filter</label>
+            <select id="stateFilter" onchange="filterByState(this.value)">
+                <option value="all">All States</option>
+                <option value="AZ">AZ</option>
+                <option value="DC">DC</option>
+                <option value="FL">FL</option>
+                <option value="GA">GA</option>
+                <option value="IL">IL</option>
+                <option value="KY">KY</option>
+                <option value="NC">NC</option>
+                <option value="NJ">NJ</option>
+                <option value="NV">NV</option>
+                <option value="OH">OH</option>
+                <option value="TN">TN</option>
+                <option value="TX">TX</option>
+                <option value="??">?? (Unknown)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card blue">
+            <div class="number">$57,761</div>
+            <div class="label">Total Spend MTD</div>
+        </div>
+        <div class="kpi-card purple">
+            <div class="number">81</div>
+            <div class="label">Active Campaigns</div>
+        </div>
+        <div class="kpi-card amber">
+            <div class="number">$1.81</div>
+            <div class="label">Avg CPA</div>
+        </div>
+        <div class="kpi-card green">
+            <div class="number">21</div>
+            <div class="label">Locations Covered</div>
+        </div>
+        <div class="kpi-card red">
+            <div class="number">42</div>
+            <div class="label">Locations w/ No Ads</div>
+        </div>
+    </div>
+
+    <!-- Section 1: Cost by Campaign Type -->
+    <div class="section">
+        <div class="section-title">Section 1: Cost Breakdown by Campaign Type</div>
+        <div class="type-chart">
+            
+        <div class="type-row">
+            <div class="type-label">Search <span class="type-count">(34 campaigns)</span></div>
+            <div class="type-bar-container">
+                <div class="type-bar" style="width: 100.0%; background: #2563eb;">
+                    $22,992
+                </div>
+            </div>
+            <div class="type-metrics">
+                <span>195,699 imp</span>
+                <span>15,880 clicks</span>
+                <span>8.1% CTR</span>
+                <span>10502 conv</span>
+                <span>CPA: $2.19</span>
+            </div>
+        </div>
+        <div class="type-row">
+            <div class="type-label">PMax <span class="type-count">(16 campaigns)</span></div>
+            <div class="type-bar-container">
+                <div class="type-bar" style="width: 46.5%; background: #7c3aed;">
+                    $10,699
+                </div>
+            </div>
+            <div class="type-metrics">
+                <span>254,079 imp</span>
+                <span>13,375 clicks</span>
+                <span>5.3% CTR</span>
+                <span>4135 conv</span>
+                <span>CPA: $2.59</span>
+            </div>
+        </div>
+        <div class="type-row">
+            <div class="type-label">App <span class="type-count">(21 campaigns)</span></div>
+            <div class="type-bar-container">
+                <div class="type-bar" style="width: 76.4%; background: #059669;">
+                    $17,567
+                </div>
+            </div>
+            <div class="type-metrics">
+                <span>1,053,033 imp</span>
+                <span>20,815 clicks</span>
+                <span>2.0% CTR</span>
+                <span>15566 conv</span>
+                <span>CPA: $1.13</span>
+            </div>
+        </div>
+        <div class="type-row">
+            <div class="type-label">Display <span class="type-count">(7 campaigns)</span></div>
+            <div class="type-bar-container">
+                <div class="type-bar" style="width: 12.3%; background: #ea580c;">
+                    $2,836
+                </div>
+            </div>
+            <div class="type-metrics">
+                <span>75,518 imp</span>
+                <span>7,178 clicks</span>
+                <span>9.5% CTR</span>
+                <span>990 conv</span>
+                <span>CPA: $2.86</span>
+            </div>
+        </div>
+        <div class="type-row">
+            <div class="type-label">Other <span class="type-count">(3 campaigns)</span></div>
+            <div class="type-bar-container">
+                <div class="type-bar" style="width: 15.9%; background: #6b7280;">
+                    $3,667
+                </div>
+            </div>
+            <div class="type-metrics">
+                <span>21,598 imp</span>
+                <span>2,305 clicks</span>
+                <span>10.7% CTR</span>
+                <span>733 conv</span>
+                <span>CPA: $5.00</span>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Spend by Location/State -->
+    <div class="section">
+        <div class="section-title">Section 2: Spend by Location / State</div>
+        <div class="legend">
+            <span><span class="dot" style="background:#dc2626"></span> High spend (&gt;$5K)</span>
+            <span><span class="dot" style="background:#d97706"></span> Mid spend ($1K-$5K)</span>
+            <span><span class="dot" style="background:#6b7280"></span> Low spend (&lt;$1K)</span>
+        </div>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>State</th>
+                        <th>Location</th>
+                        <th># Campaigns</th>
+                        <th>Spend</th>
+                        <th>Impressions</th>
+                        <th>Clicks</th>
+                        <th>Conversions</th>
+                        <th>CPA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr class="state-row" data-state="TX">
+            <td colspan="2"><strong>TX</strong></td>
+            <td><strong>23</strong></td>
+            <td><strong>$23,613</strong></td>
+            <td><strong>631,177</strong></td>
+            <td><strong>20,618</strong></td>
+            <td><strong>10605</strong></td>
+            <td><strong>$2.23</strong></td>
+        </tr>
+        <tr class="high-spend" data-state="TX">
+            <td></td>
+            <td>Ft Worth</td>
+            <td>5</td>
+            <td>$5,878</td>
+            <td>143,315</td>
+            <td>5,321</td>
+            <td>3289</td>
+            <td>$1.79</td>
+        </tr>
+        <tr class="high-spend" data-state="TX">
+            <td></td>
+            <td>Dallas</td>
+            <td>4</td>
+            <td>$5,825</td>
+            <td>153,518</td>
+            <td>4,212</td>
+            <td>1878</td>
+            <td>$3.10</td>
+        </tr>
+        <tr class="mid-spend" data-state="TX">
+            <td></td>
+            <td>Austin</td>
+            <td>3</td>
+            <td>$4,260</td>
+            <td>108,330</td>
+            <td>3,277</td>
+            <td>1523</td>
+            <td>$2.80</td>
+        </tr>
+        <tr class="mid-spend" data-state="TX">
+            <td></td>
+            <td>Haslet</td>
+            <td>4</td>
+            <td>$3,356</td>
+            <td>105,204</td>
+            <td>3,502</td>
+            <td>1376</td>
+            <td>$2.44</td>
+        </tr>
+        <tr class="mid-spend" data-state="TX">
+            <td></td>
+            <td>Flower Mound</td>
+            <td>3</td>
+            <td>$2,924</td>
+            <td>76,369</td>
+            <td>2,397</td>
+            <td>1532</td>
+            <td>$1.91</td>
+        </tr>
+        <tr class="mid-spend" data-state="TX">
+            <td></td>
+            <td>Houston</td>
+            <td>4</td>
+            <td>$1,370</td>
+            <td>44,441</td>
+            <td>1,909</td>
+            <td>1006</td>
+            <td>$1.36</td>
+        </tr>
+        <tr class="state-row" data-state="NJ">
+            <td colspan="2"><strong>NJ</strong></td>
+            <td><strong>12</strong></td>
+            <td><strong>$9,361</strong></td>
+            <td><strong>284,402</strong></td>
+            <td><strong>13,233</strong></td>
+            <td><strong>5229</strong></td>
+            <td><strong>$1.79</strong></td>
+        </tr>
+        <tr class="mid-spend" data-state="NJ">
+            <td></td>
+            <td>Logan Township</td>
+            <td>4</td>
+            <td>$4,815</td>
+            <td>186,262</td>
+            <td>7,169</td>
+            <td>2972</td>
+            <td>$1.62</td>
+        </tr>
+        <tr class="mid-spend" data-state="NJ">
+            <td></td>
+            <td>South Brunswick</td>
+            <td>4</td>
+            <td>$3,692</td>
+            <td>77,129</td>
+            <td>5,146</td>
+            <td>1907</td>
+            <td>$1.94</td>
+        </tr>
+        <tr class="low-spend" data-state="NJ">
+            <td></td>
+            <td>Paulsboro</td>
+            <td>4</td>
+            <td>$853.68</td>
+            <td>21,011</td>
+            <td>918</td>
+            <td>350</td>
+            <td>$2.44</td>
+        </tr>
+        <tr class="state-row" data-state="NV">
+            <td colspan="2"><strong>NV</strong></td>
+            <td><strong>6</strong></td>
+            <td><strong>$8,341</strong></td>
+            <td><strong>254,048</strong></td>
+            <td><strong>7,202</strong></td>
+            <td><strong>4331</strong></td>
+            <td><strong>$1.93</strong></td>
+        </tr>
+        <tr class="high-spend" data-state="NV">
+            <td></td>
+            <td>Las Vegas</td>
+            <td>4</td>
+            <td>$5,019</td>
+            <td>112,067</td>
+            <td>4,870</td>
+            <td>3391</td>
+            <td>$1.48</td>
+        </tr>
+        <tr class="mid-spend" data-state="NV">
+            <td></td>
+            <td>Reno</td>
+            <td>2</td>
+            <td>$3,322</td>
+            <td>141,981</td>
+            <td>2,332</td>
+            <td>939</td>
+            <td>$3.54</td>
+        </tr>
+        <tr class="state-row" data-state="IL">
+            <td colspan="2"><strong>IL</strong></td>
+            <td><strong>7</strong></td>
+            <td><strong>$5,653</strong></td>
+            <td><strong>106,376</strong></td>
+            <td><strong>6,050</strong></td>
+            <td><strong>2517</strong></td>
+            <td><strong>$2.25</strong></td>
+        </tr>
+        <tr class="high-spend" data-state="IL">
+            <td></td>
+            <td>Chicago</td>
+            <td>7</td>
+            <td>$5,653</td>
+            <td>106,376</td>
+            <td>6,050</td>
+            <td>2517</td>
+            <td>$2.25</td>
+        </tr>
+        <tr class="state-row" data-state="??">
+            <td colspan="2"><strong>??</strong></td>
+            <td><strong>10</strong></td>
+            <td><strong>$2,507</strong></td>
+            <td><strong>38,687</strong></td>
+            <td><strong>3,140</strong></td>
+            <td><strong>1527</strong></td>
+            <td><strong>$1.64</strong></td>
+        </tr>
+        <tr class="mid-spend" data-state="??">
+            <td></td>
+            <td>Unknown</td>
+            <td>10</td>
+            <td>$2,507</td>
+            <td>38,687</td>
+            <td>3,140</td>
+            <td>1527</td>
+            <td>$1.64</td>
+        </tr>
+        <tr class="state-row" data-state="GA">
+            <td colspan="2"><strong>GA</strong></td>
+            <td><strong>4</strong></td>
+            <td><strong>$2,257</strong></td>
+            <td><strong>72,999</strong></td>
+            <td><strong>2,571</strong></td>
+            <td><strong>3364</strong></td>
+            <td><strong>$0.67</strong></td>
+        </tr>
+        <tr class="mid-spend" data-state="GA">
+            <td></td>
+            <td>Atlanta</td>
+            <td>4</td>
+            <td>$2,257</td>
+            <td>72,999</td>
+            <td>2,571</td>
+            <td>3364</td>
+            <td>$0.67</td>
+        </tr>
+        <tr class="state-row" data-state="OH">
+            <td colspan="2"><strong>OH</strong></td>
+            <td><strong>5</strong></td>
+            <td><strong>$1,930</strong></td>
+            <td><strong>58,684</strong></td>
+            <td><strong>1,908</strong></td>
+            <td><strong>1151</strong></td>
+            <td><strong>$1.68</strong></td>
+        </tr>
+        <tr class="mid-spend" data-state="OH">
+            <td></td>
+            <td>Columbus</td>
+            <td>3</td>
+            <td>$1,470</td>
+            <td>40,335</td>
+            <td>1,434</td>
+            <td>753</td>
+            <td>$1.95</td>
+        </tr>
+        <tr class="low-spend" data-state="OH">
+            <td></td>
+            <td>Cincinnati</td>
+            <td>2</td>
+            <td>$460.36</td>
+            <td>18,349</td>
+            <td>474</td>
+            <td>398</td>
+            <td>$1.16</td>
+        </tr>
+        <tr class="state-row" data-state="KY">
+            <td colspan="2"><strong>KY</strong></td>
+            <td><strong>4</strong></td>
+            <td><strong>$1,602</strong></td>
+            <td><strong>36,735</strong></td>
+            <td><strong>1,270</strong></td>
+            <td><strong>871</strong></td>
+            <td><strong>$1.84</strong></td>
+        </tr>
+        <tr class="mid-spend" data-state="KY">
+            <td></td>
+            <td>Hebron</td>
+            <td>4</td>
+            <td>$1,602</td>
+            <td>36,735</td>
+            <td>1,270</td>
+            <td>871</td>
+            <td>$1.84</td>
+        </tr>
+        <tr class="state-row" data-state="DC">
+            <td colspan="2"><strong>DC</strong></td>
+            <td><strong>1</strong></td>
+            <td><strong>$1,074</strong></td>
+            <td><strong>63,904</strong></td>
+            <td><strong>1,482</strong></td>
+            <td><strong>968</strong></td>
+            <td><strong>$1.11</strong></td>
+        </tr>
+        <tr class="mid-spend" data-state="DC">
+            <td></td>
+            <td>Washington Dc</td>
+            <td>1</td>
+            <td>$1,074</td>
+            <td>63,904</td>
+            <td>1,482</td>
+            <td>968</td>
+            <td>$1.11</td>
+        </tr>
+        <tr class="state-row" data-state="NC">
+            <td colspan="2"><strong>NC</strong></td>
+            <td><strong>2</strong></td>
+            <td><strong>$627.06</strong></td>
+            <td><strong>20,530</strong></td>
+            <td><strong>620</strong></td>
+            <td><strong>470</strong></td>
+            <td><strong>$1.34</strong></td>
+        </tr>
+        <tr class="low-spend" data-state="NC">
+            <td></td>
+            <td>Charlotte</td>
+            <td>2</td>
+            <td>$627.06</td>
+            <td>20,530</td>
+            <td>620</td>
+            <td>470</td>
+            <td>$1.34</td>
+        </tr>
+        <tr class="state-row" data-state="AZ">
+            <td colspan="2"><strong>AZ</strong></td>
+            <td><strong>3</strong></td>
+            <td><strong>$400.13</strong></td>
+            <td><strong>18,097</strong></td>
+            <td><strong>889</strong></td>
+            <td><strong>572</strong></td>
+            <td><strong>$0.70</strong></td>
+        </tr>
+        <tr class="low-spend" data-state="AZ">
+            <td></td>
+            <td>Phoenix</td>
+            <td>3</td>
+            <td>$400.13</td>
+            <td>18,097</td>
+            <td>889</td>
+            <td>572</td>
+            <td>$0.70</td>
+        </tr>
+        <tr class="state-row" data-state="TN">
+            <td colspan="2"><strong>TN</strong></td>
+            <td><strong>2</strong></td>
+            <td><strong>$235.25</strong></td>
+            <td><strong>6,049</strong></td>
+            <td><strong>228</strong></td>
+            <td><strong>159</strong></td>
+            <td><strong>$1.47</strong></td>
+        </tr>
+        <tr class="low-spend" data-state="TN">
+            <td></td>
+            <td>Nashville</td>
+            <td>2</td>
+            <td>$235.25</td>
+            <td>6,049</td>
+            <td>228</td>
+            <td>159</td>
+            <td>$1.47</td>
+        </tr>
+        <tr class="state-row" data-state="FL">
+            <td colspan="2"><strong>FL</strong></td>
+            <td><strong>2</strong></td>
+            <td><strong>$159.85</strong></td>
+            <td><strong>8,239</strong></td>
+            <td><strong>342</strong></td>
+            <td><strong>162</strong></td>
+            <td><strong>$0.99</strong></td>
+        </tr>
+        <tr class="low-spend" data-state="FL">
+            <td></td>
+            <td>Orlando</td>
+            <td>2</td>
+            <td>$159.85</td>
+            <td>8,239</td>
+            <td>342</td>
+            <td>162</td>
+            <td>$0.99</td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Section 3: Daily Budget per Location -->
+    <div class="section">
+        <div class="section-title">Section 3: Daily Budget Utilization per Location</div>
+        <div class="legend">
+            <span><span class="dot" style="background:#d97706"></span> Underspending (&lt;50% utilization)</span>
+            <span><span class="dot" style="background:#dc2626"></span> Maxed out (&gt;90% utilization)</span>
+        </div>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>State</th>
+                        <th># Campaigns</th>
+                        <th>Daily Budget</th>
+                        <th>Avg Daily Spend</th>
+                        <th>Utilization %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr class="underspend" data-state="FL">
+            <td>Orlando</td>
+            <td>FL</td>
+            <td>2</td>
+            <td>$60.00</td>
+            <td>$5.92</td>
+            <td class="underspend-flag">10%</td>
+        </tr>
+        <tr class="underspend" data-state="NJ">
+            <td>Paulsboro</td>
+            <td>NJ</td>
+            <td>4</td>
+            <td>$180.00</td>
+            <td>$31.62</td>
+            <td class="underspend-flag">18%</td>
+        </tr>
+        <tr class="underspend" data-state="TN">
+            <td>Nashville</td>
+            <td>TN</td>
+            <td>2</td>
+            <td>$30.00</td>
+            <td>$8.71</td>
+            <td class="underspend-flag">29%</td>
+        </tr>
+        <tr class="underspend" data-state="TX">
+            <td>Houston</td>
+            <td>TX</td>
+            <td>4</td>
+            <td>$120.00</td>
+            <td>$50.73</td>
+            <td class="underspend-flag">42%</td>
+        </tr>
+        <tr class="underspend" data-state="TX">
+            <td>Haslet</td>
+            <td>TX</td>
+            <td>4</td>
+            <td>$280.00</td>
+            <td>$124.31</td>
+            <td class="underspend-flag">44%</td>
+        </tr>
+        <tr class="" data-state="??">
+            <td>Unknown</td>
+            <td>??</td>
+            <td>10</td>
+            <td>$181.00</td>
+            <td>$92.86</td>
+            <td class="">51%</td>
+        </tr>
+        <tr class="" data-state="GA">
+            <td>Atlanta</td>
+            <td>GA</td>
+            <td>4</td>
+            <td>$150.00</td>
+            <td>$83.60</td>
+            <td class="">56%</td>
+        </tr>
+        <tr class="" data-state="IL">
+            <td>Chicago</td>
+            <td>IL</td>
+            <td>7</td>
+            <td>$370.00</td>
+            <td>$209.36</td>
+            <td class="">57%</td>
+        </tr>
+        <tr class="" data-state="OH">
+            <td>Cincinnati</td>
+            <td>OH</td>
+            <td>2</td>
+            <td>$30.00</td>
+            <td>$17.05</td>
+            <td class="">57%</td>
+        </tr>
+        <tr class="" data-state="NC">
+            <td>Charlotte</td>
+            <td>NC</td>
+            <td>2</td>
+            <td>$40.00</td>
+            <td>$23.22</td>
+            <td class="">58%</td>
+        </tr>
+        <tr class="" data-state="OH">
+            <td>Columbus</td>
+            <td>OH</td>
+            <td>3</td>
+            <td>$90.00</td>
+            <td>$54.44</td>
+            <td class="">60%</td>
+        </tr>
+        <tr class="" data-state="NJ">
+            <td>South Brunswick</td>
+            <td>NJ</td>
+            <td>4</td>
+            <td>$180.00</td>
+            <td>$136.75</td>
+            <td class="">76%</td>
+        </tr>
+        <tr class="" data-state="TX">
+            <td>Austin</td>
+            <td>TX</td>
+            <td>3</td>
+            <td>$200.00</td>
+            <td>$157.79</td>
+            <td class="">79%</td>
+        </tr>
+        <tr class="maxed" data-state="TX">
+            <td>Dallas</td>
+            <td>TX</td>
+            <td>4</td>
+            <td>$231.00</td>
+            <td>$215.73</td>
+            <td class="maxed-flag">93%</td>
+        </tr>
+        <tr class="maxed" data-state="NV">
+            <td>Las Vegas</td>
+            <td>NV</td>
+            <td>4</td>
+            <td>$190.00</td>
+            <td>$185.89</td>
+            <td class="maxed-flag">98%</td>
+        </tr>
+        <tr class="maxed" data-state="NV">
+            <td>Reno</td>
+            <td>NV</td>
+            <td>2</td>
+            <td>$125.00</td>
+            <td>$123.04</td>
+            <td class="maxed-flag">98%</td>
+        </tr>
+        <tr class="maxed" data-state="AZ">
+            <td>Phoenix</td>
+            <td>AZ</td>
+            <td>3</td>
+            <td>$15.00</td>
+            <td>$14.82</td>
+            <td class="maxed-flag">99%</td>
+        </tr>
+        <tr class="maxed" data-state="KY">
+            <td>Hebron</td>
+            <td>KY</td>
+            <td>4</td>
+            <td>$60.00</td>
+            <td>$59.33</td>
+            <td class="maxed-flag">99%</td>
+        </tr>
+        <tr class="maxed" data-state="TX">
+            <td>Ft Worth</td>
+            <td>TX</td>
+            <td>5</td>
+            <td>$220.00</td>
+            <td>$217.70</td>
+            <td class="maxed-flag">99%</td>
+        </tr>
+        <tr class="maxed" data-state="NJ">
+            <td>Logan Township</td>
+            <td>NJ</td>
+            <td>4</td>
+            <td>$180.00</td>
+            <td>$178.35</td>
+            <td class="maxed-flag">99%</td>
+        </tr>
+        <tr class="maxed" data-state="DC">
+            <td>Washington Dc</td>
+            <td>DC</td>
+            <td>1</td>
+            <td>$40.00</td>
+            <td>$39.78</td>
+            <td class="maxed-flag">99%</td>
+        </tr>
+        <tr class="maxed" data-state="TX">
+            <td>Flower Mound</td>
+            <td>TX</td>
+            <td>3</td>
+            <td>$75.00</td>
+            <td>$108.29</td>
+            <td class="maxed-flag">144%</td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Section 4: Gap Analysis -->
+    <div class="section">
+        <div class="section-title">Section 4: Critical Locations Gap Analysis — Underfilled FHS Locations Only (1 no ads, 1 low budget, 20 active)</div>
+        <div class="legend">
+            <span>&#x1F534; No Google Ads campaign</span>
+            <span>&#x1F7E1; Budget &lt; $30/day</span>
+            <span>&#x1F7E2; Active with adequate budget</span>
+            <span style="margin-left: 20px; font-style: italic; color: #374151;">Only showing open FHS requisitions with fill rate &lt; 50% (excludes Indeed Flex internal reqs)</span>
+        </div>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>State</th>
+                        <th>Client(s)</th>
+                        <th>HC (Rev Req)</th>
+                        <th>FHS Open Reqs</th>
+                        <th>RSVPs</th>
+                        <th>Target</th>
+                        <th>Fill%</th>
+                        <th>Google Ads Status</th>
+                        <th>Daily Budget</th>
+                        <th>MTD Spend</th>
+                        <th>Recommended Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr class="gap-green" data-state="TX">
+            <td>Lancaster</td>
+            <td>TX</td>
+            <td>Johnstone Supply</td>
+            <td>0</td>
+            <td>1</td>
+            <td>36</td>
+            <td>0</td>
+            <td>0%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$220.00</td>
+            <td>$5,879.28</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NV">
+            <td>McCarran</td>
+            <td>NV</td>
+            <td>Stord, Inc</td>
+            <td>0</td>
+            <td>4</td>
+            <td>29</td>
+            <td>400</td>
+            <td>7%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$125.00</td>
+            <td>$3,322.26</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="DC">
+            <td>Washington</td>
+            <td>DC</td>
+            <td>CORT, CORT - Washington, DC area - Loader Crew</td>
+            <td>1</td>
+            <td>3</td>
+            <td>57</td>
+            <td>600</td>
+            <td>10%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$40.00</td>
+            <td>$1,073.94</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="FL">
+            <td>Orlando</td>
+            <td>FL</td>
+            <td>CORT, OnTrac Final Mile</td>
+            <td>0</td>
+            <td>5</td>
+            <td>122</td>
+            <td>1000</td>
+            <td>12%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$60.00</td>
+            <td>$162.03</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="IL">
+            <td>Chicago</td>
+            <td>IL</td>
+            <td>Bon Appetit Management Company, Inc, CORT, CORT - Chicago</td>
+            <td>1</td>
+            <td>3</td>
+            <td>71</td>
+            <td>488</td>
+            <td>15%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$370.00</td>
+            <td>$5,652.75</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NV">
+            <td>Sparks</td>
+            <td>NV</td>
+            <td>Stord, Inc</td>
+            <td>0</td>
+            <td>1</td>
+            <td>16</td>
+            <td>100</td>
+            <td>16%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$125.00</td>
+            <td>$3,322.26</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NJ">
+            <td>Paulsboro</td>
+            <td>NJ</td>
+            <td>OnTrac Final Mile</td>
+            <td>0</td>
+            <td>2</td>
+            <td>33</td>
+            <td>200</td>
+            <td>16%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$180.00</td>
+            <td>$859.54</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NV">
+            <td>Reno</td>
+            <td>NV</td>
+            <td>Continental Battery Systems, Inc., Stord, Inc</td>
+            <td>0</td>
+            <td>4</td>
+            <td>89</td>
+            <td>500</td>
+            <td>18%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$125.00</td>
+            <td>$3,322.26</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NJ">
+            <td>South Brunswick</td>
+            <td>NJ</td>
+            <td>OnTrac Final Mile</td>
+            <td>0</td>
+            <td>4</td>
+            <td>75</td>
+            <td>400</td>
+            <td>19%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$180.00</td>
+            <td>$3,694.17</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="TX">
+            <td>Haslet</td>
+            <td>TX</td>
+            <td>CTDI, Material Handler</td>
+            <td>40</td>
+            <td>9</td>
+            <td>173</td>
+            <td>900</td>
+            <td>19%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$500.00</td>
+            <td>$9,236.59</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="TX">
+            <td>Austin</td>
+            <td>TX</td>
+            <td>CORT, Lettuce Entertain You Enterprises, Inc, Lettuce Entertainment - Austin - D...</td>
+            <td>370</td>
+            <td>7</td>
+            <td>323</td>
+            <td>1480</td>
+            <td>22%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$200.00</td>
+            <td>$4,265.34</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-red" data-state="OH">
+            <td>Middleburg Heights</td>
+            <td>OH</td>
+            <td>OnTrac Final Mile</td>
+            <td>0</td>
+            <td>2</td>
+            <td>45</td>
+            <td>200</td>
+            <td>22%</td>
+            <td><span style="font-size:18px">&#x1F534;</span> No Campaign</td>
+            <td>-</td>
+            <td>-</td>
+            <td>Launch Google Ads campaign</td>
+        </tr>
+        <tr class="gap-green" data-state="TN">
+            <td>La Vergne</td>
+            <td>TN</td>
+            <td>Ingram Content Group, Ingram-LaVergne - Distribution- Warehouse Operative</td>
+            <td>30</td>
+            <td>3</td>
+            <td>46</td>
+            <td>200</td>
+            <td>23%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$30.00</td>
+            <td>$235.93</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NC">
+            <td>Charlotte</td>
+            <td>NC</td>
+            <td>CORT</td>
+            <td>0</td>
+            <td>3</td>
+            <td>148</td>
+            <td>600</td>
+            <td>25%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$40.00</td>
+            <td>$627.06</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-yellow" data-state="AZ">
+            <td>Phoenix</td>
+            <td>AZ</td>
+            <td>OnTrac Final Mile</td>
+            <td>0</td>
+            <td>1</td>
+            <td>40</td>
+            <td>160</td>
+            <td>25%</td>
+            <td><span style="font-size:18px">&#x1F7E1;</span> Low Budget</td>
+            <td>$15.00</td>
+            <td>$400.35</td>
+            <td>Increase budget (currently $15/day)</td>
+        </tr>
+        <tr class="gap-green" data-state="KY">
+            <td>Hebron</td>
+            <td>KY</td>
+            <td>Stord, Inc</td>
+            <td>0</td>
+            <td>5</td>
+            <td>51</td>
+            <td>200</td>
+            <td>26%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$60.00</td>
+            <td>$1,602.01</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="TN">
+            <td>Nashville</td>
+            <td>TN</td>
+            <td>CORT, Solaren Risk Management, Solaren Risk Management- Downtown Nashville, TN- ...</td>
+            <td>150</td>
+            <td>4</td>
+            <td>105</td>
+            <td>400</td>
+            <td>26%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$30.00</td>
+            <td>$235.93</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="TX">
+            <td>Flower Mound</td>
+            <td>TX</td>
+            <td>CTDI</td>
+            <td>0</td>
+            <td>3</td>
+            <td>80</td>
+            <td>300</td>
+            <td>27%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$295.00</td>
+            <td>$8,805.45</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="TX">
+            <td>Dallas</td>
+            <td>TX</td>
+            <td>Culinaire, Legends Hospitality</td>
+            <td>0</td>
+            <td>12</td>
+            <td>181</td>
+            <td>535</td>
+            <td>34%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$451.00</td>
+            <td>$11,711.10</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="TN">
+            <td>Lebanon</td>
+            <td>TN</td>
+            <td>OnTrac Final Mile</td>
+            <td>0</td>
+            <td>1</td>
+            <td>36</td>
+            <td>100</td>
+            <td>36%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$30.00</td>
+            <td>$235.93</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="OH">
+            <td>Grove City</td>
+            <td>OH</td>
+            <td>CTDI</td>
+            <td>0</td>
+            <td>4</td>
+            <td>207</td>
+            <td>500</td>
+            <td>41%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$90.00</td>
+            <td>$1,471.42</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+        <tr class="gap-green" data-state="NV">
+            <td>Las Vegas</td>
+            <td>NV</td>
+            <td>CORT, Cort - Las Vegas - Assembler, Stord, Inc</td>
+            <td>3</td>
+            <td>6</td>
+            <td>804</td>
+            <td>1920</td>
+            <td>42%</td>
+            <td><span style="font-size:18px">&#x1F7E2;</span> Active</td>
+            <td>$190.00</td>
+            <td>$5,019.05</td>
+            <td>Monitoring - budget adequate</td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="footer">
+        Indeed Flex US — Recruitment Marketing | Google Ads Account 723-610-0723 | MCC 653-165-0309 | Generated 2026-03-27 15:42
+    </div>
+
+    <script>
+    function filterByState(selectedState) {
+        // Get all section containers (skip section 1 which is index 0 — it's aggregate)
+        var sections = document.querySelectorAll('.section');
+        // Sections 2, 3, 4 are index 1, 2, 3
+        for (var s = 1; s < sections.length; s++) {
+            var rows = sections[s].querySelectorAll('tbody tr');
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var rowState = row.getAttribute('data-state');
+                if (selectedState === 'all' || rowState === selectedState) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    }
+    </script>
+</body>
+</html>

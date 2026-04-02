@@ -8,7 +8,7 @@
 
 ### Team Structure & Workload
 - Jess being integrated into RM team — no clear plan from Angela yet
-- Craig managing Megan's former areas + his own — "very overwhelmed"
+- Craig managing additional areas + his own — "very overwhelmed"
 - Onboarding approach for Jess: start on smaller markets/clients (like Austin Club), handle hiring signals first
 - Need proactive market distribution plan for Angela's approval
 

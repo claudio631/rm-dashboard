@@ -8,7 +8,6 @@
 |------|------|---------|
 | Claudio Santos | Recruitment Marketing Specialist | US |
 | Craig Freeman | Recruitment Marketing Specialist | US |
-| Megan Georgevich | Recruitment Marketing Specialist | US |
 | Olivia Smith | Recruitment Marketing Manager | UK |
 
 ## Key Definitions

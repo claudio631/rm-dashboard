@@ -1,0 +1,94 @@
+# Meta Ads Campaign Brief — YAML Template
+# Usage: python3 scripts/meta-ads-manager.py create <this-file.yaml>
+#
+# All campaigns are created in PAUSED state for review before launch.
+# Special Ad Category: EMPLOYMENT is required for job-related ads.
+
+# Facebook Page ID that will run the ads
+page_id: ""  # Your Indeed Flex Facebook Page ID
+
+campaign:
+  name: "US - B2C - Industrial - {Client} - {Role} - {Metro} - {State} - {Period}"
+  objective: "OUTCOME_LEADS"       # OUTCOME_LEADS | OUTCOME_TRAFFIC | OUTCOME_AWARENESS
+  daily_budget: 30                  # in dollars
+  special_ad_categories:
+    - "EMPLOYMENT"                  # Required for job ads
+
+adsets:
+  - name: "Core Job Seekers — {Metro}"
+    daily_budget: 18                # 60% of campaign budget
+    billing_event: "IMPRESSIONS"
+    optimization_goal: "LINK_CLICKS"  # LINK_CLICKS | LEAD_GENERATION | LANDING_PAGE_VIEWS
+    bid_strategy: "LOWEST_COST_WITHOUT_CAP"
+    start_time: "2026-04-01T00:00:00-0500"
+    end_time: "2026-04-30T23:59:59-0500"
+    targeting:
+      geo_locations:
+        cities:
+          - key: "2420587"          # Facebook city key (use Targeting Search API)
+            radius: 15
+            distance_unit: "mile"
+        # OR use coordinates:
+        # custom_locations:
+        #   - latitude: 32.7767
+        #     longitude: -96.7970
+        #     radius: 15
+        #     distance_unit: "mile"
+      age_min: 18
+      age_max: 55
+      # Note: Employment special ad category restricts demographic targeting
+      # Cannot target by gender, detailed demographics, or behaviors
+      publisher_platforms:
+        - "facebook"
+        - "instagram"
+      facebook_positions:
+        - "feed"
+        - "marketplace"
+        - "video_feeds"
+      instagram_positions:
+        - "stream"
+        - "explore"
+        - "reels"
+
+    ads:
+      - name: "Ad 1 — Pay First"
+        headline: "Warehouse Jobs $15-$17/hr"
+        primary_text: "Hiring warehouse workers in {Metro}! $15-$17/hr, all shifts available. Same-day pay, no experience needed. Apply in 2 minutes with Indeed Flex."
+        description: "Apply now — start this week"
+        url: "https://indeedflex.com/find-jobs/lp/warehouse-operative/?utm_source=meta&utm_medium=paid&utm_campaign=us-{client}-{role}-{metro}"
+        cta: "APPLY_NOW"            # APPLY_NOW | LEARN_MORE | SIGN_UP
+        # image_hash: ""            # Upload image first via Meta API
+
+      - name: "Ad 2 — Speed First"
+        headline: "Start Working This Week"
+        primary_text: "Get hired fast! Warehouse jobs in {Metro} paying $15-$17/hr. Download the Indeed Flex app, apply in minutes, start this week. Same-day pay available."
+        description: "No experience needed"
+        url: "https://indeedflex.com/find-jobs/lp/warehouse-operative/?utm_source=meta&utm_medium=paid&utm_campaign=us-{client}-{role}-{metro}"
+        cta: "APPLY_NOW"
+
+  - name: "Broad Awareness — {Metro}"
+    daily_budget: 12                # 40% of campaign budget
+    billing_event: "IMPRESSIONS"
+    optimization_goal: "LANDING_PAGE_VIEWS"
+    bid_strategy: "LOWEST_COST_WITHOUT_CAP"
+    start_time: "2026-04-01T00:00:00-0500"
+    end_time: "2026-04-30T23:59:59-0500"
+    targeting:
+      geo_locations:
+        cities:
+          - key: "2420587"
+            radius: 25
+            distance_unit: "mile"
+      age_min: 18
+      age_max: 55
+      publisher_platforms:
+        - "facebook"
+        - "instagram"
+
+    ads:
+      - name: "Ad 3 — Flexibility"
+        headline: "Jobs That Fit Your Schedule"
+        primary_text: "Choose your own shifts. Warehouse, industrial, and hospitality jobs in {Metro}. Competitive pay + same-day pay option. Apply free with Indeed Flex."
+        description: "Flexible scheduling available"
+        url: "https://indeedflex.com/find-jobs/?utm_source=meta&utm_medium=paid&utm_campaign=us-{client}-{role}-{metro}"
+        cta: "LEARN_MORE"

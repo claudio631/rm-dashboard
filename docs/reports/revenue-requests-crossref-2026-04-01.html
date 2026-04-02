@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Requests Cross-Reference Dashboard — 2026-04-01</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; font-size: 14px; color: #111827; }
+        .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); color: white; padding: 24px 32px; }
+        .header h1 { font-size: 22px; font-weight: 700; }
+        .header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; padding: 20px 32px; }
+        .kpi-card { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        .kpi-card .number { font-size: 32px; font-weight: 800; line-height: 1.2; }
+        .kpi-card .label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .kpi-card.red .number { color: #ef4444; }
+        .kpi-card.amber .number { color: #f59e0b; }
+        .kpi-card.blue .number { color: #2563eb; }
+        .kpi-card.green .number { color: #22c55e; }
+        .table-container { margin: 0 32px 32px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .table-scroll { overflow-y: auto; max-height: calc(100vh - 60px); }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead tr:first-child th { position: sticky; top: 0; z-index: 20; }
+        thead tr:nth-child(2) th { position: sticky; top: 34px; z-index: 19; }
+        th { position: sticky; top: 0; z-index: 10; background: #1e3a5f; color: white; padding: 8px 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+        th.group-header { background: #0f2540; padding: 6px 10px; font-size: 11px; text-align: center; border-left: 2px solid rgba(255,255,255,0.15); }
+        th.sub-header { background: #1e3a5f; font-size: 11px; }
+        td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; font-size: 14px; vertical-align: middle; }
+        tr:hover { filter: brightness(0.97); }
+        .legend { margin: 12px 32px; display: flex; gap: 24px; font-size: 12px; color: #6b7280; flex-wrap: wrap; }
+        .legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .legend .dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+        .filters { margin: 12px 32px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .filters label { font-size:13px; font-weight:600; color:#374151; }
+        .filters select { padding:6px 12px; border-radius:6px; border:1px solid #d1d5db; font-size:13px; background:white; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Revenue Requests Cross-Reference Dashboard</h1>
+        <p>Generated 2026-04-01 | Every revenue request = one row (no merging) | Sorted by priority | Data: FHS, Indeed, OB Funnel</p>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card blue"><div class="number">45</div><div class="label">Live Requests</div></div>
+        <div class="kpi-card blue"><div class="number">1,142</div><div class="label">Total HC</div></div>
+        <div class="kpi-card red"><div class="number">10</div><div class="label">High Priority</div></div>
+        <div class="kpi-card red"><div class="number">21</div><div class="label">No FHS</div></div>
+        <div class="kpi-card amber"><div class="number">23</div><div class="label">No Indeed</div></div>
+        <div class="kpi-card amber"><div class="number">1</div><div class="label">Shifts TBD</div></div>
+    </div>
+
+    <div class="legend">
+        <span><span class="dot" style="background:#fef2f2;border:1px solid #fecaca;"></span> Priority >= 7</span>
+        <span><span class="dot" style="background:#fffbeb;border:1px solid #fde68a;"></span> Priority 4-6</span>
+        <span><span class="dot" style="background:#f3f4f6;border:1px solid #d1d5db;"></span> Declined</span>
+    </div>
+
+    <div class="filters">
+        <label>State:</label>
+        <select id="stateFilter" onchange="applyFilters()">
+            <option value="all">All States</option>
+            <option value="AZ">AZ</option><option value="DC">DC</option><option value="GA">GA</option><option value="IL">IL</option><option value="KY">KY</option><option value="MA">MA</option><option value="NC">NC</option><option value="NJ">NJ</option><option value="NV">NV</option><option value="NV.">NV.</option><option value="OH">OH</option><option value="TN">TN</option><option value="TX">TX</option><option value="Tx">Tx</option>
+        </select>
+        <label style="margin-left:8px;">Owner:</label>
+        <select id="ownerFilter" onchange="applyFilters()">
+            <option value="all">All Owners</option>
+            <option value="Angela">Angela</option><option value="Claudio">Claudio</option><option value="Craig">Craig</option><option value="Leah">Leah</option><option value="Megan">Megan</option>
+        </select>
+        <span id="rowCount" style="font-size:12px; color:#6b7280;"></span>
+    </div>
+
+    <div class="table-container">
+        <div class="table-scroll">
+            <table id="mainTable">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="min-width:30px;">P</th>
+                        <th rowspan="2" style="min-width:160px;">Client</th>
+                        <th rowspan="2" style="min-width:70px;">Owner</th>
+                        <th rowspan="2" style="min-width:120px;">Role</th>
+                        <th rowspan="2" style="min-width:40px;">HC</th>
+                        <th rowspan="2" style="min-width:90px;">Start</th>
+                        <th rowspan="2" style="min-width:55px;">Shifts</th>
+                        <th colspan="2" class="group-header">FHS Requisitions</th>
+                        <th colspan="2" class="group-header">Indeed Ads</th>
+                        <th colspan="3" class="group-header">OB Funnel</th>
+                        <th class="group-header">Fill</th>
+                    </tr>
+                    <tr>
+                        <th class="sub-header" style="text-align:center;">Open</th>
+                        <th class="sub-header" style="text-align:center;">Interview</th>
+                        <th class="sub-header" style="text-align:center;">St</th>
+                        <th class="sub-header" style="text-align:right;">Spend</th>
+                        <th class="sub-header" style="text-align:center;">Created</th>
+                        <th class="sub-header" style="text-align:center;">Verified</th>
+                        <th class="sub-header" style="text-align:center;">RTB</th>
+                        <th class="sub-header" style="text-align:center;">Fill%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background:#fef2f2;" data-state="IL" data-role="Warehouse Operator" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">8</td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">IL and Hodgkins</span></td>
+        <td>Craig</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">Mar/05/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="" data-role="" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">8</td>
+        <td><strong>Bath Concepts</strong><br><span style="color:#6b7280;font-size:12px;">Libertyville IL .</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">70</td>
+        <td style="text-align:center;font-size:13px;">Apr/07/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="TX" data-role="Material Handler" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">8</td>
+        <td><strong>Material Handler</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Claudio</td>
+        <td>Material Handler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">40</td>
+        <td style="text-align:center;font-size:13px;">Mar/30/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="TX" data-role="Server" data-owner="Megan">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong></strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Megan</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">100</td>
+        <td style="text-align:center;font-size:13px;">Feb/02/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">292</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16,188</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$121,703</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6956</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2690</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2690%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="TN" data-role="Industrial General Laborer" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong>Ingram</strong><br><span style="color:#6b7280;font-size:12px;">La Vergne</span></td>
+        <td>Craig</td>
+        <td>Industrial General Laborer</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">120</td>
+        <td style="text-align:center;font-size:13px;">Feb/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">11</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,957</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">159</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">18</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:15%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">15%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="NV" data-role="Loader/Crew" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Las Vegas</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">69</td>
+        <td style="text-align:center;font-size:13px;">Mar/03/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">12</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1,996</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$3,532</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">842</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">445</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">134</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">194%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="IL" data-role="Warehouse Operator" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Claudio</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">45</td>
+        <td style="text-align:center;font-size:13px;">Mar/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">446</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">549</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">231</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">231%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="NV" data-role="Warehouse Operator" data-owner="Angela">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong>Continental battery systems / Warehouse/ Sparks NV</strong><br><span style="color:#6b7280;font-size:12px;">Reno</span><br><span style="background:#8b5cf6;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">RE-ENGAGE</span></td>
+        <td>Angela</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">Mar/09/2026</td>
+        <td style="text-align:center;"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,466</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="IL" data-role="cashier" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong>Levy</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>cashier</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="text-align:center;font-size:13px;">Mar/31/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">122</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">197</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">55</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:67%;background:#f59e0b;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">67%</span>
+    </div></td>
+    </tr><tr style="background:#fef2f2;" data-state="IL" data-role="Prep Cook" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#dc2626;">7</td>
+        <td><strong>Levy</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">25</td>
+        <td style="text-align:center;font-size:13px;">Mar/31/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">122</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">197</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">55</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:64%;background:#f59e0b;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">64%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="NC" data-role="Loader/Crew" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Rhino Staging</strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">Jan/24/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$487</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">22</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:40%;background:#f59e0b;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">40%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="Other" data-owner="Megan">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Foxconn</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Megan</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">9</td>
+        <td style="text-align:center;font-size:13px;">Jan/19/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$3,204</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">192</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">70</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">38</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">422%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="Other" data-owner="Megan">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Megan</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">Feb/21/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">288</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$14,793</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">207</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">43</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">143%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TN" data-role="Material Handler" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Assurant</strong><br><span style="color:#6b7280;font-size:12px;">Mount Juliet</span></td>
+        <td>Craig</td>
+        <td>Material Handler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">Feb/17/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="DC" data-role="Loader/Crew" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Feb/27/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">3000%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="Warehouse Operator" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Ryerson</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Craig</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-size:13px;">Mar/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="" data-role="Loader/Crew" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">Mar/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">88</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7,376</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$16,978</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3845</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2012</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">554</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1847%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="Forklift Driver" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Need Forklift drivers</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Claudio</td>
+        <td>Forklift Driver</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-size:13px;">Mar/06/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="Warehouse Operator" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Claudio</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">45</td>
+        <td style="text-align:center;font-size:13px;">Apr/06/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">446</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">549</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">231</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">231%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="OH" data-role="Material Handler" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>CTDI</strong><br><span style="color:#6b7280;font-size:12px;">Columbus</span></td>
+        <td>Claudio</td>
+        <td>Material Handler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">Mar/13/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">522</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$899</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">162</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">66</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">220%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="Server" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Eurest</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5</td>
+        <td style="text-align:center;font-size:13px;">Apr/02/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="Prep Cook" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">6</td>
+        <td><strong>Eurest USA, Eurest</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-size:13px;">Apr/02/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="Line Cook" data-owner="Megan">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Megan</td>
+        <td>Line Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">9</td>
+        <td style="text-align:center;font-size:13px;">Feb/21/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">288</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$14,793</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">207</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">43</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">478%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TN" data-role="Loader/Crew" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Craig</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">18</td>
+        <td style="text-align:center;font-size:13px;">Feb/10/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">28</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,267</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">259</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">141</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">35</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">194%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="" data-role="Bartender" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>HYATT PLACE ATLANTA CENTENNIAL PARK</strong><br><span style="color:#6b7280;font-size:12px;">300 Luckie Street  Atlanta</span></td>
+        <td>Craig</td>
+        <td>Bartender</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">Mar/24/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$489</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="Prep Cook" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong></strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Craig</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">15</td>
+        <td style="text-align:center;font-size:13px;">Mar/27/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">292</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16,188</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$121,703</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6956</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2690</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">17933%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="DC" data-role="Server" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">23</td>
+        <td style="text-align:center;font-size:13px;">Apr/28/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">130%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="DC" data-role="Server" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>Server</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">Apr/28/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">150%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="Forklift Driver" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>Power Stop</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Craig</td>
+        <td>Forklift Driver</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">Mar/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">446</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">549</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">231</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">104</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">3467%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="DC" data-role="Prep Cook" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">Apr/28/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">100%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="DC" data-role="Dishwasher" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>Dishwasher</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">Apr/28/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">150%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TN" data-role="Warehouse Operator" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>Ingram</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Craig</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="text-align:center;font-size:13px;">Apr/01/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">22</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,957</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">159</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">73</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">18</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:60%;background:#f59e0b;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">60%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TN" data-role="Event Staff" data-owner="Angela">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>Solaren Risk Management</strong><br><span style="color:#6b7280;font-size:12px;">Nashville</span></td>
+        <td>Angela</td>
+        <td>Event Staff</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">150</td>
+        <td style="text-align:center;font-size:13px;">Apr/25/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">70</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">36</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:5%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">5%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="GA" data-role="Barista" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">5</td>
+        <td><strong>Merritt Hospitality LLC, HEI Hotels & Resorts</strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Claudio</td>
+        <td>Barista</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Mar/29/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$332</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">200%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="" data-owner="Megan">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">4</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Megan</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Jan/07/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">240</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$2,040</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">576</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">298</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">74</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">7400%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="Dishwasher" data-owner="Megan">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">4</td>
+        <td><strong>Bon Appetit</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Megan</td>
+        <td>Dishwasher</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-size:13px;">Feb/17/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">176</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,955</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">325</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">125</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">54</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="IL" data-role="" data-owner="Claudio">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">4</td>
+        <td><strong>Bon Appetit</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span></td>
+        <td>Claudio</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">Feb/03/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">176</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$1,955</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">325</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">125</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">54</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">2700%</span>
+    </div></td>
+    </tr><tr style="background:#fffbeb;" data-state="TX" data-role="" data-owner="Craig">
+        <td style="text-align:center;font-weight:900;font-size:16px;color:#fff;background:#d97706;">4</td>
+        <td><strong>Texas Motor Speedway</strong><br><span style="color:#6b7280;font-size:12px;">3545 Lone Star Cir Fort Worth</span><br><span style="background:#f59e0b;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">IN REVIEW</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">Apr/25/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="DC" data-role="cashier" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">3</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>cashier</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5</td>
+        <td style="text-align:center;font-size:13px;">Aug/03/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">600%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="DC" data-role="Barista" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">3</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">D.C.</span></td>
+        <td>Claudio</td>
+        <td>Barista</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">Apr/27/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">276</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">116</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">30</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">1500%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="TX" data-role="Concession Stand Worker" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">2</td>
+        <td><strong>Legends Hospitality</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Craig</td>
+        <td>Concession Stand Worker</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">35</td>
+        <td style="text-align:center;font-size:13px;">Jun/14/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$939</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">400</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">110</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">41</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">117%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="TX" data-role="Dishwasher" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">2</td>
+        <td><strong>Legends Hospitality</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Claudio</td>
+        <td>Dishwasher</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">Jun/11/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$939</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">400</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">110</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">41</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">205%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="TX" data-role="Prep Cook" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">2</td>
+        <td><strong>Culinaire</strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Craig</td>
+        <td>Prep Cook</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">Apr/20/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">24</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">288</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$14,793</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">207</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">61</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">43</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">430%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="NC" data-role="Loader/Crew" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">2</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Charlotte</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">May/03/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">12</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">112</td>
+        <td style="text-align:center;">⚪</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;"></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">412</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">188</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">27</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">270%</span>
+    </div></td>
+    </tr><tr style="background:white;" data-state="TX" data-role="Other" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">1</td>
+        <td><strong>Legends Hospitality</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span></td>
+        <td>Craig</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6</td>
+        <td style="text-align:center;font-size:13px;">Jun/11/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">334</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$939</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">400</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">110</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">41</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:100%;background:#22c55e;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">683%</span>
+    </div></td>
+    </tr><tr style="background:#f3f4f6;" data-state="" data-role="" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">all locations</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">Apr/14/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="GA" data-role="Event Staff" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Stadium People</strong><br><span style="color:#6b7280;font-size:12px;">Athens</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Event Staff</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">50</td>
+        <td style="text-align:center;font-size:13px;">Apr/12/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="Forklift Driver" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Hanover Cold Storage</strong><br><span style="color:#6b7280;font-size:12px;">Dallas</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Forklift Driver</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">4</td>
+        <td style="text-align:center;font-size:13px;">May/01/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:white;" data-state="" data-role="" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong></strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-size:13px;"></td>
+        <td style="text-align:center;"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">292</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16,188</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$121,703</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6956</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2690</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr><tr style="background:#f3f4f6;" data-state="IL" data-role="Warehouse Operator" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>KEX Express</strong><br><span style="color:#6b7280;font-size:12px;">Bensenville</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Warehouse Operator</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">May/19/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="Other" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Nurse America</strong><br><span style="color:#6b7280;font-size:12px;">Austin</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Jun/06/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="" data-role="" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>HEI Hotels</strong><br><span style="color:#6b7280;font-size:12px;">Chicago - IL -</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">5</td>
+        <td style="text-align:center;font-size:13px;">Jun/16/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="" data-role="Repair Specialist" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Foxconn</strong><br><span style="color:#6b7280;font-size:12px;"></span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Repair Specialist</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">8</td>
+        <td style="text-align:center;font-size:13px;">Jul/01/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="KY" data-role="Industrial General Laborer" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>JadeEx</strong><br><span style="color:#6b7280;font-size:12px;">Hebron</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Craig</td>
+        <td>Industrial General Laborer</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Jun/18/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="Other" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Green WorldWide</strong><br><span style="color:#6b7280;font-size:12px;">Irving</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Jun/30/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="MA" data-role="Other" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>BOS</strong><br><span style="color:#6b7280;font-size:12px;">Stoughton</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Craig</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">Aug/14/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Plano, Texas</strong><br><span style="color:#6b7280;font-size:12px;"></span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">Sep/26/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="NV." data-role="Admin Assistant" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Stord</strong><br><span style="color:#6b7280;font-size:12px;">Atlanta</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Craig</td>
+        <td>Admin Assistant</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Oct/06/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="" data-role="" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Stord</strong><br><span style="color:#6b7280;font-size:12px;">2 in ATL</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Craig</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">7</td>
+        <td style="text-align:center;font-size:13px;">Oct/14/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="Tx" data-role="Barista" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Barista</strong><br><span style="color:#6b7280;font-size:12px;">Allen</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Barista</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">Nov/13/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Ashley Furniture</strong><br><span style="color:#6b7280;font-size:12px;">Lake Jackson</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">Dec/03/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="Loader/Crew" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Houston</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">25</td>
+        <td style="text-align:center;font-size:13px;">Jan/06/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="AZ" data-role="Loader/Crew" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Phoenix</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">20</td>
+        <td style="text-align:center;font-size:13px;">Dec/26/2025</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="TX" data-role="Dishwasher" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong></strong><br><span style="color:#6b7280;font-size:12px;"></span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Claudio</td>
+        <td>Dishwasher</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2</td>
+        <td style="text-align:center;font-size:13px;">Jan/17/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="GA" data-role="Event Staff" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>NCR Voyix</strong><br><span style="color:#6b7280;font-size:12px;">Atlanta</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Craig</td>
+        <td>Event Staff</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Jan/09/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="GA" data-role="Other" data-owner="Craig">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>FLIK</strong><br><span style="color:#6b7280;font-size:12px;">Atlanta</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Craig</td>
+        <td>Other</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Jan/29/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="IL" data-role="Loader/Crew" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Cort</strong><br><span style="color:#6b7280;font-size:12px;">Chicago</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">100</td>
+        <td style="text-align:center;font-size:13px;">Feb/10/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="" data-role="Barista" data-owner="Megan">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>Eurest</strong><br><span style="color:#6b7280;font-size:12px;">Dallas Tx</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Megan</td>
+        <td>Barista</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">1</td>
+        <td style="text-align:center;font-size:13px;">Feb/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="NV" data-role="Assembler" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Las Vegas</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Claudio</td>
+        <td>Assembler</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">10</td>
+        <td style="text-align:center;font-size:13px;">Mar/03/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="NV" data-role="Loader/Crew" data-owner="Claudio">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>CORT</strong><br><span style="color:#6b7280;font-size:12px;">Las Vegas</span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Claudio</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">50</td>
+        <td style="text-align:center;font-size:13px;">Feb/24/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:#f3f4f6;" data-state="NJ" data-role="Loader/Crew" data-owner="Angela">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong>New Jersey</strong><br><span style="color:#6b7280;font-size:12px;"></span><br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span></td>
+        <td>Angela</td>
+        <td>Loader/Crew</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">3</td>
+        <td style="text-align:center;font-size:13px;">Mar/16/2026</td>
+        <td style="text-align:center;"><span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:right;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td></td>
+    </tr><tr style="background:white;" data-state="" data-role="" data-owner="Leah">
+        <td style="text-align:center;font-weight:bold;font-size:15px;color:#374151;">0</td>
+        <td><strong></strong><br><span style="color:#6b7280;font-size:12px;"></span></td>
+        <td>Leah</td>
+        <td></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">0</td>
+        <td style="text-align:center;font-size:13px;"></td>
+        <td style="text-align:center;"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px;">No</span></td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">292</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">16,188</td>
+        <td style="text-align:center;">🟢</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">$121,703</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">14391</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">6956</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">2690</td>
+        <td style="min-width:120px;"><div style="display:flex;align-items:center;gap:6px;">
+        <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+            <div style="width:0%;background:#ef4444;height:100%;border-radius:4px;"></div>
+        </div>
+        <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">0%</span>
+    </div></td>
+    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    function applyFilters() {
+        const state = document.getElementById('stateFilter').value;
+        const owner = document.getElementById('ownerFilter').value;
+        const rows = document.querySelectorAll('#mainTable tbody tr');
+        let visible = 0;
+        rows.forEach(row => {
+            let show = true;
+            if (state !== 'all' && row.dataset.state !== state) show = false;
+            if (owner !== 'all' && row.dataset.owner !== owner) show = false;
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        document.getElementById('rowCount').textContent = visible + ' of ' + rows.length + ' rows';
+    }
+    applyFilters();
+    </script>
+</body>
+</html>

@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Weekly OB Funnel Report — Claudio's Markets (Feb 26 '26 to Mar 27 '26)</title>
+<style>
+    @media print {
+        body { margin: 0; font-size: 9pt; }
+        .page-break { page-break-before: always; }
+        @page { size: landscape; margin: 1cm; }
+    }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #1a1a1a;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+    h1 {
+        font-size: 22px;
+        border-bottom: 3px solid #0066cc;
+        padding-bottom: 8px;
+        margin-bottom: 5px;
+    }
+    h2 {
+        font-size: 16px;
+        color: #0066cc;
+        margin-top: 25px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 4px;
+    }
+    h3 { font-size: 14px; margin-top: 15px; }
+    .meta { color: #666; font-size: 12px; margin-bottom: 20px; }
+    .summary-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 15px 20px;
+        margin: 15px 0;
+    }
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 15px 0;
+    }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 12px;
+        text-align: center;
+    }
+    .kpi-card .value { font-size: 24px; font-weight: bold; }
+    .kpi-card .label { font-size: 11px; color: #666; margin-top: 4px; }
+    .kpi-card.red { border-left: 4px solid #dc3545; }
+    .kpi-card.yellow { border-left: 4px solid #ffc107; }
+    .kpi-card.green { border-left: 4px solid #28a745; }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+        font-size: 12px;
+    }
+    th {
+        background: #2c3e50;
+        color: white;
+        padding: 8px 6px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    th:first-child { text-align: left; min-width: 200px; }
+    td {
+        padding: 5px 6px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+        vertical-align: top;
+    }
+    td:first-child { text-align: left; }
+    td:last-child { text-align: left; min-width: 140px; }
+    tr.market-row { background: #f0f4f8; font-weight: 600; }
+    tr.market-row td { border-bottom: 1px solid #ccc; }
+    tr.total-row { background: #2c3e50; color: white; font-weight: 700; }
+    tr.total-row td { border-bottom: 2px solid #1a252f; }
+    tr.total-row .green, tr.total-row .yellow, tr.total-row .red { color: white; }
+    tr.spacer td { border: none; height: 8px; background: white; }
+    tr:hover:not(.spacer):not(.total-row) { background: #f5f7fa; }
+    .green { color: #28a745; font-weight: 600; }
+    .yellow { color: #b8860b; font-weight: 600; }
+    .red { color: #dc3545; font-weight: 600; }
+    .na { color: #999; }
+    .num { color: #333; }
+    .legend-table { max-width: 700px; }
+    .legend-table td { padding: 4px 10px; }
+    .req-legend { max-width: 600px; margin-top: 10px; }
+    .req-legend td { padding: 3px 8px; font-size: 12px; }
+    .footer {
+        margin-top: 30px;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+        color: #999;
+        font-size: 11px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Weekly OB Funnel Report — Claudio's Markets</h1>
+<div class="meta">
+    <strong>Period:</strong> Feb 26 '26 — Mar 27 '26 &nbsp;|&nbsp;
+    <strong>Generated:</strong> 2026-03-27 &nbsp;|&nbsp;
+    <strong>Source:</strong> OB Funnel Custom Viewer (Tableau) + Requisitions CSV &nbsp;|&nbsp;
+    <strong>Agent:</strong> Fiona (@funnel-specialist)
+</div>
+
+<div class="kpi-grid">
+    <div class="kpi-card red">
+        <div class="value">7.7%</div>
+        <div class="label">Overall CR% (benchmark: 15.4%)</div>
+    </div>
+    <div class="kpi-card red">
+        <div class="value">2719</div>
+        <div class="label">Accounts Created</div>
+    </div>
+    <div class="kpi-card red">
+        <div class="value">210</div>
+        <div class="label">Shifts Completed</div>
+    </div>
+    <div class="kpi-card red">
+        <div class="value">586</div>
+        <div class="label">Verified but NOT Booking</div>
+    </div>
+</div>
+
+<div class="summary-box">
+    <strong>Portfolio snapshot:</strong> 2719 accounts &rarr; 1438 verified &rarr; 849 platform verified &rarr; 263 booked &rarr; 210 completed
+    <br><strong>Markets with completions:</strong> 6 of 10
+    &nbsp;|&nbsp; <strong>Verified workers not booking:</strong> 586 (69% of pipeline wasted)
+</div>
+
+<h2>Conditional Formatting</h2>
+<table class="legend-table">
+<tr><th>Stage</th><th>🟢 Good</th><th>🟡 Watch</th><th>🔴 Critical</th><th>2025 Benchmark</th></tr>
+<tr><td>Acct &rarr; Verified</td><td class="green">&ge; 55%</td><td class="yellow">40-54%</td><td class="red">&lt; 40%</td><td>56.0%</td></tr>
+<tr><td>Verified &rarr; OB Task</td><td class="green">&ge; 85%</td><td class="yellow">75-84%</td><td class="red">&lt; 75%</td><td>93.0%</td></tr>
+<tr><td>OB Task &rarr; PlatformV</td><td class="green">&ge; 65%</td><td class="yellow">50-64%</td><td class="red">&lt; 50%</td><td>69.1%</td></tr>
+<tr><td>PlatformV &rarr; Booked</td><td class="green">&ge; 40%</td><td class="yellow">15-39%</td><td class="red">&lt; 15%</td><td>50.4%</td></tr>
+<tr><td>Booked &rarr; Completed</td><td class="green">&ge; 80%</td><td class="yellow">60-79%</td><td class="red">&lt; 60%</td><td>84.6%</td></tr>
+<tr><td>Overall CR%</td><td class="green">&ge; 15%</td><td class="yellow">8-14.9%</td><td class="red">&lt; 8%</td><td>15.4%</td></tr>
+</table>
+
+<table class='req-legend'><tr><th colspan='2'>Open Reqs Column</th></tr><tr><td>✅ N reqs</td><td>Active requisitions — demand exists, workers can book</td></tr><tr><td>⚠️ N reqs</td><td>Reqs near full (RSVPs &ge; 80% of target)</td></tr><tr><td>❌ No reqs</td><td>No open requisitions — verified workers CANNOT book (red flag if PlatV &gt; 0)</td></tr></table>
+
+<h2>Full Funnel — By Location & Client</h2>
+<table>
+<tr>
+    <th>Market / Client</th>
+    <th>Accts</th>
+    <th>Verif</th><th>A&rarr;V</th>
+    <th>OB Task</th><th>V&rarr;OB</th>
+    <th>PlatV</th><th>OB&rarr;PV</th>
+    <th>Ready</th>
+    <th>Booked</th><th>PV&rarr;Bk</th>
+    <th>Comp</th><th>Bk&rarr;Co</th>
+    <th>CR%</th>
+    <th>Open Reqs</th>
+</tr>
+<tr class="total-row">
+    <td><strong>CLAUDIO TOTAL</strong></td>
+    <td class="num">2719</td>
+    <td class="num">1438</td><td><span class="yellow">🟡 52.9%</span></td>
+    <td class="num">1303</td><td><span class="green">🟢 90.6%</span></td>
+    <td class="num">849</td><td><span class="green">🟢 65.2%</span></td>
+    <td class="num">574</td>
+    <td class="num">263</td><td><span class="yellow">🟡 31.0%</span></td>
+    <td class="num">210</td><td><span class="yellow">🟡 79.8%</span></td>
+    <td><span class="red">🔴 7.7%</span></td>
+    <td><span class="green">✅ 41 reqs</span><br><span style="font-size:10px;color:#666">2457/7740 RSVPs (32%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>LAS VEGAS</strong></td>
+    <td class="num">888</td>
+    <td class="num">481</td><td><span class="yellow">🟡 54.2%</span></td>
+    <td class="num">455</td><td><span class="green">🟢 94.6%</span></td>
+    <td class="num">308</td><td><span class="green">🟢 67.7%</span></td>
+    <td class="num">207</td>
+    <td class="num">76</td><td><span class="yellow">🟡 24.7%</span></td>
+    <td class="num">61</td><td><span class="green">🟢 80.3%</span></td>
+    <td><span class="red">🔴 6.9%</span></td>
+    <td><span class="green">✅ 6 reqs</span><br><span style="font-size:10px;color:#666">876/1920 RSVPs (46%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">444</td>
+    <td class="num">234</td><td><span class="yellow">🟡 52.7%</span></td>
+    <td class="num">220</td><td><span class="green">🟢 94.0%</span></td>
+    <td class="num">139</td><td><span class="yellow">🟡 63.2%</span></td>
+    <td class="num">77</td>
+    <td class="num">33</td><td><span class="yellow">🟡 23.7%</span></td>
+    <td class="num">26</td><td><span class="yellow">🟡 78.8%</span></td>
+    <td><span class="red">🔴 5.9%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">439/780 RSVPs (56%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">342</td>
+    <td class="num">191</td><td><span class="green">🟢 55.8%</span></td>
+    <td class="num">181</td><td><span class="green">🟢 94.8%</span></td>
+    <td class="num">132</td><td><span class="green">🟢 72.9%</span></td>
+    <td class="num">99</td>
+    <td class="num">32</td><td><span class="yellow">🟡 24.2%</span></td>
+    <td class="num">25</td><td><span class="yellow">🟡 78.1%</span></td>
+    <td><span class="red">🔴 7.3%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">437/1140 RSVPs (38%)</span><br><span style="font-size:9px;color:#999">Picker Packer</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">102</td>
+    <td class="num">56</td><td><span class="yellow">🟡 54.9%</span></td>
+    <td class="num">54</td><td><span class="green">🟢 96.4%</span></td>
+    <td class="num">37</td><td><span class="green">🟢 68.5%</span></td>
+    <td class="num">31</td>
+    <td class="num">11</td><td><span class="yellow">🟡 29.7%</span></td>
+    <td class="num">10</td><td><span class="green">🟢 90.9%</span></td>
+    <td><span class="yellow">🟡 9.8%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>AUSTIN</strong></td>
+    <td class="num">644</td>
+    <td class="num">358</td><td><span class="green">🟢 55.6%</span></td>
+    <td class="num">327</td><td><span class="green">🟢 91.3%</span></td>
+    <td class="num">230</td><td><span class="green">🟢 70.3%</span></td>
+    <td class="num">196</td>
+    <td class="num">134</td><td><span class="green">🟢 58.3%</span></td>
+    <td class="num">112</td><td><span class="green">🟢 83.6%</span></td>
+    <td><span class="green">🟢 17.4%</span></td>
+    <td><span class="green">✅ 5 reqs</span><br><span style="font-size:10px;color:#666">244/400 RSVPs (61%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- SXSW</td>
+    <td class="num">261</td>
+    <td class="num">178</td><td><span class="green">🟢 68.2%</span></td>
+    <td class="num">164</td><td><span class="green">🟢 92.1%</span></td>
+    <td class="num">120</td><td><span class="green">🟢 73.2%</span></td>
+    <td class="num">112</td>
+    <td class="num">82</td><td><span class="green">🟢 68.3%</span></td>
+    <td class="num">72</td><td><span class="green">🟢 87.8%</span></td>
+    <td><span class="green">🟢 27.6%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">95</td>
+    <td class="num">46</td><td><span class="yellow">🟡 48.4%</span></td>
+    <td class="num">40</td><td><span class="green">🟢 87.0%</span></td>
+    <td class="num">22</td><td><span class="yellow">🟡 55.0%</span></td>
+    <td class="num">8</td>
+    <td class="num">4</td><td><span class="yellow">🟡 18.2%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 75.0%</span></td>
+    <td><span class="red">🔴 3.2%</span></td>
+    <td><span class="yellow">⚠️ 2 reqs</span><br><span style="font-size:10px;color:#666">193/100 RSVPs (193%)</span><br><span style="font-size:9px;color:#999">Assembler</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Soho House Austin</td>
+    <td class="num">63</td>
+    <td class="num">35</td><td><span class="green">🟢 55.6%</span></td>
+    <td class="num">32</td><td><span class="green">🟢 91.4%</span></td>
+    <td class="num">20</td><td><span class="yellow">🟡 62.5%</span></td>
+    <td class="num">16</td>
+    <td class="num">6</td><td><span class="yellow">🟡 30.0%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 6.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Lettuce Entertain You Enterprises..</td>
+    <td class="num">55</td>
+    <td class="num">21</td><td><span class="red">🔴 38.2%</span></td>
+    <td class="num">21</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">16</td><td><span class="green">🟢 76.2%</span></td>
+    <td class="num">13</td>
+    <td class="num">11</td><td><span class="green">🟢 68.8%</span></td>
+    <td class="num">10</td><td><span class="green">🟢 90.9%</span></td>
+    <td><span class="green">🟢 18.2%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Vestals Catering</td>
+    <td class="num">42</td>
+    <td class="num">22</td><td><span class="yellow">🟡 52.4%</span></td>
+    <td class="num">20</td><td><span class="green">🟢 90.9%</span></td>
+    <td class="num">18</td><td><span class="green">🟢 90.0%</span></td>
+    <td class="num">17</td>
+    <td class="num">11</td><td><span class="green">🟢 61.1%</span></td>
+    <td class="num">8</td><td><span class="yellow">🟡 72.7%</span></td>
+    <td><span class="green">🟢 19.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Uplift Desk</td>
+    <td class="num">38</td>
+    <td class="num">24</td><td><span class="green">🟢 63.2%</span></td>
+    <td class="num">20</td><td><span class="yellow">🟡 83.3%</span></td>
+    <td class="num">12</td><td><span class="yellow">🟡 60.0%</span></td>
+    <td class="num">11</td>
+    <td class="num">9</td><td><span class="green">🟢 75.0%</span></td>
+    <td class="num">9</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 23.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- University of Texas - Housing and..</td>
+    <td class="num">36</td>
+    <td class="num">8</td><td><span class="red">🔴 22.2%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 87.5%</span></td>
+    <td class="num">6</td><td><span class="green">🟢 85.7%</span></td>
+    <td class="num">6</td>
+    <td class="num">3</td><td><span class="green">🟢 50.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 33.3%</span></td>
+    <td><span class="red">🔴 2.8%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">34</td>
+    <td class="num">13</td><td><span class="red">🔴 38.2%</span></td>
+    <td class="num">13</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">8</td><td><span class="yellow">🟡 61.5%</span></td>
+    <td class="num">6</td>
+    <td class="num">5</td><td><span class="green">🟢 62.5%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 60.0%</span></td>
+    <td><span class="yellow">🟡 8.8%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- RHINO STAGING</td>
+    <td class="num">4</td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 25.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Indeed Inc</td>
+    <td class="num">3</td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">51/300 RSVPs (17%)</span><br><span style="font-size:9px;color:#999">Forklift Driver</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Chatsworth Products</td>
+    <td class="num">2</td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Root Cellar Catering Co.</td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Revinate(Formerly Navis)</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Austin Catering</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Balcones Country Club</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Chartwells Higher Education</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Contigo Catering</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Madras Foods, Inc dba Madras Pavi..</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Mayfield DQ</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- ReconMR</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Redbook Events</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>WASHINGTON, D.C.</strong></td>
+    <td class="num">334</td>
+    <td class="num">101</td><td><span class="red">🔴 30.2%</span></td>
+    <td class="num">91</td><td><span class="green">🟢 90.1%</span></td>
+    <td class="num">56</td><td><span class="yellow">🟡 61.5%</span></td>
+    <td class="num">39</td>
+    <td class="num">1</td><td><span class="red">🔴 1.8%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 8 reqs</span><br><span style="font-size:10px;color:#666">369/1200 RSVPs (31%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">196</td>
+    <td class="num">48</td><td><span class="red">🔴 24.5%</span></td>
+    <td class="num">41</td><td><span class="green">🟢 85.4%</span></td>
+    <td class="num">27</td><td><span class="green">🟢 65.9%</span></td>
+    <td class="num">23</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">138</td>
+    <td class="num">53</td><td><span class="red">🔴 38.4%</span></td>
+    <td class="num">50</td><td><span class="green">🟢 94.3%</span></td>
+    <td class="num">29</td><td><span class="yellow">🟡 58.0%</span></td>
+    <td class="num">16</td>
+    <td class="num">1</td><td><span class="red">🔴 3.4%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">66/600 RSVPs (11%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>ORLANDO</strong></td>
+    <td class="num">238</td>
+    <td class="num">138</td><td><span class="green">🟢 58.0%</span></td>
+    <td class="num">125</td><td><span class="green">🟢 90.6%</span></td>
+    <td class="num">86</td><td><span class="green">🟢 68.8%</span></td>
+    <td class="num">42</td>
+    <td class="num">25</td><td><span class="yellow">🟡 29.1%</span></td>
+    <td class="num">15</td><td><span class="yellow">🟡 60.0%</span></td>
+    <td><span class="red">🔴 6.3%</span></td>
+    <td><span class="green">✅ 7 reqs</span><br><span style="font-size:10px;color:#666">200/1400 RSVPs (14%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">178</td>
+    <td class="num">100</td><td><span class="green">🟢 56.2%</span></td>
+    <td class="num">89</td><td><span class="green">🟢 89.0%</span></td>
+    <td class="num">56</td><td><span class="yellow">🟡 62.9%</span></td>
+    <td class="num">27</td>
+    <td class="num">16</td><td><span class="yellow">🟡 28.6%</span></td>
+    <td class="num">9</td><td><span class="red">🔴 56.2%</span></td>
+    <td><span class="red">🔴 5.1%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">145/800 RSVPs (18%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">60</td>
+    <td class="num">38</td><td><span class="green">🟢 63.3%</span></td>
+    <td class="num">36</td><td><span class="green">🟢 94.7%</span></td>
+    <td class="num">30</td><td><span class="green">🟢 83.3%</span></td>
+    <td class="num">15</td>
+    <td class="num">9</td><td><span class="yellow">🟡 30.0%</span></td>
+    <td class="num">6</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="yellow">🟡 10.0%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">55/600 RSVPs (9%)</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>RENO</strong></td>
+    <td class="num">234</td>
+    <td class="num">155</td><td><span class="green">🟢 66.2%</span></td>
+    <td class="num">131</td><td><span class="yellow">🟡 84.5%</span></td>
+    <td class="num">72</td><td><span class="yellow">🟡 55.0%</span></td>
+    <td class="num">45</td>
+    <td class="num">13</td><td><span class="yellow">🟡 18.1%</span></td>
+    <td class="num">13</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 5.6%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">109/500 RSVPs (22%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">179</td>
+    <td class="num">112</td><td><span class="green">🟢 62.6%</span></td>
+    <td class="num">93</td><td><span class="yellow">🟡 83.0%</span></td>
+    <td class="num">51</td><td><span class="yellow">🟡 54.8%</span></td>
+    <td class="num">29</td>
+    <td class="num">7</td><td><span class="red">🔴 13.7%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 3.9%</span></td>
+    <td><span class="yellow">⚠️ 1 reqs</span><br><span style="font-size:10px;color:#666">92/100 RSVPs (92%)</span><br><span style="font-size:9px;color:#999">Picker Packer</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Continental Battery Systems, Inc.</td>
+    <td class="num">22</td>
+    <td class="num">11</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">10</td><td><span class="green">🟢 90.9%</span></td>
+    <td class="num">5</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">3</td>
+    <td class="num">1</td><td><span class="yellow">🟡 20.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 4.5%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">17/400 RSVPs (4%)</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Innomark Communications LLC</td>
+    <td class="num">21</td>
+    <td class="num">21</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">19</td><td><span class="green">🟢 90.5%</span></td>
+    <td class="num">11</td><td><span class="yellow">🟡 57.9%</span></td>
+    <td class="num">9</td>
+    <td class="num">4</td><td><span class="yellow">🟡 36.4%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 19.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">12</td>
+    <td class="num">11</td><td><span class="green">🟢 91.7%</span></td>
+    <td class="num">9</td><td><span class="yellow">🟡 81.8%</span></td>
+    <td class="num">5</td><td><span class="yellow">🟡 55.6%</span></td>
+    <td class="num">4</td>
+    <td class="num">1</td><td><span class="yellow">🟡 20.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="yellow">🟡 8.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>HOUSTON</strong></td>
+    <td class="num">178</td>
+    <td class="num">90</td><td><span class="yellow">🟡 50.6%</span></td>
+    <td class="num">73</td><td><span class="yellow">🟡 81.1%</span></td>
+    <td class="num">38</td><td><span class="yellow">🟡 52.1%</span></td>
+    <td class="num">17</td>
+    <td class="num">3</td><td><span class="red">🔴 7.9%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 1.7%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">224/400 RSVPs (56%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">154</td>
+    <td class="num">78</td><td><span class="yellow">🟡 50.6%</span></td>
+    <td class="num">66</td><td><span class="yellow">🟡 84.6%</span></td>
+    <td class="num">35</td><td><span class="yellow">🟡 53.0%</span></td>
+    <td class="num">14</td>
+    <td class="num">2</td><td><span class="red">🔴 5.7%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 1.3%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">224/400 RSVPs (56%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Mitsubishi - Clerical</td>
+    <td class="num">6</td>
+    <td class="num">5</td><td><span class="green">🟢 83.3%</span></td>
+    <td class="num">3</td><td><span class="red">🔴 60.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Mitsubishi Logisnext Americas (Ho..</td>
+    <td class="num">4</td>
+    <td class="num">3</td><td><span class="green">🟢 75.0%</span></td>
+    <td class="num">2</td><td><span class="red">🔴 66.7%</span></td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 25.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">3</td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- RHINO STAGING</td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ AdvantageXPO@Cantel M..</td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Westchase Catering Group Inc</td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Enchant Christmas, LLC</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Hood Container Corporation</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ CEVA Logistics</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Powell</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>PHOENIX</strong></td>
+    <td class="num">113</td>
+    <td class="num">69</td><td><span class="green">🟢 61.1%</span></td>
+    <td class="num">58</td><td><span class="yellow">🟡 84.1%</span></td>
+    <td class="num">38</td><td><span class="green">🟢 65.5%</span></td>
+    <td class="num">22</td>
+    <td class="num">9</td><td><span class="yellow">🟡 23.7%</span></td>
+    <td class="num">6</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 5.3%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">73/160 RSVPs (46%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">65</td>
+    <td class="num">41</td><td><span class="green">🟢 63.1%</span></td>
+    <td class="num">38</td><td><span class="green">🟢 92.7%</span></td>
+    <td class="num">24</td><td><span class="yellow">🟡 63.2%</span></td>
+    <td class="num">12</td>
+    <td class="num">5</td><td><span class="yellow">🟡 20.8%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 60.0%</span></td>
+    <td><span class="red">🔴 4.6%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">48</td>
+    <td class="num">28</td><td><span class="green">🟢 58.3%</span></td>
+    <td class="num">20</td><td><span class="red">🔴 71.4%</span></td>
+    <td class="num">14</td><td><span class="green">🟢 70.0%</span></td>
+    <td class="num">10</td>
+    <td class="num">4</td><td><span class="yellow">🟡 28.6%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 75.0%</span></td>
+    <td><span class="red">🔴 6.2%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">73/160 RSVPs (46%)</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>CHARLOTTE</strong></td>
+    <td class="num">85</td>
+    <td class="num">41</td><td><span class="yellow">🟡 48.2%</span></td>
+    <td class="num">38</td><td><span class="green">🟢 92.7%</span></td>
+    <td class="num">19</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">5</td>
+    <td class="num">2</td><td><span class="red">🔴 10.5%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">156/600 RSVPs (26%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">83</td>
+    <td class="num">40</td><td><span class="yellow">🟡 48.2%</span></td>
+    <td class="num">38</td><td><span class="green">🟢 95.0%</span></td>
+    <td class="num">19</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">5</td>
+    <td class="num">2</td><td><span class="red">🔴 10.5%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">156/600 RSVPs (26%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>FORT MILL</strong></td>
+    <td class="num">4</td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">4</td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>LOGAN TOWNSHIP</strong></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">206/1160 RSVPs (18%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="yellow">⚠️ 1 reqs</span><br><span style="font-size:10px;color:#666">197/200 RSVPs (98%)</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr>
+</table>
+
+<div class="footer">
+    Report generated by Fiona (@funnel-specialist) &middot; Template: weekly-funnel-report-tmpl.md &middot; Squad: recruitment-marketing-flex<br>
+    Data source: OB Funnel Custom Viewer (Tableau) + Requisitions CSV &middot; Benchmarks: 2025 full-year baseline (52,987 accounts &rarr; 8,146 completed = 15.4%)
+</div>
+
+</body>
+</html>

@@ -8,7 +8,7 @@
 
 ### Workload Crisis
 - Past 2 weeks comparable to December peak season
-- Less staff + unclear processes post-Mason/Megan departures
+- Less staff + unclear processes post-Mason departure and recent team changes
 - Craig working until 7 PM daily, can't start actual work until 4 PM (constant meetings)
 - Washington DC expansion: 5 new requests in a single day
 

@@ -309,5 +309,5 @@ Client names vary across systems:
 3. **AppsFlyer API** — Attribution data for per-campaign funnel analysis
 4. **Braze API** — Trigger re-engagement campaigns from anomaly alerts
 5. **Scheduled Reports** — Cron-based daily Slack posting (no manual trigger)
-6. **Multi-user** — Role-based access for Craig, Megan, Olivia
+6. **Multi-user** — Role-based access for Craig, Olivia
 7. **Historical Trending** — Months of stored data for long-term analysis

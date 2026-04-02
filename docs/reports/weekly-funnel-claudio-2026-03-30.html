@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Weekly OB Funnel Report — Claudio's Markets (Mar 01 '26 to Mar 30 '26)</title>
+<style>
+    @media print {
+        body { margin: 0; font-size: 9pt; }
+        .page-break { page-break-before: always; }
+        @page { size: landscape; margin: 1cm; }
+        .date-filter { display: none !important; }
+    }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #1a1a1a;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+    h1 {
+        font-size: 22px;
+        border-bottom: 3px solid #0066cc;
+        padding-bottom: 8px;
+        margin-bottom: 5px;
+    }
+    h2 {
+        font-size: 16px;
+        color: #0066cc;
+        margin-top: 25px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 4px;
+    }
+    h3 { font-size: 14px; margin-top: 15px; }
+    .meta { color: #666; font-size: 12px; margin-bottom: 20px; }
+    .date-filter {
+        background: #eef3f8;
+        border: 1px solid #c4d4e4;
+        border-radius: 6px;
+        padding: 10px 18px;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .date-filter label {
+        font-weight: 600;
+        font-size: 13px;
+        color: #2c3e50;
+    }
+    .date-filter input[type="date"] {
+        padding: 5px 10px;
+        border: 1px solid #aab;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: inherit;
+    }
+    .date-filter button {
+        padding: 6px 16px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .date-filter button:hover { background: #0052a3; }
+    .date-filter .preset {
+        padding: 4px 10px;
+        background: #fff;
+        border: 1px solid #aab;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        color: #333;
+    }
+    .date-filter .preset:hover { background: #dde5ee; }
+    .date-filter .preset.active { background: #0066cc; color: white; border-color: #0066cc; }
+    .date-filter .range-info {
+        font-size: 12px;
+        color: #555;
+        margin-left: auto;
+    }
+    .summary-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 15px 20px;
+        margin: 15px 0;
+    }
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 15px 0;
+    }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 12px;
+        text-align: center;
+    }
+    .kpi-card .value { font-size: 24px; font-weight: bold; }
+    .kpi-card .label { font-size: 11px; color: #666; margin-top: 4px; }
+    .kpi-card.red { border-left: 4px solid #dc3545; }
+    .kpi-card.yellow { border-left: 4px solid #ffc107; }
+    .kpi-card.green { border-left: 4px solid #28a745; }
+    #funnel-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 10px 0;
+        font-size: 12px;
+    }
+    #funnel-table th {
+        background: #2c3e50;
+        color: white;
+        padding: 8px 6px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        cursor: help;
+    }
+    #funnel-table th:first-child { text-align: left; min-width: 200px; position: sticky; left: 0; z-index: 30; background: #2c3e50; }
+    #funnel-table th[data-tip] { cursor: help; position: relative; }
+    #col-tooltip {
+        display: none;
+        position: fixed;
+        background: #1a1a1a;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 400;
+        padding: 10px 14px;
+        border-radius: 6px;
+        z-index: 200;
+        min-width: 240px;
+        max-width: 340px;
+        line-height: 1.6;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+        pointer-events: none;
+        white-space: pre-line;
+    }
+    #funnel-table td {
+        padding: 5px 6px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+        vertical-align: top;
+    }
+    #funnel-table td:first-child { text-align: left; position: sticky; left: 0; z-index: 5; background: inherit; }
+    #funnel-table tr:not(.total-row):not(.market-row):not(.spacer):not(.spacer-after-total) td:first-child { background: #fff; }
+    #funnel-table tr.market-row td:first-child { background: #f0f4f8; }
+    #funnel-table tr.total-row td:first-child { background: #2c3e50; z-index: 15; }
+    #funnel-table tr.spacer td:first-child, #funnel-table tr.spacer-after-total td:first-child { background: #fff; }
+    #funnel-table td:last-child { text-align: left; min-width: 140px; }
+    tr.market-row { background: #f0f4f8; font-weight: 600; }
+    tr.market-row td { border-bottom: 1px solid #ccc; }
+    tr.total-row { background: #2c3e50; color: white; font-weight: 700; }
+    tr.total-row td { position: sticky; top: 30px; z-index: 10; background: #2c3e50; }
+    tr.total-row td { border-bottom: 2px solid #1a252f; }
+    tr.total-row .green, tr.total-row .yellow, tr.total-row .red, tr.total-row .num, tr.total-row .na { color: white; }
+    tr.total-row td { color: white; }
+    tr.total-row td span { color: white !important; }
+    tr.spacer-after-total td { border: none; height: 8px; background: white; position: sticky; top: 61px; z-index: 9; }
+    tr.spacer td { border: none; height: 8px; background: white; }
+    tr:hover:not(.spacer):not(.spacer-after-total):not(.total-row) { background: #f5f7fa; }
+    .green { color: #28a745; font-weight: 600; }
+    .yellow { color: #b8860b; font-weight: 600; }
+    .red { color: #dc3545; font-weight: 600; }
+    .na { color: #999; }
+    .num { color: #333; }
+    .legend-table { max-width: 700px; }
+    .legend-table td { padding: 4px 10px; }
+    .req-legend { max-width: 600px; margin-top: 10px; }
+    .req-legend td { padding: 3px 8px; font-size: 12px; }
+    .footer {
+        margin-top: 30px;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+        color: #999;
+        font-size: 11px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Weekly OB Funnel Report — Claudio's Markets</h1>
+<div class="meta">
+    <strong>Period:</strong> <span id="period-display">Mar 01 '26 — Mar 30 '26</span> &nbsp;|&nbsp;
+    <strong>Generated:</strong> 2026-03-30 &nbsp;|&nbsp;
+    <strong>Source:</strong> OB Funnel Custom Viewer (Tableau) + Requisitions CSV &nbsp;|&nbsp;
+    <strong>Agent:</strong> Fiona (@funnel-specialist)
+</div>
+
+<div class="date-filter">
+    <label>Date Range:</label>
+    <input type="date" id="date-start">
+    <span>to</span>
+    <input type="date" id="date-end">
+    <button onclick="applyDateRange()">Apply</button>
+    <span style="color:#999">|</span>
+    <button class="preset" onclick="setPreset('7d')">Last 7d</button>
+    <button class="preset" onclick="setPreset('14d')">Last 14d</button>
+    <button class="preset" onclick="setPreset('30d')" id="preset-30d">Full Range</button>
+    <span class="range-info" id="range-info"></span>
+</div>
+
+<div id="kpi-grid" class="kpi-grid"></div>
+
+<div id="summary-box" class="summary-box"></div>
+
+<h2>Conditional Formatting</h2>
+<table class="legend-table">
+<tr><th>Stage</th><th>🟢 Good</th><th>🟡 Watch</th><th>🔴 Critical</th><th>2025 Benchmark</th></tr>
+<tr><td>Acct &rarr; Verified</td><td class="green">&ge; 55%</td><td class="yellow">40-54%</td><td class="red">&lt; 40%</td><td>56.0%</td></tr>
+<tr><td>Verified &rarr; OB Task</td><td class="green">&ge; 85%</td><td class="yellow">75-84%</td><td class="red">&lt; 75%</td><td>93.0%</td></tr>
+<tr><td>OB Task &rarr; PlatformV</td><td class="green">&ge; 65%</td><td class="yellow">50-64%</td><td class="red">&lt; 50%</td><td>69.1%</td></tr>
+<tr><td>PlatformV &rarr; Booked</td><td class="green">&ge; 40%</td><td class="yellow">15-39%</td><td class="red">&lt; 15%</td><td>50.4%</td></tr>
+<tr><td>Booked &rarr; Completed</td><td class="green">&ge; 80%</td><td class="yellow">60-79%</td><td class="red">&lt; 60%</td><td>84.6%</td></tr>
+<tr><td>Overall CR%</td><td class="green">&ge; 15%</td><td class="yellow">8-14.9%</td><td class="red">&lt; 8%</td><td>15.4%</td></tr>
+</table>
+
+<table class='req-legend'><tr><th colspan='2'>Open Reqs Column</th></tr><tr><td>✅ N reqs</td><td>Active requisitions — demand exists, workers can book</td></tr><tr><td>⚠️ N reqs</td><td>Reqs near full (RSVPs &ge; 80% of target)</td></tr><tr><td>❌ No reqs</td><td>No open requisitions — verified workers CANNOT book (red flag if PlatV &gt; 0)</td></tr></table>
+
+<h2>Full Funnel — By Location & Client</h2>
+<table id="funnel-table">
+<thead>
+<tr>
+    <th data-tip="Market location or client name">Market / Client</th>
+    <th data-tip="Accounts Created&#10;Workers who created an account on the Indeed Flex platform">Accts</th>
+    <th data-tip="1st Role Verified&#10;Workers who completed identity verification and got their first role verified">Verif</th>
+    <th data-tip="Accounts to Verified %&#10;Formula: Verified / Accts x 100&#10;Benchmark: 56.0%&#10;Green >= 55% | Yellow >= 40% | Red < 40%">A&rarr;V</th>
+    <th data-tip="1st OB Task Completed&#10;Workers who completed their first onboarding task (training, compliance)">OB Task</th>
+    <th data-tip="Verified to OB Task %&#10;Formula: OB Task / Verified x 100&#10;Benchmark: 93.0%&#10;Green >= 85% | Yellow >= 75% | Red < 75%">V&rarr;OB</th>
+    <th data-tip="Platform Verified&#10;Workers fully verified on the platform, eligible to be booked for shifts">PlatV</th>
+    <th data-tip="OB Task to Platform Verified %&#10;Formula: PlatV / OB Task x 100&#10;Benchmark: 69.1%&#10;Green >= 65% | Yellow >= 50% | Red < 50%">OB&rarr;PV</th>
+    <th data-tip="Ready to Book Estimate&#10;Workers estimated as ready to be booked for their first shift">Ready</th>
+    <th data-tip="1st Shift Booked&#10;Workers who got booked for their very first shift">Booked</th>
+    <th data-tip="Platform Verified to Booked %&#10;Formula: Booked / PlatV x 100&#10;Benchmark: 50.4%&#10;Green >= 40% | Yellow >= 15% | Red < 15%">PV&rarr;Bk</th>
+    <th data-tip="1st Shift Completed&#10;Workers who successfully completed their first shift">Comp</th>
+    <th data-tip="Booked to Completed %&#10;Formula: Completed / Booked x 100&#10;Benchmark: 84.6%&#10;Green >= 80% | Yellow >= 60% | Red < 60%">Bk&rarr;Co</th>
+    <th data-tip="Overall Conversion Rate&#10;Formula: Completed / Accts Created x 100&#10;End-to-end funnel efficiency&#10;Benchmark: 15.4%&#10;Green >= 15% | Yellow >= 8% | Red < 8%">CR%</th>
+    <th data-tip="Open Requisitions (FHS)&#10;Active job requisitions (open + auto-paused + draft)&#10;Shows RSVPs / Target and fill %">Open Reqs</th>
+</tr>
+</thead>
+<tbody id="funnel-tbody">
+<tr class="total-row">
+    <td><strong>CLAUDIO TOTAL</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 41 reqs</span><br><span style="font-size:10px;color:#666">2395/7740 RSVPs (31%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>AUSTIN</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 5 reqs</span><br><span style="font-size:10px;color:#666">282/400 RSVPs (70%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>CHARLOTTE</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">0/600 RSVPs (0%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>FORT MILL</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>HOUSTON</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">262/400 RSVPs (66%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>LAS VEGAS</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 6 reqs</span><br><span style="font-size:10px;color:#666">980/1920 RSVPs (51%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>LOGAN TOWNSHIP</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">219/1160 RSVPs (19%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>ORLANDO</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 7 reqs</span><br><span style="font-size:10px;color:#666">0/1400 RSVPs (0%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>PHOENIX</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">97/160 RSVPs (61%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>RENO</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">124/500 RSVPs (25%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>WASHINGTON, D.C.</strong></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="na">—</span></td>
+    <td><span class="green">✅ 8 reqs</span><br><span style="font-size:10px;color:#666">431/1200 RSVPs (36%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr>
+</tbody>
+</table>
+
+<div class="footer">
+    Report generated by Fiona (@funnel-specialist) &middot; Template: weekly-funnel-report-tmpl.md &middot; Squad: recruitment-marketing-flex<br>
+    Data source: OB Funnel Custom Viewer (Tableau) + Requisitions CSV &middot; Benchmarks: 2025 full-year baseline (52,987 accounts &rarr; 8,146 completed = 15.4%)
+</div>
+
+<script>
+// === Embedded data ===
+const DAILY = {"CORT|Las Vegas":{},"CORT|Orlando":{},"CORT|Houston":{},"CORT|Washington, D.C.":{},"CORT|Austin":{},"CORT|Charlotte":{},"CORT|Phoenix":{},"Stord, Inc|Las Vegas":{},"Stord, Inc|Reno":{},"OnTrac Final Mile|Logan Township":{},"OnTrac Final Mile|Orlando":{},"OnTrac Final Mile|Phoenix":{},"OnTrac Final Mile|Reno":{},"OnTrac Final Mile|Fort Mill":{},"OnTrac Final Mile|Las Vegas":{},"OnTrac Final Mile|Charlotte":{}};
+const DATES = ["2026-03-01","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-07","2026-03-08","2026-03-09","2026-03-10","2026-03-11","2026-03-12","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18","2026-03-19","2026-03-20","2026-03-21","2026-03-22","2026-03-23","2026-03-24","2026-03-25","2026-03-26","2026-03-27","2026-03-28","2026-03-29","2026-03-30"];
+const MARKETS = [{"loc":"Austin","clients":[{"n":"CORT","s":"CORT"}]},{"loc":"Charlotte","clients":[{"n":"CORT","s":"CORT"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Fort Mill","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Houston","clients":[{"n":"CORT","s":"CORT"}]},{"loc":"Las Vegas","clients":[{"n":"CORT","s":"CORT"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Logan Township","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Orlando","clients":[{"n":"CORT","s":"CORT"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Phoenix","clients":[{"n":"CORT","s":"CORT"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Reno","clients":[{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Washington, D.C.","clients":[{"n":"CORT","s":"CORT"}]}];
+const REQ = {"Austin|__market__":{"r":5,"s":282,"t":400},"Austin|CORT":{"r":2,"s":218,"t":100},"Charlotte|__market__":{"r":3,"s":0,"t":600},"Charlotte|CORT":{"r":3,"s":0,"t":600},"Houston|__market__":{"r":3,"s":262,"t":400},"Houston|CORT":{"r":3,"s":262,"t":400},"Las Vegas|__market__":{"r":6,"s":980,"t":1920},"Las Vegas|CORT":{"r":3,"s":486,"t":780},"Las Vegas|Stord, Inc":{"r":3,"s":494,"t":1140},"Logan Township|__market__":{"r":4,"s":219,"t":1160},"Logan Township|OnTrac Final Mile":{"r":1,"s":200,"t":200},"Orlando|__market__":{"r":7,"s":0,"t":1400},"Orlando|CORT":{"r":4,"s":0,"t":800},"Orlando|OnTrac Final Mile":{"r":3,"s":0,"t":600},"Phoenix|__market__":{"r":1,"s":97,"t":160},"Phoenix|OnTrac Final Mile":{"r":1,"s":97,"t":160},"Reno|__market__":{"r":4,"s":124,"t":500},"Reno|Stord, Inc":{"r":1,"s":96,"t":100},"Washington, D.C.|__market__":{"r":8,"s":431,"t":1200},"Washington, D.C.|CORT":{"r":3,"s":82,"t":600},"__total__":{"r":41,"s":2395,"t":7740}};
+const HAS_REQS = true;
+const OWNER = "CLAUDIO";
+const COLSPAN = 15;
+const THRESHOLDS = {av:[55,40],vo:[85,75],op:[65,50],pb:[40,15],bc:[80,60],cr:[15,8]};
+
+// === Helpers ===
+function safeDiv(a,b) { return b>0 ? a/b*100 : null; }
+
+function fmtPct(val, key, forceWhite) {
+    if (val===null) return '<span class="na">&mdash;</span>';
+    const [gMin,yMin] = THRESHOLDS[key];
+    let cls = val>=gMin ? 'green' : val>=yMin ? 'yellow' : 'red';
+    const icon = cls==='green' ? '🟢' : cls==='yellow' ? '🟡' : '🔴';
+    return `<span class="${cls}">${icon} ${val.toFixed(1)}%</span>`;
+}
+
+function fmtReq(reqInfo, platv, isTotal) {
+    if (!reqInfo || reqInfo.r===0) {
+        return platv>0 ? '<span class="red">❌ No reqs</span>' : '<span class="na">&mdash;</span>';
+    }
+    const fillPct = reqInfo.t>0 ? reqInfo.s/reqInfo.t*100 : null;
+    let cls='green', icon='✅';
+    if (fillPct!==null && fillPct>=80) { cls='yellow'; icon='⚠️'; }
+    const fillStr = fillPct!==null ? ` (${fillPct.toFixed(0)}%)` : '';
+    let h = `<span class="${cls}">${icon} ${reqInfo.r} reqs</span>`;
+    h += `<br><span style="font-size:10px;color:#666">${reqInfo.s}/${reqInfo.t} RSVPs${fillStr}</span>`;
+    return h;
+}
+
+function sumRange(arr, si, ei) {
+    let s=0; for(let i=si;i<=ei;i++) s+=(arr[i]||0); return s;
+}
+
+// === Compute and render ===
+function computeAndRender(startIdx, endIdx) {
+    // Sum daily values for each client+location within the date range
+    // stage indices: 0=Accts,1=Verif,2=OBTask,3=PlatV,4=Ready,5=Booked,6=Comp
+    const clientData = {};  // "client|loc" -> [a,v,ob,pv,rd,bk,co]
+    for (const [key, stages] of Object.entries(DAILY)) {
+        const vals = [0,0,0,0,0,0,0];
+        for (let si=0; si<7; si++) {
+            if (stages[si]) vals[si] = sumRange(stages[si], startIdx, endIdx);
+        }
+        clientData[key] = vals;
+    }
+
+    // Build market aggregates, re-sort by accts descending
+    const marketAgg = [];
+    for (const mkt of MARKETS) {
+        const loc = mkt.loc;
+        const mTotal = [0,0,0,0,0,0,0];
+        const mClients = [];
+        for (const cl of mkt.clients) {
+            const key = `${cl.n}|${loc}`;
+            const vals = clientData[key] || [0,0,0,0,0,0,0];
+            for (let i=0;i<7;i++) mTotal[i]+=vals[i];
+            mClients.push({name:cl.n, short:cl.s, vals});
+        }
+        // Re-sort clients by accts descending
+        mClients.sort((a,b)=>b.vals[0]-a.vals[0]);
+        marketAgg.push({loc, total:mTotal, clients:mClients});
+    }
+    // Re-sort markets by accts descending
+    marketAgg.sort((a,b)=>b.total[0]-a.total[0]);
+
+    // Grand total
+    const gt = [0,0,0,0,0,0,0];
+    for (const m of marketAgg) for(let i=0;i<7;i++) gt[i]+=m.total[i];
+
+    // Render KPIs
+    const cr = safeDiv(gt[6],gt[0]);
+    const crDisp = cr!==null ? cr.toFixed(1)+'%' : '0.0%';
+    const vnb = gt[3]-gt[5];
+    const crClass = (cr||0)<8?'red':(cr||0)<15?'yellow':'green';
+    document.getElementById('kpi-grid').innerHTML = `
+        <div class="kpi-card ${crClass}"><div class="value">${crDisp}</div><div class="label">Overall CR% (benchmark: 15.4%)</div></div>
+        <div class="kpi-card"><div class="value">${gt[0]}</div><div class="label">Accounts Created</div></div>
+        <div class="kpi-card"><div class="value">${gt[6]}</div><div class="label">Shifts Completed</div></div>
+        <div class="kpi-card"><div class="value">${vnb}</div><div class="label">Verified but NOT Booking</div></div>`;
+
+    // Render summary
+    const vnbPct = gt[3]>0 ? (vnb/gt[3]*100).toFixed(0) : 0;
+    const mktsComp = marketAgg.filter(m=>m.total[6]>0).length;
+    document.getElementById('summary-box').innerHTML =
+        `<strong>Portfolio snapshot:</strong> ${gt[0]} accounts &rarr; ${gt[1]} verified &rarr; ${gt[3]} platform verified &rarr; ${gt[5]} booked &rarr; ${gt[6]} completed`+
+        `<br><strong>Markets with completions:</strong> ${mktsComp} of ${marketAgg.length}`+
+        ` &nbsp;|&nbsp; <strong>Verified workers not booking:</strong> ${vnb} (${vnbPct}% of pipeline wasted)`;
+
+    // Render table
+    let html = '';
+    const reqTd = (h) => HAS_REQS ? `<td>${h}</td>` : '';
+    function makeRow(label, v, rowClass, reqHtml) {
+        const [a,vr,ob,pv,rd,bk,co] = v;
+        const av=safeDiv(vr,a),vo=safeDiv(ob,vr),op=safeDiv(pv,ob),pb=safeDiv(bk,pv),bc=safeDiv(co,bk),crr=safeDiv(co,a);
+        const cls = rowClass ? ` class="${rowClass}"` : '';
+        return `<tr${cls}><td>${label}</td>`+
+            `<td class="num">${a}</td>`+
+            `<td class="num">${vr}</td><td>${fmtPct(av,'av')}</td>`+
+            `<td class="num">${ob}</td><td>${fmtPct(vo,'vo')}</td>`+
+            `<td class="num">${pv}</td><td>${fmtPct(op,'op')}</td>`+
+            `<td class="num">${rd}</td>`+
+            `<td class="num">${bk}</td><td>${fmtPct(pb,'pb')}</td>`+
+            `<td class="num">${co}</td><td>${fmtPct(bc,'bc')}</td>`+
+            `<td>${fmtPct(crr,'cr')}</td>`+
+            reqTd(reqHtml||'') + `</tr>\n`;
+    }
+
+    // Grand total row (sticky)
+    const totalReq = HAS_REQS ? fmtReq(REQ['__total__'], gt[3], true) : '';
+    html += makeRow(`<strong>${OWNER} TOTAL</strong>`, gt, 'total-row', totalReq);
+    html += `<tr class="spacer-after-total"><td colspan="${COLSPAN}"></td></tr>`;
+
+    // Per market
+    for (const m of marketAgg) {
+        const mReq = HAS_REQS ? fmtReq(REQ[`${m.loc}|__market__`], m.total[3], true) : '';
+        html += makeRow(`<strong>${m.loc.toUpperCase()}</strong>`, m.total, 'market-row', mReq);
+        for (const cl of m.clients) {
+            if (cl.vals[0]===0) continue;
+            const cReq = HAS_REQS ? fmtReq(REQ[`${m.loc}|${cl.name}`], cl.vals[3]) : '';
+            html += makeRow(`&nbsp;&nbsp;- ${cl.short}`, cl.vals, '', cReq);
+        }
+        html += `<tr class="spacer"><td colspan="${COLSPAN}"></td></tr>`;
+    }
+
+    document.getElementById('funnel-tbody').innerHTML = html;
+}
+
+// === Date range controls ===
+const dateStart = document.getElementById('date-start');
+const dateEnd = document.getElementById('date-end');
+
+if (DATES.length > 0) {
+    dateStart.min = DATES[0]; dateStart.max = DATES[DATES.length-1];
+    dateEnd.min = DATES[0]; dateEnd.max = DATES[DATES.length-1];
+    dateStart.value = DATES[0];
+    dateEnd.value = DATES[DATES.length-1];
+}
+
+function getDateIndices() {
+    const s = dateStart.value, e = dateEnd.value;
+    let si=0, ei=DATES.length-1;
+    for (let i=0;i<DATES.length;i++) { if(DATES[i]>=s){ si=i; break; } }
+    for (let i=DATES.length-1;i>=0;i--) { if(DATES[i]<=e){ ei=i; break; } }
+    return [si, ei];
+}
+
+function applyDateRange() {
+    const [si, ei] = getDateIndices();
+    const days = ei-si+1;
+    document.getElementById('range-info').textContent = `${days} day${days!==1?'s':''} selected`;
+    document.getElementById('period-display').textContent = `${dateStart.value} — ${dateEnd.value}`;
+    // Clear preset highlights
+    document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+    computeAndRender(si, ei);
+}
+
+function setPreset(key) {
+    const last = DATES.length-1;
+    let si=0;
+    if (key==='7d') si=Math.max(0, last-6);
+    else if (key==='14d') si=Math.max(0, last-13);
+    else si=0;
+    dateStart.value = DATES[si];
+    dateEnd.value = DATES[last];
+    document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+    if (key==='7d') document.querySelectorAll('.preset')[0].classList.add('active');
+    else if (key==='14d') document.querySelectorAll('.preset')[1].classList.add('active');
+    else document.getElementById('preset-30d').classList.add('active');
+    applyDateRange();
+}
+
+// Initial render with full range
+document.getElementById('preset-30d').classList.add('active');
+applyDateRange();
+
+// === Column tooltips ===
+(function() {
+    const tip = document.getElementById('col-tooltip');
+    document.querySelectorAll('#funnel-table th[data-tip]').forEach(th => {
+        th.addEventListener('mouseenter', e => {
+            const text = th.getAttribute('data-tip');
+            tip.textContent = text;
+            tip.style.display = 'block';
+            const rect = th.getBoundingClientRect();
+            let left = rect.left + rect.width/2 - 140;
+            if (left < 8) left = 8;
+            if (left + 340 > window.innerWidth) left = window.innerWidth - 350;
+            tip.style.left = left + 'px';
+            tip.style.top = (rect.bottom + 6) + 'px';
+        });
+        th.addEventListener('mouseleave', () => {
+            tip.style.display = 'none';
+        });
+    });
+})();
+</script>
+
+<div id="col-tooltip"></div>
+
+</body>
+</html>

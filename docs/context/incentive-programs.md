@@ -30,7 +30,6 @@ When client demand exceeds what normal advertising can deliver, the RM team depl
 
 | POC | Incentives Managed |
 |-----|-------------------|
-| Megan | 22 |
 | Craig | 12 |
 | Claudio | 10 |
 

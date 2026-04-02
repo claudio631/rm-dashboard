@@ -39,6 +39,9 @@ From the JobsCampaigns CSV:
 
 ### Section 3: Open Campaigns
 
+Two subsections:
+
+**3a. Named Client Campaigns**
 From the requisitions CSV:
 - Filter: status = "Open" only
 - Exclude: any client name containing "Indeed Flex"
@@ -46,6 +49,14 @@ From the requisitions CSV:
 - Deduplicate locations per client
 - Sort clients alphabetically, locations alphabetically within each client
 - Format: Client Name: Location 1; Location 2; Location 3
+
+**3b. Indeed Flex App Locations**
+From the requisitions CSV:
+- Filter: status = "Open" only AND client name contains "Indeed Flex"
+- Group by metro/city (normalize location — strip state abbreviation, trim spaces)
+- For each location, list unique job roles (deduplicated, sorted alphabetically)
+- Format: Location = Role 1, Role 2, Role 3
+- Sort locations alphabetically
 
 ### Slack Formatting Rules
 
