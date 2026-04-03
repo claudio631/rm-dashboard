@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 """
 Report 5: Revenue Requests Cross-Reference Dashboard — 2026-04-02
-Generates an HTML dashboard cross-referencing Revenue Requests with FHS, Indeed, and OB Funnel data.
+Generates an HTML dashboard cross-referencing Revenue Requests with FHS, Indeed (JobsCampaigns), and OB Funnel data.
 
-CRITICAL: Every "Live" or "Declined" row in Revenue Requests = one row in output. NO merging/dedup.
-
-Data sources:
-  - Revenue Requests: US_Recruitment_Requests__us_ (11).csv
-  - FHS Requisitions: requisitions-2026-04-02-495947.csv
-  - JobsCampaigns: JobsCampaigns_20260101_20260326.csv
-  - OB Funnel: OB Funnel Custom Viewer (24).xlsx
+CRITICAL: Every qualifying row in Revenue Requests = one row in output. NO merging/dedup.
+First column = Status badge (O for Live, D for Declined)
+Sort by submission date ascending (chronological).
 """
 
 import csv
 import re
 import os
+import sys
 from collections import defaultdict
 from datetime import datetime, date
 
@@ -29,14 +26,13 @@ INDEED_CSV = os.path.expanduser("~/Downloads/JobsCampaigns_20260101_20260326.csv
 OB_FUNNEL_XLSX = os.path.expanduser("~/Downloads/OB Funnel Custom Viewer (24).xlsx")
 OUTPUT_HTML = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-02.html")
 REPORT_DATE = "2026-04-02"
-TODAY = date(2026, 4, 2)
 
 # =============================================================================
 # CLIENT NAME NORMALIZATION MAPS
 # =============================================================================
 CLIENT_NAME_MAP = {
     "compass": ["culinaire", "culinaire international"],
-    "dc flex": ["cort", "indeed flex", "indeed flex applications"],
+    "dc flex": ["cort", "ontrac final mile"],
     "food glorious": ["culinaire"],
     "bon appetit": ["bon appetit management company, inc", "bon appetit"],
     "legends": ["legends hospitality"],
@@ -53,6 +49,7 @@ CLIENT_NAME_MAP = {
     "solaren": ["solaren risk management"],
     "hei hotels": ["merritt hospitality llc"],
     "hyatt place": ["merritt hospitality llc", "hyatt", "hei"],
+    "hyatt": ["merritt hospitality llc"],
     "merritt": ["merritt hospitality llc"],
     "foxconn": ["foxconn"],
     "ctdi": ["ctdi"],
@@ -64,13 +61,13 @@ CLIENT_NAME_MAP = {
     "bath concepts": ["bath concepts"],
     "cort": ["cort"],
     "assurant": ["assurant, inc (hyla)", "assurant"],
+    "sxsw": ["sxsw"],
     "culinaire": ["culinaire", "culinaire international"],
     "material handler": ["ctdi"],
-    "freshella": ["freshella catering"],
-    "eurest": ["eurest"],
-    "flik": ["flik"],
-    "johnstone": ["johnstone supply"],
     "need forklift": ["johnstone supply"],
+    "eurest": ["eurest", "eurest usa"],
+    "freshella": ["freshella catering", "freshella"],
+    "flik": ["flik"],
 }
 
 # Metro/Location aliases
@@ -85,19 +82,17 @@ LOCATION_ALIASES = {
     "haslet": "dallas",
     "lavergne": "nashville",
     "la vergne": "nashville",
+    "mt. juliet": "nashville",
+    "mount juliet": "nashville",
     "libertyville": "chicago",
     "grove city": "columbus",
     "mccarran": "las vegas",
     "middleburg heights": "columbus",
-    "middle heights": "columbus",
-    "south brunswick": "newark",
-    "lebanon": "nashville",
     "lockbourne": "columbus",
     "logan township": "new jersey",
     "paulsboro": "new jersey",
-    "hebron": "cincinnati",
+    "hebron": "erlanger",
     "west chester": "cincinnati",
-    "erlanger": "cincinnati",
     "washington": "washington, d.c.",
     "washington dc": "washington, d.c.",
     "washington, dc": "washington, d.c.",
@@ -105,6 +100,7 @@ LOCATION_ALIASES = {
     "washington, d.c.": "washington, d.c.",
     "washington, d.c": "washington, d.c.",
     "bedford": "chicago",
+    "arlington tx": "dallas",
     "arlington": "dallas",
     "kissimmee": "orlando",
     "desoto": "dallas",
@@ -113,20 +109,18 @@ LOCATION_ALIASES = {
     "mesquite": "dallas",
     "fairfield": "cincinnati",
     "cartersville": "atlanta",
+    "erlanger": "cincinnati",
     "fort mill": "charlotte",
     "nw atlanta": "atlanta",
     "wimberley": "austin",
     "pasadena": "houston",
+    "inland empire": "inland empire",
+    "reno": "reno",
     "joliet": "chicago",
     "sparks": "reno",
     "hapeville": "atlanta",
-    "mt. juliet": "nashville",
-    "mount juliet": "nashville",
     "carrolton": "dallas",
     "irving": "dallas",
-    "bensenville": "chicago",
-    "stoughton": "boston",
-    "lake jackson": "houston",
 }
 
 
@@ -146,7 +140,7 @@ def normalize_location(loc_str):
                   "orlando", "houston", "atlanta", "columbus", "cincinnati",
                   "charlotte", "phoenix", "reno", "newark", "new jersey",
                   "philadelphia", "cleveland", "san antonio", "inland empire",
-                  "washington, d.c.", "boston"]:
+                  "washington, d.c."]:
         if metro in loc:
             return metro
 
@@ -154,7 +148,6 @@ def normalize_location(loc_str):
     loc = re.sub(r',\s*[A-Za-z]{2}\s*\d{0,5}\s*$', '', loc_str.lower().strip())
     loc = loc.strip().rstrip(',').strip()
 
-    # Re-check aliases after cleaning
     for alias, metro in LOCATION_ALIASES.items():
         if alias in loc:
             return metro
@@ -163,7 +156,7 @@ def normalize_location(loc_str):
                   "orlando", "houston", "atlanta", "columbus", "cincinnati",
                   "charlotte", "phoenix", "reno", "newark", "new jersey",
                   "philadelphia", "cleveland", "san antonio", "inland empire",
-                  "washington, d.c.", "boston"]:
+                  "washington, d.c."]:
         if metro in loc:
             return metro
 
@@ -171,7 +164,7 @@ def normalize_location(loc_str):
 
 
 def normalize_client_for_match(client_short):
-    """Get list of possible FHS/Indeed/Funnel client names for a revenue request client."""
+    """Get list of possible FHS/Indeed/Funnel client names."""
     c = client_short.lower().strip()
     for key, vals in CLIENT_NAME_MAP.items():
         if key == c or c.startswith(key):
@@ -179,18 +172,16 @@ def normalize_client_for_match(client_short):
     return [c]
 
 
-def extract_client_and_location(client_job_str, location_col):
-    """Extract short client name and location from the Client-Job and Location columns."""
+def extract_client_and_location(client_job_str):
+    """Extract short client name and location from the Client-Job column."""
     s = client_job_str.strip()
     sl = s.lower()
 
     # Special cases
     if sl.startswith("need forklift"):
-        return "Johnstone Supply", "Lancaster, TX"
+        return "Johnstone Supply", "Dallas"
     if sl == "material handler":
-        return "CTDI", "Haslet, TX"
-    if sl.startswith("barista") and "allen" in location_col.lower():
-        return "Barista", "Allen, TX"
+        return "CTDI", "Dallas"
     if sl.startswith("san antonio & austin"):
         return "CORT", "San Antonio/Austin"
     if sl.startswith("assurant"):
@@ -198,7 +189,7 @@ def extract_client_and_location(client_job_str, location_col):
     if sl == "foxconn":
         return "Foxconn", "Dallas"
     if sl == "rhino staging":
-        return "Rhino", "Charlotte"
+        return "Rhino", "Austin"
     if sl.startswith("sxsw"):
         return "SXSW", "Austin"
     if "vestals catering" in sl:
@@ -210,17 +201,16 @@ def extract_client_and_location(client_job_str, location_col):
             return "Legends", "Dallas"
     if "at&t stadium" in sl and "legends" in sl:
         return "Legends", "Dallas"
-    if "at&t stadium" in sl and "dos equis" in sl and "legends" in sl:
-        return "Legends", "Dallas"
     if "soldier field" in sl and "levy" in sl:
         return "Levy", "Chicago"
-    if "new jersey" in sl and "loader" in sl:
-        return "CORT", "New Jersey"
+    if "barista" == sl:
+        return "Barista", "Dallas"
+    if sl.startswith("plano, texas") or sl == "plano, texas - dallas":
+        return "Unknown", "Dallas"
 
-    # Parse "Client - Location - Role" pattern
     parts = re.split(r'\s*-\s*', s, maxsplit=3)
-
     client = parts[0].strip()
+
     # Remove leading parens like "(Culinaire)"
     if client.startswith("("):
         m = re.match(r'\(([^)]+)\)\s*(.*)', client)
@@ -231,111 +221,47 @@ def extract_client_and_location(client_job_str, location_col):
     if len(parts) >= 2:
         location = parts[1].strip()
 
-    loc = _extract_city(location, s, location_col)
+    loc = _extract_city(location, s)
 
-    # Client name standardization
+    # Client cleanups
     cl = client.lower()
-    if cl == "cort" or cl.startswith("cort"):
-        client = "CORT"
-    elif "culinaire" in cl or "food glorious" in cl:
-        client = "Culinaire"
-    elif "compass" in cl:
-        client = "Compass"
-    elif "bon appetit" in cl:
-        client = "Bon Appetit"
-    elif "dc flex" in cl:
-        client = "DC Flex"
-    elif "foxconn" in cl:
-        client = "Foxconn"
-    elif "power stop" in cl:
-        client = "Power Stop"
-    elif "legends" in cl:
-        client = "Legends"
-    elif "levy" in cl:
-        client = "Levy"
-    elif "ingram" in cl:
-        client = "Ingram"
-    elif "ctdi" in cl:
-        client = "CTDI"
-    elif "bath concepts" in cl:
-        client = "Bath Concepts"
-    elif "btx" in cl:
-        client = "BTX"
-    elif "solaren" in cl:
-        client = "Solaren"
-    elif "hei hotels" in cl or "merritt" in cl:
-        client = "HEI Hotels"
-    elif "hyatt" in cl:
-        client = "Hyatt Place"
-    elif "rhino" in cl:
-        client = "Rhino"
-    elif "uplift" in cl:
-        client = "Uplift"
-    elif "ryerson" in cl:
-        client = "Ryerson"
-    elif "lettuce" in cl:
-        client = "Lettuce"
-    elif "soho" in cl:
-        client = "Soho House"
-    elif "eurest" in cl:
-        client = "Eurest"
-    elif "freshella" in cl:
-        client = "Freshella"
-    elif "stord" in cl:
-        client = "Stord"
-    elif "flik" in cl or "ncr voyix" in cl:
-        client = "FLIK"
-    elif "johnstone" in cl:
-        client = "Johnstone Supply"
+    client_map = {
+        "cort": "CORT", "culinaire": "Culinaire", "food glorious": "Culinaire",
+        "compass": "Compass", "bon appetit": "Bon Appetit", "dc flex": "DC Flex",
+        "foxconn": "Foxconn", "power stop": "Power Stop", "legends": "Legends",
+        "levy": "Levy", "ingram": "Ingram", "ctdi": "CTDI",
+        "bath concepts": "Bath Concepts", "btx": "BTX", "solaren": "Solaren",
+        "hei hotels": "HEI Hotels", "hyatt": "Hyatt Place", "rhino": "Rhino",
+        "uplift": "Uplift", "ryerson": "Ryerson", "lettuce": "Lettuce",
+        "soho": "Soho House", "austin club": "Austin Club", "vestals": "Vestals",
+        "sxsw": "SXSW", "eurest": "Eurest", "freshella": "Freshella",
+        "flik": "FLIK", "ncr voyix": "NCR Voyix", "stord": "Stord",
+    }
+    for key, name in client_map.items():
+        if key in cl:
+            client = name
+            break
 
     return client, loc
 
 
-def _extract_city(loc_part, full_str, location_col=""):
-    """Try to extract a city name from location columns."""
-    check_str = (full_str + " " + location_col).lower()
+def _extract_city(loc_part, full_str):
+    """Try to extract a city name from a location part."""
     cities = {
-        "chicago": "Chicago",
-        "dallas": "Dallas",
-        "dfw": "Dallas",
-        "austin": "Austin",
-        "nashville": "Nashville",
-        "las vegas": "Las Vegas",
-        "vegas": "Las Vegas",
-        "orlando": "Orlando",
-        "houston": "Houston",
-        "atlanta": "Atlanta",
-        "columbus": "Columbus",
-        "cincinnati": "Cincinnati",
-        "charlotte": "Charlotte",
-        "phoenix": "Phoenix",
-        "reno": "Reno",
-        "san antonio": "San Antonio",
-        "washington": "Washington, D.C.",
-        "fort worth": "Dallas",
-        "bedford park": "Chicago",
-        "hodgkins": "Chicago",
-        "la vergne": "Nashville",
-        "lavergne": "Nashville",
-        "grove city": "Columbus",
-        "libertyville": "Chicago",
-        "bedford": "Chicago",
-        "mt. juliet": "Nashville",
-        "mount juliet": "Nashville",
-        "haslet": "Dallas",
-        "lancaster": "Dallas",
-        "carrolton": "Dallas",
-        "new jersey": "New Jersey",
-        "bensenville": "Chicago",
-        "arlington": "Dallas",
-        "irving": "Dallas",
-        "hapeville": "Atlanta",
-        "athens": "Athens, GA",
-        "allen": "Allen, TX",
-        "stoughton": "Boston",
-        "lake jackson": "Houston",
+        "chicago": "Chicago", "dallas": "Dallas", "dfw": "Dallas",
+        "austin": "Austin", "nashville": "Nashville", "las vegas": "Las Vegas",
+        "vegas": "Las Vegas", "orlando": "Orlando", "houston": "Houston",
+        "atlanta": "Atlanta", "columbus": "Columbus", "cincinnati": "Cincinnati",
+        "charlotte": "Charlotte", "phoenix": "Phoenix", "reno": "Reno",
+        "newark": "Newark", "new jersey": "New Jersey",
+        "san antonio": "San Antonio", "washington": "Washington, D.C.",
+        "fort worth": "Dallas", "bedford park": "Chicago", "hodgkins": "Chicago",
+        "la vergne": "Nashville", "lavergne": "Nashville", "grove city": "Columbus",
+        "libertyville": "Chicago", "bedford": "Chicago", "haslet": "Dallas",
+        "mt. juliet": "Nashville", "mount juliet": "Nashville",
+        "carrolton": "Dallas", "irving": "Dallas",
     }
-
+    check_str = full_str.lower()
     for key, city in cities.items():
         if key in check_str:
             return city
@@ -347,15 +273,36 @@ def _extract_city(loc_part, full_str, location_col=""):
     return loc_part
 
 
+# Market owners
+MARKET_OWNERS = {
+    "claudio": [
+        "austin", "houston", "charlotte", "fort mill", "orlando",
+        "las vegas", "reno", "washington, d.c.", "washington", "monroe", "phoenix",
+        "logan township"
+    ],
+    "craig": [
+        "columbus", "cincinnati", "hebron", "chicago", "atlanta",
+        "dallas", "north haven", "south brunswick",
+        "hamilton", "kearny", "nashville", "middleburg heights",
+        "erlanger", "newark", "paulsboro", "mccarran"
+    ],
+}
+
+
+def get_owner_by_market(location):
+    loc_norm = normalize_location(location)
+    for owner, markets in MARKET_OWNERS.items():
+        for market in markets:
+            if market in loc_norm or loc_norm in market:
+                return owner.title()
+    return ""
+
+
 def parse_owner(email):
-    """Extract first name from email."""
     owners = {
-        "claudio.santos": "Claudio",
-        "craig.freeman": "Craig",
-        "megan.mccue": "Megan",
-        "angela": "Angela",
-        "lacey.henderson": "Lacey",
-        "david.starkman": "David",
+        "claudio.santos": "Claudio", "craig.freeman": "Craig",
+        "megan.mccue": "Megan", "angela": "Angela",
+        "lacey.henderson": "Lacey", "david.starkman": "David",
     }
     email_lower = email.lower().strip()
     for key, name in owners.items():
@@ -366,7 +313,6 @@ def parse_owner(email):
 
 
 def parse_headcount(hc_str):
-    """Parse headcount from string."""
     s = hc_str.strip()
     if not s:
         return 0
@@ -379,14 +325,12 @@ def parse_headcount(hc_str):
 
 
 def has_shifts(shift_info):
-    """Determine if shifts are posted (Yes) or not (No/TBD)."""
     if not shift_info:
         return False
     s = shift_info.lower().strip()
     no_indicators = ["not posted", "tbd", "no posted", "shifts not posted",
                      "need to immediately start recruiting", "not yet",
-                     "will be based on client posts", "dates/times tbd",
-                     "shift not posted"]
+                     "will be based on client posts"]
     for ind in no_indicators:
         if ind in s:
             return False
@@ -400,7 +344,6 @@ def has_shifts(shift_info):
 
 
 def parse_currency(val_str):
-    """Parse a currency string to float."""
     if not val_str or val_str.strip() == '-':
         return 0.0
     s = val_str.strip().replace('$', '').replace(',', '').strip()
@@ -424,25 +367,32 @@ def load_revenue_requests():
             if len(row) < 12:
                 continue
             status = row[2].strip()
-            # Only Live or Declined
+            # Include Live and Declined only
             if "Live" not in status and "Declined" not in status:
                 continue
             is_declined = "Declined" in status
 
             client_job = row[0].strip()
             owner_email = row[1].strip()
-            location_col = row[8].strip() if len(row) > 8 else ""
             role_col = row[5].strip()
             other_role = row[6].strip() if len(row) > 6 else ""
             shift_info = row[9].strip() if len(row) > 9 else ""
             start_date = row[10].strip() if len(row) > 10 else ""
             hc_str = row[11].strip() if len(row) > 11 else "0"
+            submission_str = row[17].strip() if len(row) > 17 else ""
 
-            client, location = extract_client_and_location(client_job, location_col)
-            owner = parse_owner(owner_email)
+            # Parse submission date (format: "25/03/2026, 12:55" DD/MM/YYYY)
+            submission_date = None
+            if submission_str:
+                try:
+                    submission_date = datetime.strptime(submission_str.split(',')[0].strip(), '%d/%m/%Y').date()
+                except ValueError:
+                    pass
+
+            client, location = extract_client_and_location(client_job)
+            owner = get_owner_by_market(location) or parse_owner(owner_email)
             hc = parse_headcount(hc_str)
 
-            # Role: use Role column, or other_role if Role is "Other", or extract from client_job
             role = role_col
             if role.lower() == "other" and other_role:
                 role = other_role
@@ -465,15 +415,6 @@ def load_revenue_requests():
                 except ValueError:
                     continue
 
-            # Parse start date for priority calculation
-            start_dt = None
-            for fmt in ('%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y'):
-                try:
-                    start_dt = datetime.strptime(start_date, fmt).date()
-                    break
-                except ValueError:
-                    continue
-
             rows.append({
                 'client_job': client_job,
                 'client': client,
@@ -482,11 +423,10 @@ def load_revenue_requests():
                 'role': role,
                 'hc': hc,
                 'start_date': formatted_date,
-                'start_dt': start_dt,
                 'shifts': shifts,
                 'shift_info': shift_info,
                 'is_declined': is_declined,
-                'status': status,
+                'submission_date': submission_date,
             })
 
     return rows
@@ -501,28 +441,34 @@ def load_fhs_requisitions():
         for row in reader:
             if len(row) < 13:
                 continue
+            last_updated_str = row[0].strip()
+            job_title = row[3].strip().lower() if len(row) > 3 else ""
             client = row[5].strip()
             location = row[6].strip()
             status = row[12].strip()
             rsvps = int(row[10]) if row[10].strip().isdigit() else 0
 
+            try:
+                req_date = datetime.strptime(last_updated_str[:10], '%Y-%m-%d').date()
+            except (ValueError, TypeError):
+                req_date = None
+
             loc_norm = normalize_location(location)
-            job_title = row[3].strip().lower() if len(row) > 3 else ""
             rows.append({
                 'client': client.lower().strip(),
                 'loc_norm': loc_norm,
                 'job_title': job_title,
                 'status': status,
                 'rsvps': rsvps,
+                'date': req_date,
             })
     return rows
 
 
 def load_indeed_campaigns():
     """Load Indeed campaigns from JobsCampaigns CSV.
-    JobsCampaigns has: Campaign, Impressions, ..., Spend, ...
-    No Status column — all campaigns with spend > 0 are relevant.
-    Also include campaigns with spend=0 but that match naming patterns.
+    This file has ALL campaigns (no status filter). Match by campaign name keywords.
+    Columns: Campaign, Spend, Applies, Job Count, etc.
     """
     rows = []
     with open(INDEED_CSV, 'r', encoding='utf-8-sig') as f:
@@ -530,160 +476,32 @@ def load_indeed_campaigns():
         for row in reader:
             campaign_name = row.get('Campaign', '').strip()
             spend = parse_currency(row.get('Spend', '0'))
+            applies = 0
+            applies_str = row.get('Applies', '0').strip()
+            try:
+                applies = int(float(applies_str))
+            except (ValueError, TypeError):
+                applies = 0
 
-            # Skip meta rows
-            if not campaign_name or campaign_name == "Jobs not in a campaign":
-                continue
-            # Skip non-B2C campaigns (e.g., "Senior Demand Generation Manager")
-            if campaign_name.lower().startswith("senior demand"):
+            # Skip "Jobs not in a campaign" and empty
+            if not campaign_name or campaign_name.lower() == "jobs not in a campaign":
                 continue
 
-            client, location, role = _parse_campaign_name_with_role(campaign_name)
-            if not client:
-                continue
-
-            loc_norm = normalize_location(location)
             rows.append({
-                'client': client.lower().strip(),
-                'loc_norm': loc_norm,
-                'role': role.lower().strip() if role else '',
-                'spend': spend,
                 'name': campaign_name,
+                'name_lower': campaign_name.lower(),
+                'spend': spend,
+                'applies': applies,
             })
-
     return rows
-
-
-def _parse_campaign_name_with_role(name):
-    """Parse Indeed campaign name to extract client, location, AND role.
-    Format: US - B2C - {category} - {client} - {role} - {location} - {dates}
-    Returns (client, location, role).
-    """
-    s = name.strip()
-    parts = re.split(r'\s*-\s*', s)
-
-    known_clients = {
-        'cort', 'johnstone', 'bon appetit', 'evergreen', 'ontrac', 'tennant',
-        'legends', 'culinaire', 'afc', 'foxconn', 'stord', 'powerstop',
-        'power stop', 'powerststop', 'ryerson', 'bath concepts', 'btx',
-        'ctdi', 'ingram', 'indeed flex', 'indeed', 'lettuce',
-        'continental battery', 'hyatt', 'ac', 'levy', 'solaren',
-        'uplift', 'soho house', 'soho', 'rhino', 'vestals', 'sxsw',
-        'hei hotels', 'austin club', 'moody', 'freshella',
-    }
-
-    skip_words = {'us', 'b2c', 'industrial', 'hospitality', 'hiring event', 'clerical'}
-
-    client = None
-    location = None
-    role = None
-
-    # Find location (pattern "City, ST" or "City, oh" etc.)
-    loc_idx = None
-    for i, part in enumerate(parts):
-        p = part.strip()
-        if re.match(r'^[A-Za-z\s\.]+,\s*[A-Z]{2}$', p):
-            location = p
-            loc_idx = i
-            break
-        # Also match lowercase state: "Cincinnati, oh"
-        if re.match(r'^[A-Za-z\s\.]+,\s*[A-Za-z]{2}$', p):
-            location = p
-            loc_idx = i
-            break
-
-    if loc_idx is not None:
-        before_loc = [p.strip() for p in parts[:loc_idx]]
-        candidate_parts = [p for p in before_loc if p.lower().strip() not in skip_words]
-
-        combined = ' '.join(candidate_parts).lower()
-        client_idx_in_candidates = None
-        for kc in sorted(known_clients, key=len, reverse=True):
-            if kc in combined:
-                client = kc
-                for ci, cp in enumerate(candidate_parts):
-                    if kc in cp.lower():
-                        client_idx_in_candidates = ci
-                        break
-                break
-
-        if not client and candidate_parts:
-            client = candidate_parts[0]
-            client_idx_in_candidates = 0
-
-        # Role = parts between client and location
-        if client_idx_in_candidates is not None and client_idx_in_candidates + 1 < len(candidate_parts):
-            role_parts = candidate_parts[client_idx_in_candidates + 1:]
-            if role_parts:
-                role = ' '.join(role_parts).strip()
-    else:
-        # No "City, ST" location found
-        candidate_parts = [p.strip() for p in parts if p.strip().lower() not in skip_words]
-        non_date_parts = []
-        for cp in candidate_parts:
-            if re.match(r'^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+\d', cp, re.IGNORECASE):
-                break
-            non_date_parts.append(cp)
-
-        combined = ' '.join(non_date_parts).lower()
-        client_idx_in_nondates = None
-        for kc in sorted(known_clients, key=len, reverse=True):
-            if kc in combined:
-                client = kc
-                for ci, cp in enumerate(non_date_parts):
-                    if kc in cp.lower():
-                        client_idx_in_nondates = ci
-                        break
-                break
-        if not client and non_date_parts:
-            client = non_date_parts[0]
-            client_idx_in_nondates = 0
-
-        if client_idx_in_nondates is not None and client_idx_in_nondates + 1 < len(non_date_parts):
-            role_parts = non_date_parts[client_idx_in_nondates + 1:]
-            if role_parts:
-                role = ' '.join(role_parts).strip()
-
-        # Infer location from client defaults
-        if client and not location:
-            client_default_locations = {
-                'levy': 'Chicago, IL',
-                'bath concepts': 'Libertyville, IL',
-                'foxconn': 'Fort Worth, TX',
-                'ryerson': 'Dallas, TX',
-                'sxsw': 'Austin, TX',
-                'material handler': 'Haslet, TX',
-            }
-            location = client_default_locations.get(client.lower(), '')
-
-    # Normalize client names
-    if client:
-        cl = client.lower().strip()
-        if cl in ('powerstop', 'powerststop'):
-            client = 'Power Stop'
-        elif cl == 'ac':
-            client = 'Austin Club'
-
-    # Clean up role
-    if role:
-        role = re.sub(r'(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s*\d+.*', '', role, flags=re.IGNORECASE).strip()
-        role = re.sub(r'\b(premium|additional\s+location\w*)\b', '', role, flags=re.IGNORECASE).strip()
-        role = role.strip(' -,')
-
-    return client, location if location else "", role if role else ""
 
 
 def load_ob_funnel():
     """Load OB Funnel data from Excel.
-    Structure: Col 0 = Client (only on first row of client block)
-               Col 1 = Location (only on first row of location block)
-               Col 2 = Role slice ("Total" for aggregate, or role name like "Assembler")
-               Col 3 = Metric name
-    When Col 2 = "Total", it starts a block of ~14 metric rows.
-    The first metric row has Col2="Total", subsequent rows in the block have Col2=None.
-    We track the current role_slice and only capture metrics when role_slice == "Total".
-    Grand Total is the last column (col 35 = index 34).
-    Returns dict keyed by (client_lower, loc_norm) with created/verified/rtb.
+    Col 0 = Client, Col 1 = Location, Col 2 = "Total" type, Col 3 = Metric
+    Date cols from 4, Grand Total = last col (index 34).
+    Only use rows where Col 2 = "Total".
+    Key metrics: Worker Accounts Created, 1st Role Verified, "Ready to Book" Estimate.
     """
     data = defaultdict(lambda: {'created': 0, 'verified': 0, 'rtb': 0})
 
@@ -691,30 +509,25 @@ def load_ob_funnel():
     ws = wb.active
 
     current_client = None
-    current_loc = None
-    current_role_slice = None
-    grand_total_col = ws.max_column  # Last column is Grand Total (col 35 = index 34)
+    grand_total_col = ws.max_column  # Last column is Grand Total
 
-    for row in ws.iter_rows(min_row=2, values_only=False):
-        cells = [c.value for c in row]
-
-        if cells[0] is not None and str(cells[0]).strip():
-            current_client = str(cells[0]).strip()
-        if cells[1] is not None and str(cells[1]).strip():
-            current_loc = str(cells[1]).strip()
-        if cells[2] is not None and str(cells[2]).strip():
-            current_role_slice = str(cells[2]).strip()
-
-        # Only capture metrics when we are in a "Total" block
-        if current_role_slice != "Total":
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if row[0] is not None and str(row[0]).strip():
+            current_client = str(row[0]).strip()
+        if not current_client:
             continue
 
-        metric = cells[3]  # Col 3 = metric name
-        if not metric or not current_client or not current_loc:
+        col2 = row[2]
+        if col2 is None or str(col2).strip() != "Total":
             continue
 
+        metric = row[3]
+        if not metric:
+            continue
         metric_str = str(metric).strip()
-        grand_total = cells[grand_total_col - 1]  # 0-indexed
+
+        location = str(row[1]).strip() if row[1] else ""
+        grand_total = row[grand_total_col - 1]  # 0-indexed
         if grand_total is None:
             grand_total = 0
         try:
@@ -722,14 +535,14 @@ def load_ob_funnel():
         except (ValueError, TypeError):
             val = 0
 
-        loc_norm = normalize_location(current_loc)
+        loc_norm = normalize_location(location)
         key = (current_client.lower().strip(), loc_norm)
 
         if "Worker Accounts Created" in metric_str:
             data[key]['created'] += val
         elif "1st Role Verified" in metric_str:
             data[key]['verified'] += val
-        elif '"Ready to Book" Estimate' in metric_str:
+        elif '"Ready to Book" Estimate' in metric_str or "Ready to Book" in metric_str:
             data[key]['rtb'] += val
 
     wb.close()
@@ -740,103 +553,8 @@ def load_ob_funnel():
 # CROSS-REFERENCE MATCHING
 # =============================================================================
 
-def _fuzzy_client_match(a, b):
-    """Basic fuzzy matching for client names."""
-    for suffix in [', inc', ' inc', ', llc', ' llc', ', ltd', ' ltd']:
-        a = a.replace(suffix, '')
-        b = b.replace(suffix, '')
-    a = a.strip().rstrip('.')
-    b = b.strip().rstrip('.')
-    if a == b:
-        return True
-    if a in b or b in a:
-        return True
-    a_words = a.split()
-    b_words = b.split()
-    if a_words and b_words and a_words[0] == b_words[0] and len(a_words[0]) > 3:
-        return True
-    return False
-
-
-def _location_match(loc_a, loc_b):
-    """Check if two normalized locations match."""
-    if not loc_a or not loc_b:
-        return not loc_a and not loc_b
-    a = loc_a.lower().strip()
-    b = loc_b.lower().strip()
-    if a == b:
-        return True
-    if a in b or b in a:
-        return True
-    if "/" in a:
-        parts = a.split("/")
-        return any(p.strip() == b for p in parts)
-    if "/" in b:
-        parts = b.split("/")
-        return any(p.strip() == a for p in parts)
-    return False
-
-
-def _role_match(rev_role, fhs_job_title):
-    """Check if a revenue request role matches an FHS job title."""
-    a = rev_role.lower().strip()
-    b = fhs_job_title.lower().strip()
-    if not a or not b:
-        return True
-    if a == b:
-        return True
-    if a in b or b in a:
-        return True
-    role_aliases = {
-        'food preps': ['prep cook', 'prep'],
-        'prep cook': ['food preps', 'prep'],
-        'prep': ['prep cook', 'food preps'],
-        'loader/crew': ['loader', 'crew', 'lc', 'loader / crew'],
-        'loader': ['loader/crew', 'crew', 'lc', 'loader / crew'],
-        'loader / crew': ['loader/crew', 'loader', 'crew', 'lc'],
-        'lc': ['loader/crew', 'loader', 'crew'],
-        'warehouse operative': ['warehouse', 'warehouse operator', 'picker packer', 'material handler', 'wo'],
-        'warehouse operator': ['warehouse', 'warehouse operative', 'picker packer', 'material handler', 'wo'],
-        'wo': ['warehouse operative', 'warehouse operator', 'warehouse'],
-        'picker packer': ['warehouse operative', 'warehouse operator', 'warehouse', 'pp'],
-        'pp': ['picker packer', 'warehouse operative', 'warehouse'],
-        'material handler': ['warehouse operative', 'warehouse operator', 'warehouse'],
-        'industrial general labor': ['industrial general laborer', 'general labor', 'general laborer', 'igl'],
-        'industrial general laborer': ['industrial general labor', 'general labor', 'general laborer', 'igl'],
-        'igl': ['industrial general labor', 'industrial general laborer', 'general labor'],
-        'dishwasher': ['dishwash', 'dishwhasher'],
-        'dishwash': ['dishwasher', 'dishwhasher'],
-        'server': ['event server', 'buffet server', 'banquet server', 'servers'],
-        'servers': ['server', 'event server', 'buffet server'],
-        'event server': ['server'],
-        'buffet server': ['server'],
-        'barista': ['barista'],
-        'bartender': ['bartender', 'bart'],
-        'cashier': ['cashier'],
-        'assembler': ['assembler'],
-        'repair technician': ['repair tech', 'cellphone repair specialist', 'repair specialist'],
-        'repair tech': ['repair technician', 'cellphone repair specialist'],
-        'htl': ['hospitality', 'hospitality general labor'],
-        'hospitality': ['htl', 'hospitality general labor'],
-        'concession stand worker': ['concessions', 'concession'],
-        'concessions': ['concession stand worker'],
-        'multi': ['hospitality', 'general'],
-        'forklift': ['forklift driver', 'forklift operator'],
-        'forklift driver': ['forklift'],
-        'lead generation specialist': ['lead generation', 'lead gen'],
-    }
-    aliases = role_aliases.get(a, [])
-    for alias in aliases:
-        if alias in b or b in alias:
-            return True
-    return False
-
-
-def match_fhs(client_short, location, fhs_rows, role=None):
-    """Find FHS data matching a revenue request client+location.
-    Open count: only open + auto-paused status reqs
-    Interview (RSVPs): sum from open + auto-paused reqs
-    """
+def match_fhs(client_short, location, fhs_rows, submission_date=None, role=None):
+    """Find FHS data matching a revenue request."""
     possible_clients = normalize_client_for_match(client_short)
     loc_norm = normalize_location(location)
 
@@ -855,64 +573,126 @@ def match_fhs(client_short, location, fhs_rows, role=None):
         if not _location_match(loc_norm, fhs_row['loc_norm']):
             continue
 
-        # Role filtering
         if role:
             if not fhs_row['job_title']:
                 continue
             if not _role_match(role, fhs_row['job_title']):
                 continue
 
-        # Open count: only open + auto-paused
         if fhs_row['status'] in ('open', 'auto-paused'):
             total['count'] += 1
+
+        if submission_date and fhs_row['date']:
+            if fhs_row['date'] >= submission_date:
+                total['rsvps'] += fhs_row['rsvps']
+        elif not submission_date:
             total['rsvps'] += fhs_row['rsvps']
 
     return total
 
 
 def match_indeed(client_short, location, indeed_rows, role=None):
-    """Find Indeed campaign data matching a revenue request client+location."""
-    possible_clients = normalize_client_for_match(client_short)
+    """Find Indeed campaigns matching a revenue request by keywords in campaign name."""
     loc_norm = normalize_location(location)
+
+    # Build keywords from client, location, role
+    client_keywords = _get_client_keywords(client_short)
+    location_keywords = _get_location_keywords(location, loc_norm)
 
     total = {'count': 0, 'spend': 0.0}
 
-    for ind_row in indeed_rows:
-        client_match = False
-        for pc in possible_clients:
-            pc_lower = pc.lower().strip()
-            if (pc_lower in ind_row['client'] or ind_row['client'] in pc_lower or
-                    _fuzzy_client_match(pc_lower, ind_row['client'])):
-                client_match = True
-                break
+    for ind in indeed_rows:
+        name = ind['name_lower']
+
+        # Check client keywords match
+        client_match = any(kw in name for kw in client_keywords)
         if not client_match:
             continue
-        if not _location_match(loc_norm, ind_row['loc_norm']):
+
+        # Check location keywords match
+        loc_match = any(kw in name for kw in location_keywords) if location_keywords else True
+        if not loc_match:
             continue
 
-        # Role filtering
-        if role and ind_row['role']:
-            if not _role_match(role, ind_row['role']):
-                continue
-
         total['count'] += 1
-        total['spend'] += ind_row['spend']
+        total['spend'] += ind['spend']
 
     return total
 
 
-# OB Funnel client overrides for DC Flex
+def _get_client_keywords(client_short):
+    """Build keyword list for client matching in campaign names."""
+    c = client_short.lower().strip()
+    kw = [c]
+
+    keyword_map = {
+        "cort": ["cort"],
+        "culinaire": ["culinaire", "food glorious"],
+        "compass": ["culinaire", "compass"],
+        "dc flex": ["dc flex", "indeed flex"],
+        "bon appetit": ["bon appetit"],
+        "legends": ["legends"],
+        "levy": ["levy"],
+        "power stop": ["power stop", "powerstop"],
+        "foxconn": ["foxconn"],
+        "ctdi": ["ctdi"],
+        "ingram": ["ingram"],
+        "bath concepts": ["bath concepts"],
+        "rhino": ["rhino"],
+        "solaren": ["solaren"],
+        "hyatt place": ["hyatt"],
+        "hei hotels": ["hei", "hyatt"],
+        "eurest": ["eurest"],
+        "freshella": ["freshella"],
+        "ryerson": ["ryerson"],
+        "johnstone supply": ["johnstone"],
+        "stord": ["stord"],
+        "merritt": ["merritt", "hei"],
+    }
+    for key, vals in keyword_map.items():
+        if key in c or c in key:
+            return vals
+    return kw
+
+
+def _get_location_keywords(location, loc_norm):
+    """Build keyword list for location matching in campaign names."""
+    if not location and not loc_norm:
+        return []
+    keywords = []
+    if loc_norm:
+        keywords.append(loc_norm)
+    loc_lower = location.lower().strip() if location else ""
+
+    # Add state abbreviations
+    loc_to_state = {
+        "chicago": "il", "dallas": "tx", "austin": "tx", "nashville": "tn",
+        "las vegas": "nv", "orlando": "fl", "houston": "tx", "atlanta": "ga",
+        "columbus": "oh", "cincinnati": "oh", "charlotte": "nc", "phoenix": "az",
+    }
+    if loc_norm in loc_to_state:
+        keywords.append(loc_to_state[loc_norm])
+
+    # Add common variations
+    if loc_norm == "dallas":
+        keywords.extend(["dfw", "fort worth", "arlington"])
+    elif loc_norm == "chicago":
+        keywords.extend(["bedford park", "hodgkins", "libertyville"])
+    elif loc_norm == "nashville":
+        keywords.extend(["mt. juliet", "la vergne", "lavergne"])
+    elif loc_norm == "columbus":
+        keywords.extend(["grove city", "lockbourne"])
+
+    return keywords
+
+
 OB_FUNNEL_CLIENT_OVERRIDES = {
-    "dc flex": ["cort", "ontrac final mile", "ontrac"],
+    "dc flex": ["cort", "ontrac final mile"],
 }
 
 
-def match_ob_funnel(client_short, location, ob_data):
-    """Find OB Funnel data matching a revenue request client+location.
-    Priority:
-      1. client + location match
-      2. location-only match (across all clients)
-    """
+def match_ob_funnel(client_short, location, ob_data, role=None):
+    """Find OB Funnel data matching a revenue request."""
     possible_clients = normalize_client_for_match(client_short)
     override_clients = OB_FUNNEL_CLIENT_OVERRIDES.get(client_short.lower().strip(), [])
     if override_clients:
@@ -921,11 +701,12 @@ def match_ob_funnel(client_short, location, ob_data):
 
     total = {'created': 0, 'verified': 0, 'rtb': 0}
 
-    # 1. Try client + location
-    matched = False
     for (ob_client, ob_loc), vals in ob_data.items():
+        # Location match
         if not _location_match(loc_norm, ob_loc):
             continue
+
+        # Client match
         client_match = False
         for pc in possible_clients:
             pc_lower = pc.lower().strip()
@@ -939,64 +720,135 @@ def match_ob_funnel(client_short, location, ob_data):
         total['created'] += vals['created']
         total['verified'] += vals['verified']
         total['rtb'] += vals['rtb']
-        matched = True
-
-    if matched:
-        return total
-
-    # 2. Fallback: location-only (sum all clients at this metro)
-    if loc_norm:
-        for (ob_client, ob_loc), vals in ob_data.items():
-            if _location_match(loc_norm, ob_loc):
-                total['created'] += vals['created']
-                total['verified'] += vals['verified']
-                total['rtb'] += vals['rtb']
 
     return total
 
 
-# =============================================================================
-# PRIORITY CALCULATION
-# =============================================================================
+def _role_match(rev_role, fhs_job_title):
+    a = rev_role.lower().strip()
+    b = fhs_job_title.lower().strip()
+    if not a or not b:
+        return True
+    if a == b:
+        return True
+    if a in b or b in a:
+        return True
+    role_aliases = {
+        'food preps': ['prep cook', 'prep'],
+        'prep cook': ['food preps', 'prep'],
+        'loader/crew': ['loader', 'crew', 'lc', 'loader / crew'],
+        'loader': ['loader/crew', 'crew', 'lc', 'loader / crew'],
+        'warehouse operative': ['warehouse', 'warehouse operator', 'picker packer', 'material handler'],
+        'warehouse operator': ['warehouse', 'warehouse operative', 'picker packer', 'material handler'],
+        'material handler': ['warehouse operative', 'warehouse operator', 'warehouse'],
+        'industrial general labor': ['industrial general laborer', 'general labor'],
+        'dishwasher': ['dishwash', 'dishwhasher'],
+        'server': ['event server', 'buffet server', 'banquet server'],
+        'event server': ['server', 'event servers'],
+        'buffet server': ['server'],
+        'barista': ['barista'],
+        'bartender': ['bartender'],
+        'cashier': ['cashier'],
+        'assembler': ['assembler'],
+        'repair technician': ['repair tech'],
+        'concessions': ['concession stand worker', 'concession'],
+        'forklift': ['forklift driver', 'forklift operator'],
+        'forklift driver': ['forklift'],
+        'driver': ['driver', 'cdl'],
+    }
+    aliases = role_aliases.get(a, [])
+    for alias in aliases:
+        if alias in b or b in alias:
+            return True
+    return False
 
-def calculate_priority(row, fhs, indeed):
-    """Calculate priority score for a row.
-    Base: HC / 10, capped at 10
-    +2 if no FHS reqs found
-    +1 if no Indeed campaigns
-    +1 if start date is within 14 days
-    Cap at 10
-    """
-    hc = row['hc'] if isinstance(row['hc'], int) else 0
-    p = min(hc / 10, 10)
 
-    if fhs['count'] == 0:
-        p += 2
-    if indeed['count'] == 0:
-        p += 1
-    if row.get('start_dt'):
-        days_until = (row['start_dt'] - TODAY).days
-        if days_until <= 14:
-            p += 1
+def _fuzzy_client_match(a, b):
+    for suffix in [', inc', ' inc', ', llc', ' llc', ', ltd', ' ltd']:
+        a = a.replace(suffix, '')
+        b = b.replace(suffix, '')
+    a = a.strip().rstrip('.')
+    b = b.strip().rstrip('.')
+    if a == b:
+        return True
+    if a in b or b in a:
+        return True
+    a_words = a.split()
+    b_words = b.split()
+    if a_words and b_words and a_words[0] == b_words[0] and len(a_words[0]) > 3:
+        return True
+    return False
 
-    return min(round(p, 1), 10)
+
+def _location_match(loc_a, loc_b):
+    if not loc_a or not loc_b:
+        return not loc_a and not loc_b
+    a = loc_a.lower().strip()
+    b = loc_b.lower().strip()
+    if a == b:
+        return True
+    if a in b or b in a:
+        return True
+    if "/" in a:
+        parts = a.split("/")
+        return any(p.strip() == b for p in parts)
+    if "/" in b:
+        parts = b.split("/")
+        return any(p.strip() == a for p in parts)
+    return False
 
 
 # =============================================================================
 # HTML GENERATION
 # =============================================================================
 
+LOCATION_TO_STATE = {
+    'chicago': 'IL', 'bedford park': 'IL', 'hodgkins': 'IL', 'joliet': 'IL', 'libertyville': 'IL',
+    'dallas': 'TX', 'fort worth': 'TX', 'lancaster': 'TX', 'haslet': 'TX', 'flower mound': 'TX',
+    'plano': 'TX', 'arlington': 'TX', 'austin': 'TX', 'houston': 'TX', 'san antonio': 'TX',
+    'nashville': 'TN', 'lavergne': 'TN', 'la vergne': 'TN', 'lebanon': 'TN',
+    'las vegas': 'NV', 'reno': 'NV', 'mccarran': 'NV', 'sparks': 'NV',
+    'atlanta': 'GA', 'hapeville': 'GA', 'cartersville': 'GA',
+    'orlando': 'FL', 'kissimmee': 'FL',
+    'columbus': 'OH', 'grove city': 'OH', 'lockbourne': 'OH', 'cincinnati': 'OH',
+    'middleburg heights': 'OH', 'west chester': 'OH', 'hebron': 'KY', 'erlanger': 'KY',
+    'charlotte': 'NC', 'fort mill': 'SC',
+    'phoenix': 'AZ',
+    'washington, d.c.': 'DC', 'washington': 'DC',
+    'logan township': 'NJ', 'paulsboro': 'NJ', 'south brunswick': 'NJ', 'newark': 'NJ',
+    'philadelphia': 'PA',
+    'inland empire': 'CA',
+}
+
+
+def _get_state_from_location(location):
+    if not location:
+        return 'Unknown'
+    loc = location.lower().strip()
+    for key, state in LOCATION_TO_STATE.items():
+        if key in loc:
+            return state
+    m = re.search(r',\s*([A-Z]{2})\b', location)
+    if m:
+        return m.group(1)
+    return 'Other'
+
+
 def generate_html(processed_rows):
     """Generate the full HTML report."""
-    # Sort by priority descending, then by client name
-    processed_rows.sort(key=lambda r: (-r['priority'], r['client'].lower()))
+    # Sort by submission date ascending (chronological)
+    processed_rows.sort(key=lambda r: r.get('submission_date') or date.max)
 
-    # Calculate KPIs
+    all_states = set()
+    all_owners = set()
+
+    # Calculate KPIs -- only Live rows
     live_rows = [r for r in processed_rows if not r.get('is_declined')]
     declined_rows = [r for r in processed_rows if r.get('is_declined')]
     total_live = len(live_rows)
+    total_declined = len(declined_rows)
     total_hc = sum(r['hc'] for r in live_rows if isinstance(r['hc'], int))
-    high_priority = sum(1 for r in live_rows if r['priority'] >= 7)
+    high_priority = sum(1 for r in live_rows if isinstance(r['hc'], int) and r['hc'] >= 20)
     no_fhs = sum(1 for r in live_rows if r['fhs']['count'] == 0)
     no_indeed = sum(1 for r in live_rows if r['indeed']['count'] == 0)
     shifts_tbd = sum(1 for r in live_rows if not r['shifts'])
@@ -1004,125 +856,125 @@ def generate_html(processed_rows):
     rows_html = ""
     for r in processed_rows:
         is_declined = r.get('is_declined', False)
-        p = r['priority']
 
-        # Priority color-coding
         if is_declined:
-            bg = "#f3f4f6"
-        elif p >= 7:
-            bg = "#fef2f2"  # Red tint
-        elif p >= 4:
-            bg = "#fffbeb"  # Amber tint
+            bg = "#fef2f2"  # Light red for declined
         else:
             bg = "#ffffff"
 
-        # Priority cell styling
+        # Status badge: O = green for Live, D = red for Declined
         if is_declined:
-            p_bg = "#9ca3af"
-            p_color = "#fff"
-            p_display = "D"
-        elif p >= 7:
-            p_bg = "#dc2626"
-            p_color = "#fff"
-            p_display = f"{p:.0f}" if p == int(p) else f"{p:.1f}"
-        elif p >= 4:
-            p_bg = "#f59e0b"
-            p_color = "#fff"
-            p_display = f"{p:.0f}" if p == int(p) else f"{p:.1f}"
+            status_cell = '<td style="text-align:center;font-weight:bold;font-size:15px;color:#fff;background:#dc2626;padding:6px 10px;">D</td>'
         else:
-            p_bg = "#e5e7eb"
-            p_color = "#374151"
-            p_display = f"{p:.0f}" if p == int(p) else f"{p:.1f}"
+            status_cell = '<td style="text-align:center;font-weight:bold;font-size:15px;color:#fff;background:#16a34a;padding:6px 10px;">O</td>'
 
         hc_display = str(r['hc']) if isinstance(r['hc'], int) else r['hc']
         shifts_tag = ('<span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:4px;font-size:12px;">Yes</span>'
                       if r['shifts'] else
                       '<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px;">No</span>')
 
-        # Metric cells for declined rows are BLANK
-        if is_declined:
-            fhs_open_html = ""
-            fhs_interview_html = ""
-            indeed_st_html = ""
-            indeed_camps_html = ""
-            indeed_spend_html = ""
-            ob_created_html = ""
-            ob_verified_html = ""
-            ob_rtb_html = ""
-            target_html = ""
-            fill_cell_html = ""
-        else:
-            fhs_open_html = f'{r["fhs"]["count"]}'
-            fhs_interview_html = f'{r["fhs"]["rsvps"]:,}'
-
-            # Indeed status emoji
-            if r['indeed']['count'] > 0 and r['indeed']['spend'] > 0:
-                indeed_st_html = "✅"
-            elif r['indeed']['count'] > 0:
-                indeed_st_html = "⚠️"
-            else:
-                indeed_st_html = "❌"
-            indeed_camps_html = f'{r["indeed"]["count"]}'
-            indeed_spend_html = f"${r['indeed']['spend']:,.0f}" if r['indeed']['spend'] > 0 else "$0"
-
-            ob_created_html = f'{r["ob"]["created"]}'
-            ob_verified_html = f'{r["ob"]["verified"]}'
-            ob_rtb_html = f'{r["ob"]["rtb"]}'
-
-            # Target = HC × 10
-            hc_val = r['hc'] if isinstance(r['hc'], int) else 0
-            target = hc_val * 10
-            target_html = f'{target:,}' if target > 0 else '—'
-
-            # Fill% = RTB / HC
-            ob_rtb = r['ob']['rtb']
-            if hc_val > 0:
-                fill_pct = min((ob_rtb / hc_val) * 100, 100)
-                fill_color = "#ef4444" if fill_pct < 25 else "#f59e0b" if fill_pct < 50 else "#22c55e"
-                fill_cell_html = f'''<div style="display:flex;align-items:center;gap:6px;">
-            <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
-                <div style="width:{fill_pct:.1f}%;background:{fill_color};height:100%;border-radius:4px;"></div>
-            </div>
-            <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">{fill_pct:.0f}%</span>
-        </div>'''
-            else:
-                fill_cell_html = '<span style="color:#9ca3af;">—</span>'
-
-        # Escape HTML
+        # Client display
         client_safe = r['client'].replace('&', '&amp;').replace('<', '&lt;')
         location_safe = r['location'].replace('&', '&amp;').replace('<', '&lt;') if r['location'] else ''
         role_safe = r['role'].replace('&', '&amp;').replace('<', '&lt;') if r['role'] else ''
 
-        status_label = ''
-        if is_declined:
-            status_label = '<br><span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span>'
+        # Start date
+        start_display = r['start_date'] if r['start_date'] else '&mdash;'
 
-        rows_html += f'''<tr style="background:{bg};">
-        <td style="text-align:center;font-weight:800;font-size:15px;color:{p_color};background:{p_bg};min-width:36px;border-radius:0;">{p_display}</td>
-        <td><strong>{client_safe}</strong><br><span style="color:#6b7280;font-size:12px;">{location_safe}</span>{status_label}</td>
-        <td>{r['owner']}</td>
+        # State for filter
+        row_state = _get_state_from_location(r['location'])
+        all_states.add(row_state)
+        row_owner = r.get('owner', '').strip()
+        if row_owner:
+            all_owners.add(row_owner)
+
+        row_status_class = "declined" if is_declined else "live"
+
+        # Build metric cells
+        if is_declined:
+            # Declined: ALL metric columns blank (dashes)
+            metric_cells = '''
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:right;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="text-align:center;color:#d1d5db;">&mdash;</td>
+        <td style="color:#d1d5db;">&mdash;</td>'''
+        else:
+            fhs_open = f'{r["fhs"]["count"]}'
+            fhs_rsvps = f'{r["fhs"]["rsvps"]:,}'
+
+            # Indeed status emoji
+            if r['indeed']['count'] > 0 and r['indeed']['spend'] > 0:
+                indeed_st = "&#x2705;"  # checkmark
+            elif r['indeed']['count'] > 0:
+                indeed_st = "&#x26A0;&#xFE0F;"  # warning
+            else:
+                indeed_st = "&#x274C;"  # X mark
+            indeed_camps = f'{r["indeed"]["count"]}'
+            indeed_spend = f'${r["indeed"]["spend"]:,.0f}' if r['indeed']['spend'] > 0 else "$0"
+
+            ob_created = f'{r["ob"]["created"]}'
+            ob_verified = f'{r["ob"]["verified"]}'
+            ob_rtb = f'{r["ob"]["rtb"]}'
+
+            # Target = HC x 10
+            hc_val = r['hc'] if isinstance(r['hc'], int) else 0
+            target = hc_val * 10
+            target_html = f'{target:,}' if target > 0 else '&mdash;'
+
+            # Fill% = RTB / HC
+            ob_rtb_val = r['ob']['rtb']
+            if hc_val > 0:
+                fill_pct = min((ob_rtb_val / hc_val) * 100, 999)
+                fill_display = min(fill_pct, 100)
+                fill_color = "#ef4444" if fill_pct < 25 else "#f59e0b" if fill_pct < 50 else "#22c55e"
+                fill_html = f'''<div style="display:flex;align-items:center;gap:6px;">
+            <div style="flex:1;background:#e5e7eb;border-radius:4px;height:14px;min-width:60px;">
+                <div style="width:{fill_display:.1f}%;background:{fill_color};height:100%;border-radius:4px;"></div>
+            </div>
+            <span style="font-size:13px;font-weight:bold;min-width:40px;text-align:right;">{fill_pct:.0f}%</span>
+        </div>'''
+            else:
+                fill_html = '<span style="color:#9ca3af;">&mdash;</span>'
+
+            metric_cells = f'''
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_open}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_rsvps}</td>
+        <td style="text-align:center;">{indeed_st}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{indeed_camps}</td>
+        <td style="text-align:right;font-weight:bold;font-size:15px;">{indeed_spend}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_created}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_verified}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_rtb}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{target_html}</td>
+        <td style="min-width:120px;">{fill_html}</td>'''
+
+        rows_html += f'''<tr style="background:{bg};" data-state="{row_state}" data-owner="{row_owner}" data-status="{row_status_class}">
+        {status_cell}
+        <td><strong>{client_safe}</strong><br><span style="color:#6b7280;font-size:12px;">{location_safe}</span></td>
+        <td>{row_owner}</td>
         <td>{role_safe}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{hc_display}</td>
-        <td style="text-align:center;font-size:13px;">{r['start_date']}</td>
-        <td style="text-align:center;">{shifts_tag}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_open_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_interview_html}</td>
-        <td style="text-align:center;">{indeed_st_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{indeed_camps_html}</td>
-        <td style="text-align:right;font-weight:bold;font-size:15px;">{indeed_spend_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_created_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_verified_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_rtb_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{target_html}</td>
-        <td style="min-width:120px;">{fill_cell_html}</td>
-    </tr>'''
+        <td style="text-align:center;font-size:13px;">{start_display}</td>
+        <td style="text-align:center;">{shifts_tag}</td>{metric_cells}
+    </tr>
+'''
+
+    # Build filter options
+    state_options = ''.join(f'<option value="{s}">{s}</option>' for s in sorted(all_states))
+    owner_options = ''.join(f'<option value="{o}">{o}</option>' for o in sorted(all_owners))
 
     html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revenue Requests Cross-Reference Dashboard — {REPORT_DATE}</title>
+    <title>Revenue Requests Cross-Reference Dashboard &mdash; {REPORT_DATE}</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; font-size: 14px; color: #111827; }}
@@ -1137,30 +989,30 @@ def generate_html(processed_rows):
         .kpi-card.amber .number {{ color: #f59e0b; }}
         .kpi-card.blue .number {{ color: #2563eb; }}
         .kpi-card.green .number {{ color: #22c55e; }}
+        .filters {{ display: flex; gap: 12px; padding: 0 32px 16px; align-items: center; flex-wrap: wrap; }}
+        .filters select, .filters button {{ padding: 6px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 13px; background: white; cursor: pointer; }}
+        .filters button {{ background: #2563eb; color: white; border: none; font-weight: 600; }}
+        .filters button:hover {{ background: #1d4ed8; }}
         .table-container {{ margin: 0 32px 32px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }}
         .table-scroll {{ overflow-y: auto; max-height: calc(100vh - 60px); }}
         table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
-        thead th {{ position: sticky; top: 0; z-index: 20; }}
-        thead tr:first-child th {{ position: sticky; top: 0; z-index: 20; }}
-        thead tr:nth-child(2) th {{ position: sticky; top: 34px; z-index: 19; }}
-        th {{ background: #1e3a5f; color: white; padding: 8px 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }}
-        th.group-header {{ background: #0f2540; padding: 6px 10px; font-size: 11px; text-align: center; border-left: 2px solid rgba(255,255,255,0.15); }}
-        th.sub-header {{ background: #1e3a5f; font-size: 11px; }}
-        td {{ padding: 8px 10px; border-bottom: 1px solid #e5e7eb; font-size: 14px; vertical-align: middle; }}
-        tr:hover {{ filter: brightness(0.97); }}
-        .legend {{ margin: 12px 32px; display: flex; gap: 24px; font-size: 12px; color: #6b7280; }}
-        .legend span {{ display: inline-flex; align-items: center; gap: 6px; }}
-        .legend .dot {{ width: 12px; height: 12px; border-radius: 3px; display: inline-block; }}
+        thead th {{ position: sticky; top: 0; z-index: 20; background: #1e3a5f; color: white; padding: 8px 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }}
+        td {{ padding: 8px 10px; border-bottom: 1px solid #e5e7eb; vertical-align: middle; font-size: 14px; }}
+        tr:hover {{ background: #f0f9ff !important; }}
+        .legend {{ display: flex; gap: 20px; padding: 8px 32px 0; font-size: 12px; color: #6b7280; }}
+        .legend-item {{ display: flex; align-items: center; gap: 4px; }}
+        .legend-dot {{ width: 14px; height: 14px; border-radius: 3px; display: inline-block; text-align: center; color: white; font-size: 10px; font-weight: bold; line-height: 14px; }}
+        .count-badge {{ display: inline-block; background: #e5e7eb; color: #374151; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }}
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Revenue Requests Cross-Reference Dashboard</h1>
-        <p>Generated {REPORT_DATE} | Sorted by priority (descending) | Every revenue request row = one table row (no merging) | Data: FHS Requisitions, Indeed JobsCampaigns, OB Funnel</p>
+        <p>Report 5 &mdash; Generated {REPORT_DATE} | Sorted by Submission Date (Ascending)</p>
     </div>
 
     <div class="kpi-grid">
-        <div class="kpi-card blue">
+        <div class="kpi-card green">
             <div class="number">{total_live}</div>
             <div class="label">Live Requests</div>
         </div>
@@ -1168,15 +1020,15 @@ def generate_html(processed_rows):
             <div class="number">{total_hc:,}</div>
             <div class="label">Total HC</div>
         </div>
-        <div class="kpi-card red">
+        <div class="kpi-card amber">
             <div class="number">{high_priority}</div>
-            <div class="label">High Priority (P>=7)</div>
+            <div class="label">High Priority (HC&ge;20)</div>
         </div>
         <div class="kpi-card red">
             <div class="number">{no_fhs}</div>
             <div class="label">No FHS</div>
         </div>
-        <div class="kpi-card amber">
+        <div class="kpi-card red">
             <div class="number">{no_indeed}</div>
             <div class="label">No Indeed</div>
         </div>
@@ -1187,40 +1039,66 @@ def generate_html(processed_rows):
     </div>
 
     <div class="legend">
-        <span><span class="dot" style="background:#fef2f2;border:1px solid #fecaca;"></span> P >= 7 (High)</span>
-        <span><span class="dot" style="background:#fffbeb;border:1px solid #fde68a;"></span> P 4-6 (Medium)</span>
-        <span><span class="dot" style="background:#ffffff;border:1px solid #d1d5db;"></span> P 0-3 (Low)</span>
-        <span><span class="dot" style="background:#f3f4f6;border:1px solid #d1d5db;"></span> Declined</span>
+        <div class="legend-item"><span class="legend-dot" style="background:#16a34a;">O</span> Live</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626;">D</span> Declined</div>
+        <div class="legend-item">&#x2705; Indeed Active &amp; Spending</div>
+        <div class="legend-item">&#x26A0;&#xFE0F; Indeed Active, $0 Spend</div>
+        <div class="legend-item">&#x274C; No Indeed</div>
+    </div>
+
+    <div class="filters">
+        <select id="filterState" onchange="applyFilters()">
+            <option value="">All States</option>
+            {state_options}
+        </select>
+        <select id="filterOwner" onchange="applyFilters()">
+            <option value="">All Owners</option>
+            {owner_options}
+        </select>
+        <select id="filterStatus" onchange="applyFilters()">
+            <option value="">All Statuses</option>
+            <option value="live">Live</option>
+            <option value="declined">Declined</option>
+        </select>
+        <button onclick="resetFilters()">Reset</button>
+        <span id="rowCount" class="count-badge">{len(processed_rows)} rows</span>
     </div>
 
     <div class="table-container">
         <div class="table-scroll">
-            <table id="mainTable">
+            <table>
                 <thead>
                     <tr>
-                        <th rowspan="2" style="min-width:36px;">P</th>
-                        <th rowspan="2" style="min-width:160px;">Client</th>
-                        <th rowspan="2" style="min-width:70px;">Owner</th>
-                        <th rowspan="2" style="min-width:120px;">Role</th>
-                        <th rowspan="2" style="min-width:40px;">HC</th>
-                        <th rowspan="2" style="min-width:90px;">Start</th>
-                        <th rowspan="2" style="min-width:55px;">Shifts</th>
-                        <th colspan="2" class="group-header">FHS</th>
-                        <th colspan="3" class="group-header">Indeed</th>
-                        <th colspan="3" class="group-header">OB Funnel</th>
-                        <th colspan="2" class="group-header">Fill</th>
+                        <th>St</th>
+                        <th>Client</th>
+                        <th>Owner</th>
+                        <th>Role</th>
+                        <th>HC</th>
+                        <th>Start</th>
+                        <th>Shifts</th>
+                        <th colspan="2" style="background:#1e5631;text-align:center;">FHS</th>
+                        <th colspan="3" style="background:#7c2d12;text-align:center;">Indeed</th>
+                        <th colspan="3" style="background:#4338ca;text-align:center;">OB Funnel</th>
+                        <th colspan="2" style="background:#92400e;text-align:center;">Fill</th>
                     </tr>
                     <tr>
-                        <th class="sub-header" style="text-align:center;">Open</th>
-                        <th class="sub-header" style="text-align:center;">Interview</th>
-                        <th class="sub-header" style="text-align:center;">St</th>
-                        <th class="sub-header" style="text-align:center;">Camps</th>
-                        <th class="sub-header" style="text-align:right;">Spend</th>
-                        <th class="sub-header" style="text-align:center;">Created</th>
-                        <th class="sub-header" style="text-align:center;">Verified</th>
-                        <th class="sub-header" style="text-align:center;">RTB</th>
-                        <th class="sub-header" style="text-align:center;">Target</th>
-                        <th class="sub-header" style="text-align:center;">Fill%</th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;"></th>
+                        <th style="top:34px;background:#1e5631;">Open</th>
+                        <th style="top:34px;background:#1e5631;">RSVPs</th>
+                        <th style="top:34px;background:#7c2d12;">St</th>
+                        <th style="top:34px;background:#7c2d12;">Camps</th>
+                        <th style="top:34px;background:#7c2d12;">Spend</th>
+                        <th style="top:34px;background:#4338ca;">Created</th>
+                        <th style="top:34px;background:#4338ca;">Verified</th>
+                        <th style="top:34px;background:#4338ca;">RTB</th>
+                        <th style="top:34px;background:#92400e;">Target</th>
+                        <th style="top:34px;background:#92400e;">Fill%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1229,6 +1107,31 @@ def generate_html(processed_rows):
             </table>
         </div>
     </div>
+
+    <script>
+    function applyFilters() {{
+        const state = document.getElementById('filterState').value;
+        const owner = document.getElementById('filterOwner').value;
+        const status = document.getElementById('filterStatus').value;
+        const rows = document.querySelectorAll('tbody tr');
+        let visible = 0;
+        rows.forEach(row => {{
+            let show = true;
+            if (state && row.dataset.state !== state) show = false;
+            if (owner && row.dataset.owner !== owner) show = false;
+            if (status && row.dataset.status !== status) show = false;
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        }});
+        document.getElementById('rowCount').textContent = visible + ' rows';
+    }}
+    function resetFilters() {{
+        document.getElementById('filterState').value = '';
+        document.getElementById('filterOwner').value = '';
+        document.getElementById('filterStatus').value = '';
+        applyFilters();
+    }}
+    </script>
 </body>
 </html>'''
 
@@ -1241,67 +1144,66 @@ def generate_html(processed_rows):
 
 def main():
     print("Loading Revenue Requests...")
-    revenue_rows = load_revenue_requests()
-    live_count = sum(1 for r in revenue_rows if not r['is_declined'])
-    declined_count = sum(1 for r in revenue_rows if r['is_declined'])
-    print(f"  Found {live_count} Live + {declined_count} Declined = {len(revenue_rows)} total rows")
+    rev_rows = load_revenue_requests()
+    print(f"  Loaded {len(rev_rows)} qualifying rows (Live + Declined)")
 
     print("Loading FHS Requisitions...")
     fhs_rows = load_fhs_requisitions()
-    print(f"  Loaded {len(fhs_rows)} individual FHS rows")
+    print(f"  Loaded {len(fhs_rows)} requisitions")
 
     print("Loading Indeed Campaigns (JobsCampaigns)...")
-    indeed_data = load_indeed_campaigns()
-    print(f"  Loaded {len(indeed_data)} individual campaign rows")
+    indeed_rows = load_indeed_campaigns()
+    print(f"  Loaded {len(indeed_rows)} campaigns")
 
     print("Loading OB Funnel...")
     ob_data = load_ob_funnel()
-    print(f"  Loaded {len(ob_data)} client+location groups")
+    print(f"  Loaded {len(ob_data)} client-location combos")
 
-    print("\nCross-referencing...")
+    print("\nCross-referencing data...")
     processed = []
-    for i, row in enumerate(revenue_rows):
-        if row['is_declined']:
-            fhs = {'count': 0, 'rsvps': 0}
-            indeed = {'count': 0, 'spend': 0.0}
-            ob = {'created': 0, 'verified': 0, 'rtb': 0}
-            priority = 0
+    for r in rev_rows:
+        if r['is_declined']:
+            # Declined rows: no metric lookup
+            r['fhs'] = {'count': 0, 'rsvps': 0}
+            r['indeed'] = {'count': 0, 'spend': 0.0}
+            r['ob'] = {'created': 0, 'verified': 0, 'rtb': 0}
         else:
-            fhs = match_fhs(row['client'], row['location'], fhs_rows, row.get('role'))
-            indeed = match_indeed(row['client'], row['location'], indeed_data, row.get('role'))
-            ob = match_ob_funnel(row['client'], row['location'], ob_data)
-            priority = calculate_priority(row, fhs, indeed)
+            r['fhs'] = match_fhs(r['client'], r['location'], fhs_rows,
+                                  submission_date=r.get('submission_date'), role=r.get('role'))
+            r['indeed'] = match_indeed(r['client'], r['location'], indeed_rows, role=r.get('role'))
+            r['ob'] = match_ob_funnel(r['client'], r['location'], ob_data, role=r.get('role'))
+        processed.append(r)
 
-        processed.append({
-            **row,
-            'fhs': fhs,
-            'indeed': indeed,
-            'ob': ob,
-            'priority': priority,
-        })
+    print(f"  Processed {len(processed)} rows")
 
-        status_tag = "DECLINED" if row['is_declined'] else "LIVE"
-        print(f"  [{i+1:2d}] {row['client']:20s} | {row['location']:20s} | P={priority:>4} | FHS={fhs['count']:>2} | Indeed={indeed['count']:>2} ${indeed['spend']:>8,.0f} | OB RTB={ob['rtb']:>4} [{status_tag}]")
+    # ROW INTEGRITY CHECK
+    expected = len(rev_rows)
+    actual = len(processed)
+    if actual != expected:
+        print(f"  WARNING: Row count mismatch! Expected {expected}, got {actual}")
+    else:
+        print(f"  Row integrity OK: {actual} rows")
 
-    print(f"\nGenerating HTML report...")
+    print("\nGenerating HTML...")
     html = generate_html(processed)
 
     os.makedirs(os.path.dirname(OUTPUT_HTML), exist_ok=True)
     with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
         f.write(html)
+    print(f"  Saved to {OUTPUT_HTML}")
 
-    print(f"HTML saved to: {OUTPUT_HTML}")
-    print(f"Total rows: {len(processed)} ({live_count} Live + {declined_count} Declined)")
+    # Summary stats
+    live_rows = [r for r in processed if not r.get('is_declined')]
+    declined_rows = [r for r in processed if r.get('is_declined')]
+    print(f"\n=== SUMMARY ===")
+    print(f"  Live: {len(live_rows)}")
+    print(f"  Declined: {len(declined_rows)}")
+    print(f"  Total rows: {len(processed)}")
+    total_hc = sum(r['hc'] for r in live_rows if isinstance(r['hc'], int))
+    print(f"  Total HC (Live): {total_hc:,}")
 
-    # KPI summary
-    live_processed = [r for r in processed if not r['is_declined']]
-    total_hc = sum(r['hc'] for r in live_processed if isinstance(r['hc'], int))
-    high_p = sum(1 for r in live_processed if r['priority'] >= 7)
-    no_fhs_count = sum(1 for r in live_processed if r['fhs']['count'] == 0)
-    no_indeed_count = sum(1 for r in live_processed if r['indeed']['count'] == 0)
-    shifts_tbd_count = sum(1 for r in live_processed if not r['shifts'])
-    print(f"KPIs: Live={len(live_processed)}, HC={total_hc}, HighP={high_p}, NoFHS={no_fhs_count}, NoIndeed={no_indeed_count}, ShiftsTBD={shifts_tbd_count}")
+    return 0
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    sys.exit(main())
