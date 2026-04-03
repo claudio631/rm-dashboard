@@ -1,9 +1,18 @@
 import { RedditAuthService } from "@/services/reddit/reddit-auth.service";
+import { db } from "@/lib/db";
+import { redditAdPerformance, redditCampaigns } from "@/lib/db/schema";
+import { desc, count, sum, gte } from "drizzle-orm";
 
 interface RedditStatus {
   connected: boolean;
   scopes: string[];
   expires_at: string | null;
+}
+
+interface SyncSummary {
+  lastSync: string | null;
+  totalCampaigns: number;
+  last7dSpend: number; // microcurrency
 }
 
 async function getRedditStatus(): Promise<RedditStatus> {
@@ -21,8 +30,51 @@ async function getRedditStatus(): Promise<RedditStatus> {
   }
 }
 
+async function getSyncSummary(): Promise<SyncSummary> {
+  try {
+    const [lastRow] = await db
+      .select({ syncedAt: redditAdPerformance.syncedAt })
+      .from(redditAdPerformance)
+      .orderBy(desc(redditAdPerformance.syncedAt))
+      .limit(1);
+
+    const [campaignCount] = await db
+      .select({ value: count() })
+      .from(redditCampaigns)
+      .where(
+        gte(redditCampaigns.id, "0") // exclude 'account_total' synthetic row
+      );
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+    const cutoffDate = cutoff.toISOString().split("T")[0];
+
+    const [spendRow] = await db
+      .select({ value: sum(redditAdPerformance.spend) })
+      .from(redditAdPerformance)
+      .where(gte(redditAdPerformance.date, cutoffDate));
+
+    return {
+      lastSync: lastRow?.syncedAt ?? null,
+      totalCampaigns: Math.max(0, (campaignCount?.value ?? 0) - 1), // subtract synthetic row
+      last7dSpend: Number(spendRow?.value ?? 0),
+    };
+  } catch {
+    return { lastSync: null, totalCampaigns: 0, last7dSpend: 0 };
+  }
+}
+
+function formatSpend(microcurrency: number): string {
+  return (microcurrency / 1_000_000).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  });
+}
+
 export default async function IntegrationsPage() {
   const reddit = await getRedditStatus();
+  const sync = await getSyncSummary();
 
   return (
     <div>
@@ -71,6 +123,45 @@ export default async function IntegrationsPage() {
                   {new Date(reddit.expires_at).toLocaleString()}
                 </div>
               )}
+            </div>
+          )}
+
+          {reddit.connected && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                Performance Data
+              </h3>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <p className="text-xs text-gray-500">Last Sync</p>
+                  <p className="text-sm font-medium text-gray-900 mt-0.5">
+                    {sync.lastSync
+                      ? new Date(sync.lastSync).toLocaleString()
+                      : "Never"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Campaigns</p>
+                  <p className="text-sm font-medium text-gray-900 mt-0.5">
+                    {sync.totalCampaigns > 0 ? sync.totalCampaigns : "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Last 7d Spend</p>
+                  <p className="text-sm font-medium text-gray-900 mt-0.5">
+                    {sync.last7dSpend > 0 ? formatSpend(sync.last7dSpend) : "—"}
+                  </p>
+                </div>
+              </div>
+
+              <form action="/api/reddit/sync" method="POST">
+                <button
+                  type="submit"
+                  className="px-3 py-1.5 text-xs font-medium text-orange-600 bg-white border border-orange-200 rounded-md hover:bg-orange-50 transition-colors"
+                >
+                  Sync Now
+                </button>
+              </form>
             </div>
           )}
 

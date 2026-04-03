@@ -25,7 +25,9 @@ jest.mock("drizzle-orm", () => ({
   desc: jest.fn(),
 }));
 
-const REQUIRED_SCOPES = ["ads:read", "ads:manage", "identity", "read"];
+// Updated after live API testing: ads:read/ads:manage are invalid Reddit OAuth scopes.
+// Ads API access is account-level via Business Manager. adsread is the correct scope.
+const REQUIRED_SCOPES = ["identity", "read", "adsread"];
 
 describe("RedditAuthService", () => {
   const originalEnv = process.env;

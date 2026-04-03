@@ -5,7 +5,9 @@ import { desc } from "drizzle-orm";
 const REDDIT_AUTH_URL = "https://www.reddit.com/api/v1/authorize";
 const REDDIT_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
-const SCOPES = ["ads:read", "ads:manage", "identity", "read"];
+// Reddit OAuth scopes — ads API access is controlled at account level in Business Manager,
+// not via OAuth scopes. Only standard scopes are valid here.
+const SCOPES = ["identity", "read", "adsread"];
 
 interface RedditTokenResponse {
   access_token: string;
