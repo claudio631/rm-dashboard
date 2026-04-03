@@ -47,6 +47,7 @@ export default function RootLayout({
                 <NavLink href="/upload">Upload</NavLink>
                 <NavLink href="/tools/utm-builder">UTM Builder</NavLink>
                 <NavLink href="/tools/ad-copy">Ad Copy</NavLink>
+                <NavLink href="/settings/integrations">Settings</NavLink>
               </div>
             </div>
           </div>

@@ -12,6 +12,7 @@ aiox:
 components:
   agents:
     - rm-coordinator.md
+    - copywriter.md
     - ppc-paid-media-specialist.md
     - seo-content-strategist.md
     - crm-email-specialist.md
@@ -84,6 +85,11 @@ data:
   - google-ads/lead-generation-guide.md
   # reddit-ads/ — Reddit Ads knowledge base
   - reddit-ads/playbook.md
+  # copy/ — Copywriter KB (brand voice, EEOC, Indeed best practices, job hooks)
+  - copy/indeed-ads-best-practices.md
+  - copy/brand-voice-guide.md
+  - copy/eeoc-language-guide.md
+  - copy/job-category-hooks.md
   # insights/ — Periodic analysis reports
   - insights/top-funnel-levers-2026-03.md
   # hiring-events/ — Event playbooks & post-mortems
@@ -129,3 +135,4 @@ tags:
   - candidate-acquisition
   - multi-channel
   - indeed-flex
+  - copywriting

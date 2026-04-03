@@ -39,3 +39,17 @@ Thumbs.db
 # SQLite databases (runtime data)
 *.db
 *.sqlite
+
+# Google Ads credentials
+.google-ads-client-secret.json
+google-ads.yaml
+
+# Meta Ads credentials
+meta-ads.yaml
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+
+# Generated reports (runtime output)
+docs/reports/
+scripts/generate-report5-*.py
