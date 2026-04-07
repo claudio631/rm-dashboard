@@ -1,7 +1,9 @@
 import { RedditAuthService } from "@/services/reddit/reddit-auth.service";
 import { db } from "@/lib/db";
-import { redditAdPerformance, redditCampaigns } from "@/lib/db/schema";
-import { desc, count, sum, gte } from "drizzle-orm";
+import { redditAdPerformance, redditCampaigns, redditTrackedTerms, redditMentions } from "@/lib/db/schema";
+import { desc, count, sum, gte, ne, and } from "drizzle-orm";
+import { RedditCampaignTable } from "@/components/reddit/RedditCampaignTable";
+import { RedditOrganicMonitoring } from "@/components/reddit/RedditOrganicMonitoring";
 
 interface RedditStatus {
   connected: boolean;
@@ -72,9 +74,47 @@ function formatSpend(microcurrency: number): string {
   });
 }
 
+async function getTrackedTerms() {
+  try {
+    return await db.select().from(redditTrackedTerms);
+  } catch {
+    return [];
+  }
+}
+
+async function getRecentMentions() {
+  try {
+    const cutoffUtc = Math.floor(Date.now() / 1000) - 30 * 24 * 60 * 60;
+    return await db
+      .select()
+      .from(redditMentions)
+      .where(and(gte(redditMentions.createdUtc, cutoffUtc), ne(redditMentions.over18, true)))
+      .orderBy(desc(redditMentions.createdUtc))
+      .limit(50);
+  } catch {
+    return [];
+  }
+}
+
+async function getCampaigns() {
+  try {
+    return await db
+      .select()
+      .from(redditCampaigns)
+      .where(ne(redditCampaigns.id, "account_total"));
+  } catch {
+    return [];
+  }
+}
+
 export default async function IntegrationsPage() {
-  const reddit = await getRedditStatus();
-  const sync = await getSyncSummary();
+  const [reddit, sync, campaigns, trackedTerms, recentMentions] = await Promise.all([
+    getRedditStatus(),
+    getSyncSummary(),
+    getCampaigns(),
+    getTrackedTerms(),
+    getRecentMentions(),
+  ]);
 
   return (
     <div>
@@ -162,6 +202,27 @@ export default async function IntegrationsPage() {
                   Sync Now
                 </button>
               </form>
+            </div>
+          )}
+
+          {reddit.connected && campaigns.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                Campaigns
+              </h3>
+              <RedditCampaignTable initialCampaigns={campaigns} />
+            </div>
+          )}
+
+          {reddit.connected && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                Organic Monitoring
+              </h3>
+              <RedditOrganicMonitoring
+                initialTerms={trackedTerms}
+                initialMentions={recentMentions}
+              />
             </div>
           )}
 

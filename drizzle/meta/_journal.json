@@ -15,6 +15,13 @@
       "when": 1775244747250,
       "tag": "0001_panoramic_stellaris",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1775593679674,
+      "tag": "0002_nasty_electro",
+      "breakpoints": true
     }
   ]
 }

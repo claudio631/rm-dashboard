@@ -34,6 +34,15 @@ export class RedditApiClient {
     return this.request<T>("POST", url, body);
   }
 
+  async patch<T>(
+    endpoint: string,
+    body?: unknown,
+    baseUrl: "ads" | "oauth" = "ads"
+  ): Promise<T> {
+    const url = this.buildUrl(endpoint, baseUrl);
+    return this.request<T>("PATCH", url, body);
+  }
+
   private buildUrl(
     endpoint: string,
     baseUrl: "ads" | "oauth",

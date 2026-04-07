@@ -18,6 +18,18 @@ interface RedditCampaignResponse {
   }>;
 }
 
+interface RedditCampaignUpdatePayload {
+  configured_status?: "ACTIVE" | "PAUSED";
+  name?: string;
+  daily_budget?: { amount: number; currency: string };
+}
+
+export interface CampaignUpdateResult {
+  id: string;
+  name: string;
+  status: string;
+}
+
 interface RedditReportMetric {
   clicks: number;
   impressions: number;
@@ -159,6 +171,52 @@ export class RedditAdsService {
       });
 
     return 1;
+  }
+
+  async updateCampaign(
+    campaignId: string,
+    updates: { configuredStatus?: "ACTIVE" | "PAUSED"; name?: string; dailyBudgetAmount?: number }
+  ): Promise<CampaignUpdateResult> {
+    const ACCOUNT_ID = process.env.REDDIT_ADS_ACCOUNT_ID ?? "";
+    if (!ACCOUNT_ID) throw new Error("REDDIT_ADS_ACCOUNT_ID is not set");
+
+    const payload: { data: RedditCampaignUpdatePayload } = { data: {} };
+    if (updates.configuredStatus) payload.data.configured_status = updates.configuredStatus;
+    if (updates.name) payload.data.name = updates.name;
+    if (updates.dailyBudgetAmount !== undefined) {
+      payload.data.daily_budget = { amount: updates.dailyBudgetAmount, currency: "USD" };
+    }
+
+    const response = await this.client.patch<{ data: { id: string; name: string; effective_status: string; configured_status: string } }>(
+      `ad_accounts/${ACCOUNT_ID}/campaigns/${campaignId}`,
+      payload
+    );
+
+    const c = response.data;
+    const syncedAt = new Date().toISOString();
+    const status = c.effective_status ?? c.configured_status;
+
+    await db
+      .insert(redditCampaigns)
+      .values({ id: c.id, name: c.name, status, objective: null, dailyBudgetAmount: null, currency: null, syncedAt })
+      .onConflictDoUpdate({
+        target: redditCampaigns.id,
+        set: {
+          name: sql`excluded.name`,
+          status: sql`excluded.status`,
+          syncedAt: sql`excluded.synced_at`,
+        },
+      });
+
+    return { id: c.id, name: c.name, status };
+  }
+
+  async pauseCampaign(campaignId: string): Promise<CampaignUpdateResult> {
+    return this.updateCampaign(campaignId, { configuredStatus: "PAUSED" });
+  }
+
+  async activateCampaign(campaignId: string): Promise<CampaignUpdateResult> {
+    return this.updateCampaign(campaignId, { configuredStatus: "ACTIVE" });
   }
 
   async syncLast30Days(): Promise<SyncSummary> {

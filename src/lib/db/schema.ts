@@ -42,6 +42,30 @@ export const redditAdPerformance = sqliteTable(
   (table) => [uniqueIndex("reddit_ad_perf_campaign_date").on(table.campaignId, table.date)]
 );
 
+export const redditTrackedTerms = sqliteTable("reddit_tracked_terms", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  term: text("term").notNull().unique(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const redditMentions = sqliteTable(
+  "reddit_mentions",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    term: text("term").notNull(),
+    postId: text("post_id").notNull(),
+    title: text("title").notNull(),
+    url: text("url").notNull(),
+    subreddit: text("subreddit").notNull(),
+    score: integer("score").notNull().default(0),
+    numComments: integer("num_comments").notNull().default(0),
+    createdUtc: integer("created_utc").notNull(),
+    over18: integer("over_18", { mode: "boolean" }).notNull().default(false),
+    syncedAt: text("synced_at").notNull(),
+  },
+  (table) => [uniqueIndex("reddit_mentions_post_id").on(table.postId)]
+);
+
 export const uploads = sqliteTable("uploads", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   filename: text("filename").notNull(),
