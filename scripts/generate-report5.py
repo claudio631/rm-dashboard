@@ -19,13 +19,13 @@ import openpyxl
 # =============================================================================
 # FILE PATHS
 # =============================================================================
-REVENUE_CSV = os.path.expanduser("~/Downloads/US_Recruitment_Requests__us_ (10).csv")
-FHS_CSV = os.path.expanduser("~/Downloads/requisitions-2026-04-01-215017.csv")
-INDEED_CSV = os.path.expanduser("~/Downloads/CampaignReport_Advanced_2026-01-01_2026-04-01.csv")
-OB_FUNNEL_XLSX = os.path.expanduser("~/Downloads/OB Funnel Custom Viewer (21).xlsx")
-OUTPUT_HTML = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-01.html")
-OUTPUT_XLSX = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-01.xlsx")
-REPORT_DATE = "2026-04-01"
+REVENUE_CSV = os.path.expanduser("~/Downloads/US_Recruitment_Requests__us_ (12).csv")
+FHS_CSV = os.path.expanduser("~/Downloads/requisitions-2026-04-03-687462.csv")
+INDEED_CSV = os.path.expanduser("~/Downloads/CampaignReport_Advanced_2026-04-01_2026-04-03.csv")
+OB_FUNNEL_XLSX = os.path.expanduser("~/Downloads/OB Funnel Custom Viewer (25).xlsx")
+OUTPUT_HTML = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-03.html")
+OUTPUT_XLSX = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-03.xlsx")
+REPORT_DATE = "2026-04-03"
 FROZEN_DATA_PATH = os.path.expanduser("~/RM-Team-Ai/src/data/frozen-requests.json")
 
 # =============================================================================
@@ -1166,37 +1166,6 @@ def _location_match(loc_a, loc_b):
 
 
 # =============================================================================
-# PRIORITY CALCULATION
-# =============================================================================
-
-def calculate_priority(row, fhs, indeed):
-    """Calculate priority score for a row."""
-    p = 0
-    # +2 if no FHS reqs
-    if fhs['count'] == 0:
-        p += 2
-    # +2 if no Indeed campaigns
-    if indeed['count'] == 0:
-        p += 2
-    # +1 if shifts = No/TBD
-    if not row['shifts']:
-        p += 1
-    # +1 if HC > 20
-    hc = row['hc']
-    if isinstance(hc, int) and hc > 20:
-        p += 1
-    # +1 per week past start date
-    try:
-        start = datetime.strptime(row['start_date'], '%Y-%m-%d').date()
-        today = date(2026, 3, 26)
-        if start < today:
-            weeks_past = (today - start).days // 7
-            p += weeks_past
-    except (ValueError, TypeError):
-        pass
-    return p
-
-
 # =============================================================================
 # HTML GENERATION
 # =============================================================================
@@ -1776,7 +1745,6 @@ def main():
             fhs = snap['fhs']
             indeed = snap['indeed']
             ob = snap['ob']
-            priority = snap['priority']
             frozen_used += 1
             src = "FROZEN"
         else:
@@ -1784,7 +1752,6 @@ def main():
             fhs = match_fhs(row['client'], row['location'], fhs_rows, row.get('submission_date'), row.get('role'))
             indeed = match_indeed(row['client'], row['location'], indeed_data, row.get('role'))
             ob = match_ob_funnel(row['client'], row['location'], ob_data, row.get('role'))
-            priority = calculate_priority(row, fhs, indeed)
             src = "LIVE"
 
             # Freeze newly-Complete rows
@@ -1793,7 +1760,6 @@ def main():
                     'fhs': fhs,
                     'indeed': indeed,
                     'ob': ob,
-                    'priority': priority,
                     'frozen_date': REPORT_DATE,
                 }
                 frozen_new += 1
@@ -1804,10 +1770,9 @@ def main():
             'fhs': fhs,
             'indeed': indeed,
             'ob': ob,
-            'priority': priority,
         })
 
-        print(f"  [{i+1:2d}] {row['client']:20s} | {row['location']:20s} | P={priority} | FHS={fhs['count']} | Indeed={indeed['count']} | OB Created={ob['created']} [{src}]")
+        print(f"  [{i+1:2d}] {row['client']:20s} | {row['location']:20s} | FHS={fhs['count']} | Indeed={indeed['count']} | OB Created={ob['created']} [{src}]")
 
     # Save updated frozen data
     save_frozen_data(frozen)
@@ -1829,11 +1794,10 @@ def main():
 
     # KPI summary
     total_hc = sum(r['hc'] for r in processed if isinstance(r['hc'], int))
-    high_p = sum(1 for r in processed if r['priority'] >= 7)
     no_fhs = sum(1 for r in processed if r['fhs']['count'] == 0)
     no_indeed = sum(1 for r in processed if r['indeed']['count'] == 0)
     shifts_tbd = sum(1 for r in processed if not r['shifts'])
-    print(f"KPIs: Live={len(processed)}, HC={total_hc}, HighP={high_p}, NoFHS={no_fhs}, NoIndeed={no_indeed}, ShiftsTBD={shifts_tbd}")
+    print(f"KPIs: Live={len(processed)}, HC={total_hc}, NoFHS={no_fhs}, NoIndeed={no_indeed}, ShiftsTBD={shifts_tbd}")
 
 
 if __name__ == "__main__":

@@ -8,8 +8,8 @@
 
 ## Campaign Overview
 
-> **Note:** Nashville has BAU campaigns (Search + App) running across hospitality/event-staff.
-> Confirm exact campaign names and IDs in Google Ads — look for `p-b2c-google-{search|app}-us-bofu-bau-nashville-hospitality--eg--`.
+> **Note:** Nashville has BAU campaigns (Search + P.Max + App) running across hospitality/event-staff.
+> Confirm exact campaign names and IDs in Google Ads — look for `p-b2c-google-{search|pmax|app}-us-bofu-bau-nashville-hospitality--eg--`.
 > Duplicate the Nashville hospitality BAU campaigns. BAU stays live and untouched.
 > **Flight rationale:** Event is April 25 (22 days out). Workers on Indeed Flex book shifts 1–2 weeks ahead — launching Apr 18 maximizes intent overlap and avoids budget waste on premature impressions. Early-start option: if fill rate is at risk, launch Apr 10 at $25/day and ramp to $50/day on Apr 18.
 
@@ -40,6 +40,22 @@
 | **End Date** | 2026-04-25 (event day) |
 | **Daily Budget** | $50/day |
 | **Total Budget** | ~$350 |
+| **BAU Campaign** | Remains live and untouched |
+
+### Performance Max Campaign
+
+| Field | Value |
+|-------|-------|
+| **Duplicate From** | `p-b2c-google-pmax-us-bofu-bau-nashville-hospitality--eg--` *(confirm ID — if no P.Max BAU exists, create new)* |
+| **New Campaign Name** | `p-b2c-google-pmax-us-bofu-bau-nashville-hospitality-hiring-event-04252026` |
+| **Campaign Type** | Performance Max |
+| **Objective** | Conversions (App Registration / Apply) |
+| **Start Date** | 2026-04-18 |
+| **End Date** | 2026-04-25 (event day) |
+| **Daily Budget** | $50/day |
+| **Total Budget** | ~$350 |
+| **Bidding** | Maximize Conversions (with target CPA $5–8 if enough conversion history) |
+| **Asset Group** | `Event Staff — Nashville` |
 | **BAU Campaign** | Remains live and untouched |
 
 ---
@@ -134,6 +150,29 @@ https://indeedflex.com/find-jobs/hospitality/lp-event-staff/?utm_source=google&u
 [PHRASE] staffing agency event jobs nashville
 ```
 
+### Performance Max — Asset Group
+
+**Asset Group Name:** `Event Staff — Nashville`
+
+#### Audience Signals
+| Signal Type | Detail |
+|-------------|--------|
+| Website visitors | Past LP visitors / app registrants |
+| Customer match | Existing Indeed Flex worker list (Nashville) |
+| In-market | Job Seekers, Employment & Staffing Agencies |
+| Custom intent | event staff jobs nashville, hospitality gig work, same day pay nashville |
+
+#### Required Assets
+> **Source:** Copy all assets from the active Nashville hospitality BAU P.Max campaign (or closest active campaign with event-staff / hospitality creative). Do not upload new assets — reuse existing approved creative.
+
+| Asset | Spec | Action |
+|-------|------|--------|
+| Landscape image | 1200×628px (1.91:1) | Copy from BAU P.Max |
+| Square image | 300×300px (1:1) | Copy from BAU P.Max |
+| Portrait image | 480×600px (4:5) — optional | Copy from BAU P.Max if available |
+| Logo (square) | 128×128px min | Copy from BAU P.Max |
+| Video (YouTube) | 15–30 sec — optional | Copy from BAU P.Max if available |
+
 ---
 
 ## Ad Copy — Search Campaign RSA
@@ -198,16 +237,51 @@ https://indeedflex.com/find-jobs/hospitality/lp-event-staff/?utm_source=google&u
 
 ---
 
+## Ad Copy — Performance Max Asset Group
+
+> P.Max uses all assets across Google inventory (Search, Display, YouTube, Gmail, Maps, Discover). Provide all headline/description variants — Google assembles combinations.
+> **Long headlines** are shown without description — must be self-contained.
+
+### Headlines (up to 15, max 30 chars each)
+*Reuse all 15 from Search RSA — same headlines apply.*
+
+### Long Headlines (up to 5, max 90 chars each)
+
+| # | Long Headline | Chars |
+|---|---------------|-------|
+| 1 | Join our April 25 hiring event in Nashville. Traffic & event staff roles. $17.50/hr. | 84 |
+| 2 | Walk in, walk out employed. Indeed Flex event staff jobs pay $17.50/hr in Nashville. | 84 |
+| 3 | Work the biggest events in Nashville. Event staff needed April 25 — apply free today. | 85 |
+| 4 | Same Day Pay. $75 referral bonus. We're hiring event staff in Nashville for April 25. | 85 |
+| 5 | 18+ welcome. Reliable, punctual workers wanted for large-scale Nashville events. | 79 |
+
+### Descriptions (up to 5, max 90 chars each)
+*Reuse all 4 from Search RSA + add 1:*
+
+| # | Description | Chars |
+|---|-------------|-------|
+| 1 | Join us Apr 25 for a large-scale Nashville event. $17.50/hr. Get hired on the spot! | 83 |
+| 2 | Event Staff roles $17.50/hr — traffic control & crowd management. Same Day Pay available. | 89 |
+| 3 | Indeed Flex hiring event — walk in & leave with a job offer. 18+ welcome. Apply now! | 84 |
+| 4 | Saturday April 25 shift, 4am–2pm. Reliable, punctual staff wanted. Sign up free today. | 86 |
+| 5 | Coordinate traffic, monitor road closures & guide drivers at live events. Apply now! | 84 |
+
+### Final URL
+*Same as Search Campaign — use the event staff LP URL above.*
+
+---
+
 ## Implementation Checklist
 
 ### Pre-Launch (Apr 18) — Duplicate Setup
-- [ ] Confirm Nashville hospitality BAU campaign names and IDs in Google Ads console
+- [ ] Confirm Nashville hospitality BAU campaign names and IDs in Google Ads console (Search + P.Max + App)
 - [ ] Duplicate Search BAU campaign → rename to `p-b2c-google-search-us-bofu-bau-nashville-hospitality-hiring-event-04252026`
+- [ ] Duplicate P.Max BAU campaign → rename to `p-b2c-google-pmax-us-bofu-bau-nashville-hospitality-hiring-event-04252026` *(if no P.Max BAU, create new)*
 - [ ] Duplicate App BAU campaign → rename to `p-b2c-google-app-us-bofu-bau-nashville-hospitality-hiring-event-04252026`
-- [ ] Set daily budget: $50/day on both duplicate campaigns
+- [ ] Set daily budget: $50/day on all three duplicate campaigns
 - [ ] Set start date: April 18, 2026
 - [ ] Set end date: April 25, 2026
-- [ ] Update Final URL to event staff LP (URL above)
+- [ ] Update Final URL to event staff LP (URL above) on all three campaigns
 - [ ] BAU campaigns remain untouched and running
 
 ### Search Campaign (Duplicate)
@@ -217,22 +291,35 @@ https://indeedflex.com/find-jobs/hospitality/lp-event-staff/?utm_source=google&u
 - [ ] Set RSA display paths: path1 = `Event-Staff` | path2 = `Nashville`
 - [ ] Replace RSA copy in all active ad groups with event headlines + descriptions above
 
+### Performance Max Campaign (Duplicate / New)
+- [ ] Create asset group: `Event Staff — Nashville`
+- [ ] Upload all 15 headlines (reuse Search RSA list)
+- [ ] Upload 5 long headlines
+- [ ] Upload 5 descriptions
+- [ ] Copy landscape image from active BAU P.Max / hospitality campaign
+- [ ] Copy square image from active BAU P.Max / hospitality campaign
+- [ ] Copy logo from active BAU P.Max / hospitality campaign
+- [ ] Copy video from active BAU P.Max if available
+- [ ] Add audience signals: website visitors, customer match, in-market job seekers, custom intent
+- [ ] Set bidding: Maximize Conversions (add tCPA $5–8 if conversion history available)
+- [ ] Verify Final URL is set to event staff LP
+
 ### App Campaign (Duplicate)
 - [ ] Replace UAC copy with event headlines + descriptions above
 
 ### Post-Launch (Apr 18)
 - [ ] Verify Final URL resolves and event staff LP loads correctly (job ID 500202 active)
-- [ ] Confirm conversion tracking fires on registration/app download
-- [ ] Check impression share after 24hrs — increase budget if hitting cap before event
+- [ ] Confirm conversion tracking fires on registration/app download across all 3 campaigns
+- [ ] Check impression share (Search) and P.Max reach after 24hrs — increase budget if hitting cap before event
 - [ ] *(If fill rate concern)* Option to soft-launch Apr 10 at $25/day → ramp to $50/day Apr 18
 
 ### Pre-Event (Apr 24)
 - [ ] Confirm event venue address with Solaren — update LP and ad copy if location is surfaced
-- [ ] Check campaign pacing — ensure budget not exhausted before event day
+- [ ] Check campaign pacing across all 3 — ensure budget not exhausted before event day
 
 ### Post-Event (Apr 25)
-- [ ] Pause both duplicate campaigns
-- [ ] Drop budget to $1/day on BAU campaigns only if algorithm learning needs preservation
+- [ ] Pause all three event campaigns (Search + P.Max + App)
+- [ ] BAU campaigns remain running untouched — do not pause or adjust
 
 ---
 
@@ -241,8 +328,9 @@ https://indeedflex.com/find-jobs/hospitality/lp-event-staff/?utm_source=google&u
 | Campaign | Daily Budget | Flight Days | Total |
 |----------|-------------|-------------|-------|
 | Search | $50 | 7 | $350 |
+| Performance Max | $50 | 7 | $350 |
 | App | $50 | 7 | $350 |
-| **Total** | **$100/day** | **7 days** | **$700** |
+| **Total** | **$150/day** | **7 days** | **$1,050** |
 
 ---
 
@@ -251,3 +339,4 @@ https://indeedflex.com/find-jobs/hospitality/lp-event-staff/?utm_source=google&u
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-04-03 | Brief created — duplicating Nashville hospitality BAU campaigns for Solaren Event Staff April 25; BAU stays live | Parker (PPC) |
+| 2026-04-03 | Added Performance Max campaign (3-campaign structure: Search + P.Max + App); updated budget to $1,050 total | Parker (PPC) |

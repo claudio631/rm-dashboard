@@ -86,10 +86,8 @@
 ## Final URL
 
 ```
-https://indeedflex.com/find-jobs/lp/hiring-event/?utm_source=google&utm_medium=cpc&metro=nashville&role=warehouse-worker&utm_campaign=hiring-event-mt-juliet-04092026
+https://indeedflex.com/find-jobs/lp/hiring-event/?utm_source=google&utm_medium=cpc&link_value=syft://jobs/browse/500463&employer=NA&metro=nashville&role=event-staff&utm_campaign=us-hiring-event-goodwill-mt-juliet
 ```
-
-> **Confirm:** Verify with the event LP that this URL resolves and tracking fires. Add `link_value=syft://jobs/browse/{JOB_ID}` if a specific job ID is available for this event.
 
 ---
 
@@ -97,12 +95,12 @@ https://indeedflex.com/find-jobs/lp/hiring-event/?utm_source=google&utm_medium=c
 
 ### Search Campaign — Ad Groups
 
-**UPDATE these ad groups:**
-- `p---generic_immediate--` → update RSA with event copy
-- `p---warehouse--` *(if exists)* → update RSA with event copy
+**UPDATE these ad groups** *(3 RSAs each — urgency / pay & benefits / process angles)*:
+- `p---generic_immediate--` → add 3 RSA variants + event keywords
+- `p---warehouse--` *(if exists)* → add 3 RSA variants + event keywords
 
 **ADD new ad group:**
-- `Hiring Event — Mt. Juliet` → event-specific keywords + RSA
+- `Hiring Event — Mt. Juliet` → event-specific keywords + 3 RSA variants
 
 ---
 
@@ -144,9 +142,12 @@ https://indeedflex.com/find-jobs/lp/hiring-event/?utm_source=google&utm_medium=c
 
 ---
 
-## Ad Copy — Search Campaign RSA
+## Ad Copy — Search Campaign RSAs
 
-> Apply to ALL active ad groups. Max 30 chars per headline, 90 chars per description.
+> **3 RSA variants per ad group.** Google rotates and learns which angle converts best.
+> Max 30 chars per headline, 90 chars per description. All variants include path1/path2.
+
+### Variant 1 — Urgency (`path1: Hiring-Event` / `path2: Mt-Juliet`)
 
 ### Headlines (use all 15)
 
@@ -168,40 +169,132 @@ https://indeedflex.com/find-jobs/lp/hiring-event/?utm_source=google&utm_medium=c
 | 14 | Flex & Long-Term Shifts Open | 28 |
 | 15 | Limited Spots — Register Now | 28 |
 
-### Descriptions (use all 4)
+### Descriptions (Variant 1 — Urgency)
 
 | # | Description | Chars |
 |---|-------------|-------|
 | 1 | Join us Apr 9, 10am–2pm at 1985 Providence Pkwy, Mt. Juliet TN. Get hired on the spot! | 87 |
-| 2 | Warehouse, event staff & hospitality jobs $16–$18/hr. Same Day Pay. Apply now. | 79 |
-| 3 | Indeed Flex hiring event — walk in & get a job offer. Flex shifts + long-term work. | 84 |
-| 4 | No long wait. Meet our recruiters Apr 9 and get an instant offer. Sign up free. | 80 |
+| 2 | No long process. Meet our recruiters & get an instant offer on April 9. Sign up free. | 85 |
+| 3 | Walk in, interview live, and walk out with a job offer on April 9 in Mt. Juliet, TN. | 84 |
+| 4 | Limited spots left. Register today for the Indeed Flex hiring event on April 9th, 2026. | 88 |
+
+---
+
+### Variant 2 — Pay & Benefits (`path1: Hiring-Event` / `path2: Apply-Now`)
+
+| # | Headline | Chars |
+|---|----------|-------|
+| 1 | Warehouse & Event Staff $16+ | 28 |
+| 2 | $16–$18/Hr + Special Bonuses | 28 |
+| 3 | Same Day Pay Available | 22 |
+| 4 | $75 Referral Bonus | 18 |
+| 5 | Health & Vision Benefits | 24 |
+| 6 | Multiple Roles $16–$18/Hr | 25 |
+| 7 | Full-Time Potential Available | 29 |
+| 8 | Hiring Event — April 9th | 24 |
+| 9 | Mt. Juliet, TN · Thu Apr 9 | 26 |
+| 10 | Get Paid Same Day or Next Day | 29 |
+| 11 | Health & Dental Coverage | 24 |
+| 12 | Instant Job Offer on the Spot | 29 |
+| 13 | Walk In, Walk Out Employed | 26 |
+| 14 | Flex & Long-Term Shifts Open | 28 |
+| 15 | Competitive Pay + Benefits | 26 |
+
+| # | Description | Chars |
+|---|-------------|-------|
+| 1 | Warehouse, event staff & hospitality jobs $16–$18/hr. Same Day Pay. Apply now. | 79 |
+| 2 | Earn $75 per referral, Same Day Pay & full health benefits. Join us April 9th in TN. | 85 |
+| 3 | Competitive pay $16–$18/hr, health/dental/vision & Same Day Pay. Join us April 9th. | 83 |
+| 4 | Come to our Apr 9 hiring event. Leave with a $16–$18/hr offer + full-time potential. | 84 |
+
+---
+
+### Variant 3 — Process & Opportunity (`path1: Hiring-Event` / `path2: Get-Hired`)
+
+| # | Headline | Chars |
+|---|----------|-------|
+| 1 | No Long Application Process | 27 |
+| 2 | Get Hired in One Day | 21 |
+| 3 | Meet Recruiters Face to Face | 28 |
+| 4 | Start Working This Week | 23 |
+| 5 | Full-Time Potential Available | 29 |
+| 6 | Warehouse & Hospitality Roles | 29 |
+| 7 | Hiring Event — April 9th | 24 |
+| 8 | Mt. Juliet, TN · Thu Apr 9 | 26 |
+| 9 | Walk In, Walk Out Employed | 26 |
+| 10 | Indeed Flex Hiring Event | 24 |
+| 11 | $16–$18/Hr + Bonuses | 20 |
+| 12 | Apply in Minutes on Site | 24 |
+| 13 | Same Day Pay Available | 22 |
+| 14 | $75 Referral Bonus | 18 |
+| 15 | Flex & Long-Term Shifts Open | 28 |
+
+| # | Description | Chars |
+|---|-------------|-------|
+| 1 | Indeed Flex hiring event — walk in & get a job offer. Flex shifts + long-term work. | 84 |
+| 2 | Skip the wait. Interview live with recruiters on April 9 & start working this week. | 83 |
+| 3 | Warehouse, event staff & hospitality roles open. Walk in Apr 9, leave with an offer. | 84 |
+| 4 | Multiple openings at 1985 Providence Pkwy, Mt. Juliet TN. Walk in April 9 & get hired. | 86 |
 
 ---
 
 ## Ad Copy — App Campaign
 
-> UAC copy — Google optimizes placement. Provide 5 headlines + 5 descriptions.
+> **3 app ad variants per ad group.** UAC — Google optimizes placement across variants.
 
-### Headlines
+### App Variant 1 — Urgency
 
 | # | Headline | Chars |
 |---|----------|-------|
 | 1 | Download App & Attend Apr 9 | 28 |
 | 2 | Hiring Event — April 9th | 24 |
-| 3 | Warehouse & Event Staff Roles | 29 |
-| 4 | $16–$18/Hr Mt. Juliet, TN | 25 |
+| 3 | Warehouse & Event Staff $16+ | 28 |
+| 4 | Limited Spots — Register Now | 28 |
 | 5 | Get Hired at Our Live Event | 28 |
-
-### Descriptions
 
 | # | Description | Chars |
 |---|-------------|-------|
 | 1 | Download Indeed Flex & register for our Apr 9 hiring event in Mt. Juliet, TN. | 78 |
-| 2 | Warehouse, event staff & hospitality roles $16–$18/hr. Walk in Apr 9, 10am–2pm. | 80 |
-| 3 | Download the app, sign up & come to our hiring event. Instant offers on April 9. | 80 |
-| 4 | Same Day Pay, $75 referral bonus, health benefits. Attend our hiring event Apr 9. | 81 |
-| 5 | Indeed Flex is hiring warehouse & event staff in Mt. Juliet, TN. Register today. | 81 |
+| 2 | Warehouse, event staff & hospitality roles. Walk in Apr 9, 10am–2pm. Get hired. | 80 |
+| 3 | Limited spots available. Download the app & register for our Apr 9 event in TN. | 80 |
+| 4 | No long process. Download, sign up & attend our hiring event on April 9th. | 74 |
+| 5 | Get hired on April 9 in Mt. Juliet, TN. Download the Indeed Flex app now. | 73 |
+
+### App Variant 2 — Pay & Benefits
+
+| # | Headline | Chars |
+|---|----------|-------|
+| 1 | Warehouse & Event Staff $16+ | 28 |
+| 2 | $16–$18/Hr + Special Bonuses | 28 |
+| 3 | Same Day Pay Available | 22 |
+| 4 | Multiple Roles Nashville Area | 29 |
+| 5 | $75 Referral Bonus | 18 |
+
+| # | Description | Chars |
+|---|-------------|-------|
+| 1 | Warehouse & event staff $16–$18/hr. Same Day Pay & $75 referral bonus. Download app. | 84 |
+| 2 | Download Indeed Flex, register for Apr 9 hiring event & earn $16–$18/hr in TN. | 78 |
+| 3 | $75 referral bonus, Same Day Pay & health benefits. Come to our Apr 9 event. | 76 |
+| 4 | Competitive pay + benefits. Download Indeed Flex & attend hiring event April 9. | 79 |
+| 5 | Same Day Pay, health/dental/vision. Join us Apr 9 at Goodwill Career Center, TN. | 80 |
+
+### App Variant 3 — Process & Opportunity
+
+| # | Headline | Chars |
+|---|----------|-------|
+| 1 | Download App & Attend Apr 9 | 28 |
+| 2 | Get Hired at Our Live Event | 28 |
+| 3 | Full-Time Potential Available | 29 |
+| 4 | No Long Interview Process | 25 |
+| 5 | Hiring Event — April 9th | 24 |
+
+| # | Description | Chars |
+|---|-------------|-------|
+| 1 | Download Indeed Flex & come to our Apr 9 event. Walk in, get hired, start this week. | 84 |
+| 2 | Skip the wait — attend our live hiring event Apr 9 at Goodwill Career Center, TN. | 81 |
+| 3 | Warehouse, event staff & hospitality roles open. Download app, register, attend Apr 9. | 86 |
+| 4 | No lengthy process. Interview live Apr 9 in Mt. Juliet, TN. Download Indeed Flex today. | 87 |
+| 5 | Walk in on April 9, meet our recruiters & leave with a $16–$18/hr offer. Download now. | 86 |
 
 ---
 
@@ -251,3 +344,4 @@ https://indeedflex.com/find-jobs/lp/hiring-event/?utm_source=google&utm_medium=c
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-04-03 | Brief created — duplicating 2 BAU Nashville campaigns for hiring event (Mt. Juliet); BAU stays live | Parker (PPC) |
+| 2026-04-03 | Updated — correct Final URL (syft/500463), 3 RSA variants per ad group, implementation script added | Parker (PPC) |

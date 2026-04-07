@@ -10,7 +10,7 @@ You MUST execute ALL 5 reports below in sequence. Do NOT ask for confirmation be
 
 Find the most recent version of each file in ~/Downloads by modification date. When multiple versions exist for the same day, ALWAYS use the newest one (latest timestamp).
 
-1. **OB Funnel:** `OB Funnel Custom Viewer*.xlsx` — latest by modification date (may have numbered suffixes like `(2)`, `(3)`)
+1. **OB Funnel:** `OB Funnel Custom Viewer*.xlsx` — latest **full export** by modification date (may have numbered suffixes like `(2)`, `(3)`). Full exports are ~250KB+ with 5000+ rows and 80+ clients. Filtered/partial exports are ~95KB with <2000 rows and only 4 clients. ALWAYS prefer the latest full export over a newer partial export. To validate: check file size (>200KB = full) or row count (>3000 = full).
 2. **Requisitions:** `requisitions-*.csv` — latest by modification date AND largest file size (~2.3MB = full export). Ignore partial exports (<500KB).
 3. **Campaign Spend:** `JobsCampaigns_*.csv` — latest by modification date. The file may cover a longer period than the current month (e.g., Jan 1 to Mar 25). Parse the filename dates `JobsCampaigns_YYYYMMDD_YYYYMMDD.csv` to know the range.
 4. **Last spend:** Read from `src/data/last-report-spend.json`
@@ -28,8 +28,9 @@ Key rules:
 - Key clients: CORT, Stord, OnTrac, CTDI with their named locations
 - D-1 rule: use yesterday's single-day verified count for (+N). On Monday use Friday's.
 - Include Indeed Spend Comparison with delta vs last report
+- Include Google Ads Spend MTD — pull from Google Ads API (`google-ads.yaml`, US account `7236100723`) for current month. Show as: `*Google Ads Spend:* Google Ads {Month} so far: $X,XXX.XX (+$X,XXX.XX since last report)`. Store last Google Ads spend in `src/data/last-report-spend.json` under `last_google_ads_spend`.
 - Include Open Campaigns (status=open, exclude Indeed Flex clients)
-- After generating, update `src/data/last-report-spend.json` with the new MTD spend
+- After generating, update `src/data/last-report-spend.json` with both Indeed and Google Ads MTD spend
 
 **Indeed Spend — Month-to-Date calculation:**
 The JobsCampaigns CSV may cover a period longer than the current month (e.g., Jan 1 to Mar 25). You MUST use **current-month-only spend**:
