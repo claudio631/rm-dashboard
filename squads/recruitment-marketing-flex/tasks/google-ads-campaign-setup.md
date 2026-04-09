@@ -1,5 +1,7 @@
 # Task: Google Ads Campaign Setup
 
+// turbo-all
+
 > Agent: @ppc-paid-media-specialist
 > Elicit: true
 > Dependencies: keyword-strategy-guide.md, campaign-types-reference.md

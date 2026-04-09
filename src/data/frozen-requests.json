@@ -1698,5 +1698,117 @@
     },
     "priority": 4,
     "frozen_date": "2026-04-01"
+  },
+  "Ingram - LaVergne Distribution - Industrial General Labor|2026-02-05": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 136
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 596.03
+    },
+    "ob": {
+      "created": 15,
+      "verified": 9,
+      "rtb": 8
+    },
+    "frozen_date": "2026-04-09"
+  },
+  "Bon Appetit - Obama Foundation - Dishwasher|2026-01-27": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 129
+    },
+    "indeed": {
+      "count": 2,
+      "spend": 501.88
+    },
+    "ob": {
+      "created": 8,
+      "verified": 10,
+      "rtb": 8
+    },
+    "frozen_date": "2026-04-09"
+  },
+  "Bon Appetit - Uber Chicago - Dishwasher & Station Attendant|2026-01-28": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 129
+    },
+    "indeed": {
+      "count": 2,
+      "spend": 501.88
+    },
+    "ob": {
+      "created": 8,
+      "verified": 10,
+      "rtb": 8
+    },
+    "frozen_date": "2026-04-09"
+  },
+  "Assurant|2026-02-11": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 16,
+      "verified": 3,
+      "rtb": 2
+    },
+    "frozen_date": "2026-04-09"
+  },
+  "Rhino Staging|2026-01-07": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-04-09"
+  },
+  "Culinaire - Dallas - Server|2026-01-07": {
+    "fhs": {
+      "count": 5,
+      "rsvps": 480
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 82,
+      "verified": 14,
+      "rtb": 12
+    },
+    "frozen_date": "2026-04-09"
+  },
+  "Foxconn - Fort Worth - Repair Technician|2026-01-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 149
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 799.6
+    },
+    "ob": {
+      "created": 17,
+      "verified": 8,
+      "rtb": 7
+    },
+    "frozen_date": "2026-04-09"
   }
 }

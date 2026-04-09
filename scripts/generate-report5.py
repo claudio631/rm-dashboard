@@ -187,6 +187,8 @@ def extract_client_and_location(client_job_str):
         return "Stord", "Las Vegas"
     if "aba nashville" in sl or (sl.startswith("aba") and "lettuce" in sl):
         return "Lettuce", "Nashville"
+    if "texas motor speedway" in sl:
+        return "Levy", "Dallas"
     if sl == "material handler":
         return "CTDI", "Dallas"
     if sl.startswith("san antonio & austin"):
@@ -950,6 +952,21 @@ def match_fhs(client_short, location, fhs_rows, submission_date=None, role=None)
             # No submission date available, count all
             total['rsvps'] += fhs_row['rsvps']
 
+    # Fallback: if no client match found, try location + role only (any client)
+    if total['count'] == 0 and total['rsvps'] == 0 and role and loc_norm:
+        for fhs_row in fhs_rows:
+            if not _location_match(loc_norm, fhs_row['loc_norm']):
+                continue
+            if not fhs_row['job_title'] or not _role_match(role, fhs_row['job_title']):
+                continue
+            if fhs_row['status'] in ('open', 'auto-paused'):
+                total['count'] += 1
+            if submission_date and fhs_row['date']:
+                if fhs_row['date'] >= submission_date:
+                    total['rsvps'] += fhs_row['rsvps']
+            elif not submission_date:
+                total['rsvps'] += fhs_row['rsvps']
+
     return total
 
 
@@ -1008,7 +1025,11 @@ def _role_match(rev_role, fhs_job_title):
 
 
 def match_indeed(client_short, location, indeed_rows, role=None):
-    """Find Indeed campaign data matching a revenue request client+location+role."""
+    """Find Indeed campaign data matching a revenue request.
+    Priority:
+      1. client + location + role (exact match)
+      2. location + role only (fallback — picks up Indeed Flex / other client campaigns for same role+metro)
+    """
     possible_clients = normalize_client_for_match(client_short)
     loc_norm = normalize_location(location)
 
@@ -1037,6 +1058,15 @@ def match_indeed(client_short, location, indeed_rows, role=None):
 
         total['count'] += 1
         total['spend'] += ind_row['spend']
+
+    # Fallback: if no client match found, try location + role only (any client)
+    if total['count'] == 0 and role and loc_norm:
+        for ind_row in indeed_rows:
+            if not _location_match(loc_norm, ind_row['loc_norm']):
+                continue
+            if ind_row['role'] and _role_match(role, ind_row['role']):
+                total['count'] += 1
+                total['spend'] += ind_row['spend']
 
     return total
 
@@ -1118,15 +1148,8 @@ def match_ob_funnel(client_short, location, ob_data, role=None):
     if _try_match(check_client=True, use_role=False):
         return total
 
-    # 3. Fallback: location-only + role
-    if role and loc_norm:
-        if _try_match(check_client=False, use_role=True):
-            return total
-
-    # 4. Fallback: location-only + __total__
-    if loc_norm:
-        _try_match(check_client=False, use_role=False)
-
+    # No location-only fallback for OB Funnel — summing all clients in a city
+    # would produce inflated numbers (e.g. all Chicago clients for a Compass request)
     return total
 
 
@@ -1280,9 +1303,9 @@ def generate_html(processed_rows):
         hc_val = r['hc'] if isinstance(r['hc'], int) else 0
         int_target = hc_val * 10
 
-        # RTB Target = HC; Fill% = RTB ÷ (HC × 2.5)
+        # RTB Target = HC × 2.5; Fill% = RTB ÷ (HC × 2.5)
         ob_rtb = r['ob']['rtb']
-        rtb_target = hc_val
+        rtb_target = round(hc_val * 2.5, 1)
         fill_target = hc_val * 2.5
         if fill_target > 0:
             fill_pct = min((ob_rtb / fill_target) * 100, 100)
@@ -1489,7 +1512,7 @@ def generate_html(processed_rows):
                         <th class="sub-header" style="text-align:center;" data-tip="Worker Accounts Created — new workers who signed up via the OB funnel">Created</th>
                         <th class="sub-header" style="text-align:center;" data-tip="1st Role Verified — workers who completed role verification in the OB funnel">Verified</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Ready to Book — workers who completed onboarding and are available for shifts">RTB</th>
-                        <th class="sub-header" style="text-align:center;" data-tip="RTB Target = HC — number of Ready to Book workers needed">Target</th>
+                        <th class="sub-header" style="text-align:center;" data-tip="RTB Target = HC × 2.5 — pipeline target of Ready to Book workers needed">Target</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Fill% = RTB ÷ (HC × 2.5) — workers ready to book vs. pipeline target">Fill%</th>
                     </tr>
                 </thead>
@@ -1698,8 +1721,8 @@ def generate_excel(processed_rows):
         ws.cell(row=row_idx, column=18, value=r['ob']['rtb']).alignment = center_align
         ws.cell(row=row_idx, column=18).font = number_font
 
-        # RTB Target = HC
-        ws.cell(row=row_idx, column=19, value=hc_num).alignment = center_align
+        # RTB Target = HC × 2.5
+        ws.cell(row=row_idx, column=19, value=round(hc_num * 2.5, 1)).alignment = center_align
         ws.cell(row=row_idx, column=19).font = number_font
 
         # Fill% = RTB / (HC × 2.5)

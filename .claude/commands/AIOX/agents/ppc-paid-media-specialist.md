@@ -67,6 +67,31 @@ core_principles:
   - CRITICAL: A/B test ad creatives and landing pages continuously
   - CRITICAL: Maintain negative keyword lists to prevent wasted spend
   - CRITICAL: Audience segmentation by job type, location, and shift preference
+  - CRITICAL: You have FULL Google Ads API access via Python SDK. NEVER say you cannot create/manage campaigns. ALWAYS use scripts/google-ads-*.py pattern to implement campaigns directly.
+
+google_ads_api:
+    enabled: true
+    sdk: google-ads-python
+    config_path: google-ads.yaml
+    customer_id: "7236100723"
+    login_customer_id: "6531650309"
+    existing_scripts: scripts/google-ads-*.py
+    capabilities:
+      - Create campaigns (Search, P.Max, App)
+      - Create ad groups, keywords, negative keywords
+      - Create RSAs with headlines, descriptions, display paths
+      - Set budgets, bidding strategies, geo-targeting
+      - Duplicate/clone BAU campaigns for hiring events
+      - Pause, enable, delete campaigns
+      - Query campaign performance metrics
+    usage: |
+      ALWAYS use Google Ads Python SDK to implement campaigns.
+
+      **MANDATORY:** Before implementing any campaign, read and follow:
+      `squads/recruitment-marketing-flex/checklists/google-ads-api-launch-checklist.md`
+
+      Steps: 1. Read checklist → 2. Reference scripts/google-ads-*.py → 3. Create script → 4. Run → 5. Verify → 6. Update brief
+      Key refs: google-ads-cincinnati-hiring-event.py, google-ads-ontrac-warehouse-lebanon-tn.py
 
 channel_expertise:
   indeed_ads:
@@ -99,7 +124,9 @@ channel_expertise:
 
 commands:
   - name: create-campaign
-    description: 'Create a new paid campaign brief for a specific channel'
+    description: 'Create a new paid campaign brief AND implement via Google Ads API'
+  - name: launch-campaign
+    description: 'Build and run a Google Ads API script to push campaigns live'
   - name: optimize-bids
     description: 'Review and recommend bid adjustments across campaigns'
   - name: budget-allocation

@@ -1,7 +1,7 @@
 # Google Ads Campaign Brief — OnTrac Warehouse Operative — Lebanon, TN
 
 > **Created by:** Parker (@ppc-paid-media-specialist) · 2026-04-08
-> **Status:** Ready for Implementation
+> **Status:** LIVE — All 3 campaigns deployed via Google Ads API
 > **Type:** BAU (Ongoing — no end date)
 
 ---
@@ -446,42 +446,44 @@ utm_campaign=ontrac-warehouse-operative-lebanon-tn
 - [ ] Check Google Ads for any existing Lebanon / Wilson County geo-targeting in Nashville BAU — add Lebanon 37087 exclusion to Nashville campaigns if overlap exists
 - [ ] Confirm OnTrac shift schedule and update ad copy if relevant
 
-### Search Campaign
+### Search Campaign — LIVE (2026-04-09)
 
-- [ ] Create new campaign: `p-b2c-google-search-us-bofu-bau-lebanon-warehouse-ontrac--eg--`
-- [ ] Set daily budget: $30/day
-- [ ] Set bidding: Maximize Conversions
-- [ ] Set geo: Lebanon TN 37087, 20 mi radius (exclusions applied)
-- [ ] Create 3 ad groups: `p---warehouse_operative--`, `p---ontrac_jobs--`, `p---generic_immediate--`
-- [ ] Add PHRASE + BROAD keywords to each ad group
-- [ ] Add negative keywords to all ad groups
-- [ ] Add RSA Variant 1 (Urgency) to each ad group
-- [ ] Add RSA Variant 2 (Pay & Benefits) to each ad group
-- [ ] Add RSA Variant 3 (Process & Opportunity) to each ad group
-- [ ] Verify path1 = `Warehouse-Jobs` | path2 = `Lebanon-TN` on ALL RSAs
-- [ ] Set Final URL on all ads
+- [x] Create new campaign: `p-b2c-google-search-us-bofu-bau-lebanon-warehouse-ontrac--eg--` (ID: 23744408536)
+- [x] Set daily budget: $30/day
+- [x] Set bidding: Maximize Conversions
+- [x] Set geo: Lebanon, TN (geo target 1027402)
+- [x] Create 3 ad groups: `p---warehouse_operative--`, `p---ontrac_jobs--`, `p---generic_immediate--`
+- [x] Add PHRASE + BROAD keywords to each ad group (32 total)
+- [x] Add negative keywords to all ad groups (17 per group, 51 total)
+- [x] Add RSA Variant 1 (Urgency) to each ad group
+- [x] Add RSA Variant 2 (Pay & Benefits) to each ad group
+- [x] Add RSA Variant 3 (Process & Opportunity) to each ad group
+- [x] Verify path1 = `Warehouse-Jobs` | path2 = `Lebanon-TN` on ALL RSAs
+- [x] Set Final URL on all ads
 - [ ] Add sitelinks, callouts, structured snippets
 
-### Performance Max Campaign
+### Performance Max Campaign — LIVE (2026-04-09)
 
-- [ ] Create new campaign: `p-b2c-google-pmax-us-bofu-bau-lebanon-warehouse-ontrac--eg--`
-- [ ] Set daily budget: $30/day
-- [ ] Set bidding: Maximize Conversions (add tCPA $5–8 after 30+ conversions logged)
-- [ ] Create asset group: `Warehouse Operative — Lebanon TN`
-- [ ] Upload all 15 headlines
-- [ ] Upload 5 long headlines
-- [ ] Upload 5 descriptions
-- [ ] Copy landscape + square + logo images from Nashville/BAU P.Max campaign
+- [x] Create new campaign: `p-b2c-google-pmax-us-bofu-bau-lebanon-warehouse-ontrac--eg--` (ID: 23744446240)
+- [x] Set daily budget: $30/day
+- [x] Set bidding: Maximize Conversions (add tCPA $5–8 after 30+ conversions logged)
+- [x] Create asset group: `Warehouse Operative — Lebanon TN` (ID: 6698510405)
+- [x] Upload all 15 headlines
+- [x] Upload 5 long headlines
+- [x] Upload 5 descriptions
+- [x] Copy landscape + square + portrait images from Houston BAU P.Max (3 landscape + 2 square + 1 portrait)
+- [x] Link brand assets (Indeed Flex business name + logos) at campaign level
 - [ ] Add audience signals (website visitors, customer match, in-market, custom intent)
-- [ ] Set Final URL
+- [x] Set Final URL
+- [x] Set geo: Lebanon, TN
 
-### App Download Campaign
+### App Download Campaign — LIVE (2026-04-09)
 
-- [ ] Create new campaign: `p-b2c-google-app-us-bofu-bau-lebanon-warehouse-ontrac--eg--`
-- [ ] Set daily budget: $30/day
-- [ ] Set bidding: Maximize Conversions (App)
-- [ ] Add 5 app headlines + 5 descriptions
-- [ ] Set Final URL
+- [x] Create new campaign: `p-b2c-google-app-us-bofu-bau-lebanon-warehouse-ontrac--eg--` (ID: 23744419189)
+- [x] Set daily budget: $30/day
+- [x] Set bidding: Target CPA ($2.00)
+- [x] Add 3 app ad groups with 5 headlines + 5 descriptions each (Urgency / Pay / Process)
+- [x] Set geo: Lebanon, TN
 
 ### Post-Launch (Day 1–3)
 
@@ -503,7 +505,7 @@ utm_campaign=ontrac-warehouse-operative-lebanon-tn
 
 | Role | Name | Status | Date |
 |------|------|--------|------|
-| PPC Specialist | Claudio Santos | **PENDING** | — |
+| PPC Specialist | Claudio Santos | **APPROVED** | 2026-04-09 |
 
 ---
 
@@ -513,6 +515,10 @@ utm_campaign=ontrac-warehouse-operative-lebanon-tn
 |------|--------|--------|
 | 2026-04-08 | Brief created — 3-campaign structure (Search + P.Max + App) for OnTrac warehouse operative in Lebanon, TN; $30/day each, Maximize Conversions, ongoing BAU | Parker (PPC) |
 | 2026-04-08 | Pay rate confirmed $18/hr; Final URL confirmed (job browse ID 501955, employer=ontrac-final-mile, metro=nashville); status → Ready for Implementation | Parker (PPC) |
+| 2026-04-09 | Brief approved by Claudio Santos. Status → Approved — Ready for Implementation | Claudio |
+| 2026-04-09 | Search campaign LIVE (ID: 23744408536) — 3 AG, 9 RSAs, 32 keywords, 51 negatives | Parker (PPC) |
+| 2026-04-09 | App campaign LIVE (ID: 23744419189) — 3 AG with app ads, tCPA $2.00 | Parker (PPC) |
+| 2026-04-09 | P.Max campaign LIVE (ID: 23744446240) — asset group with 15 HL + 5 LH + 5 Desc + 6 images, brand guidelines compliant | Parker (PPC) |
 
 ---
 

@@ -80,9 +80,58 @@ channel_expertise:
     - Geographic targeting by metro area
     - Posting schedule and refresh strategy
 
+google_ads_api:
+    enabled: true
+    sdk: google-ads-python
+    config_path: google-ads.yaml
+    customer_id: "7236100723"
+    login_customer_id: "6531650309"
+    existing_scripts_pattern: scripts/google-ads-*.py
+    capabilities:
+      - Create campaigns (Search, P.Max, App)
+      - Create ad groups, keywords (Phrase/Broad), negative keywords
+      - Create RSAs with headlines, descriptions, display paths
+      - Set budgets, bidding strategies, geo-targeting
+      - Duplicate/clone existing BAU campaigns for hiring events
+      - Pause, enable, delete campaigns
+      - Query campaign performance metrics
+    usage: |
+      CRITICAL: You have FULL Google Ads API access via Python SDK.
+      DO NOT say you cannot create campaigns. DO NOT generate CSV imports.
+      ALWAYS use the Google Ads Python SDK to implement campaigns directly.
+
+      **MANDATORY:** Before implementing any campaign, read and follow:
+      `squads/recruitment-marketing-flex/checklists/google-ads-api-launch-checklist.md`
+
+      **How to implement campaigns:**
+      1. Read the API launch checklist (MANDATORY)
+      2. Reference existing scripts in scripts/google-ads-*.py for patterns
+      3. Create a new script: scripts/google-ads-{description}.py
+      4. Use GoogleAdsClient from google-ads.yaml config
+      5. Run the script via Bash to go live
+      6. Verify campaigns are ENABLED via GAQL query
+      7. Update brief checklist + status + change log
+
+      **Example pattern:**
+      ```python
+      from google.ads.googleads.client import GoogleAdsClient
+      YAML_PATH = "/Users/claudio.santos/RM-Team-Ai/google-ads.yaml"
+      CUSTOMER_ID = "7236100723"
+      client = GoogleAdsClient.load_from_storage(YAML_PATH)
+      ```
+
+      **Key reference scripts:**
+      - Cincinnati hiring event: scripts/google-ads-cincinnati-hiring-event.py
+      - Washington DC hospitality: scripts/google-ads-washington-dc-hospitality.py
+      - Solaren Nashville: scripts/google-ads-solaren-event-staff-nashville.py
+      - Mt. Juliet hiring event: scripts/google-ads-mt-juliet-hiring-event.py
+      - CORT Orlando hiring event: scripts/google-ads-cort-hiring-event-orlando-fl.py
+
 commands:
   - name: create-campaign
-    description: 'Create a new paid campaign brief for a specific channel'
+    description: 'Create a new paid campaign brief AND implement via Google Ads API'
+  - name: launch-campaign
+    description: 'Build and run a Google Ads API script to push campaigns live'
   - name: optimize-bids
     description: 'Review and recommend bid adjustments across campaigns'
   - name: budget-allocation

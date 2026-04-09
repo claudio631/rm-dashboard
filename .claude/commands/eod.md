@@ -1,10 +1,12 @@
 # EOD — Daily Reports Generator
 
+// turbo-all
+
 Run all daily reports from the latest files in ~/Downloads. No questions, no permissions — just execute.
 
 ## Instructions
 
-You MUST execute ALL 5 reports below in sequence. Do NOT ask for confirmation between them. Read all data files ONCE at the start, then produce all outputs.
+You MUST execute ALL 4 reports below in sequence. Do NOT ask for confirmation between them. Read all data files ONCE at the start, then produce all outputs.
 
 ### Step 0: Find Latest Files
 
@@ -80,25 +82,7 @@ From the requisitions CSV, build a table grouped by State > Metro > Client > Rol
 
 **Filters:** Active statuses only (open + auto-paused + draft). Exclude Indeed Flex Application clients. Show ALL markets.
 
-### Report 4: Campaign Spend Breakdown — MTD Only (markdown table)
-
-**This report is MTD (current month only). Never show YTD or full-file data.**
-
-Apply the same MTD filter as Report 1 before aggregating anything:
-- **Preferred:** If the filename starts with the current month (`JobsCampaigns_20260401_*.csv`), all rows are already MTD — use them all.
-- **Fallback (multi-month file):** Filter to campaigns whose **first date in the campaign name** falls in the current month. Exclude campaigns that started in prior months. Campaigns with no date in the name are always included.
-- **No current-month data:** If no campaigns qualify after filtering, show an empty table and note: "No {Month} campaigns in file — download a current-month export from Indeed Analytics."
-
-After filtering to MTD-only rows, aggregate spend by:
-- Category: State
-- Subcategory: Metro
-- Sub-subcategory: Client
-
-Show totals at each level. Flag any campaigns that don't follow the naming convention.
-
-Label the report header with the current month (e.g., "April 2026 MTD"), never with the file's full date range.
-
-### Report 5: Recruitment Request Dashboard (HTML)
+### Report 4: Recruitment Request Dashboard (HTML)
 
 Cross-reference the revenue team's recruitment requests against FHS requisitions, Indeed campaigns, and OB Funnel data. Generate an HTML dashboard saved to `docs/reports/recruitment-request-dashboard-YYYY-MM-DD.html`.
 
@@ -115,15 +99,15 @@ Cross-reference the revenue team's recruitment requests against FHS requisitions
 - Rows with Request Status = "Declined" appear in the table but ALL metric columns (FHS, Indeed, OB Funnel, Fill) are left BLANK. We don't run campaigns for declined requests.
 
 **Client matching rules:**
-- Normalize client names (e.g. "Compass" → "Culinaire", "DC Flex" → "CORT", "Food Glorious" → "Culinaire", "Aba Nashville" → "Lettuce")
+- Normalize client names (e.g. "Compass" → "Culinaire", "DC Flex" → "CORT", "Food Glorious" → "Culinaire", "Aba Nashville" → "Lettuce", "Texas Motor Speedway" → "Levy")
 - Use metro aliases for location matching (e.g. "DFW" ↔ "Dallas", "Vegas" ↔ "Las Vegas", "Bedford Park" ↔ "Chicago")
 
 **Columns:**
 - St (request status badge: `O` = Open, `C` = Closed — color-coded, no priority score), Client (shortened), Owner (first name), Role, HC, Start (format: mmm/dd/yyyy e.g. Mar/31/2026), Shifts (Yes/No tag)
-- FHS: Open reqs count (status=open AND status=auto-paused both count as open), Interview (sum of RSVPs from matching reqs after the revenue request submission date), Int. Target (HC × 10 — interview pipeline target)
-- Indeed Ads: status emoji, # campaigns (Camps), spend (value only, no campaign names)
+- FHS: Open reqs count (status=open AND status=auto-paused both count as open), Interview (sum of RSVPs from matching reqs after the revenue request submission date), Int. Target (HC × 10 — interview pipeline target). Matching priority: (1) client+location+role, (2) fallback to location+role only if no client match (picks up Indeed Flex reqs for same role+metro)
+- Indeed Ads: status emoji, # campaigns (Camps), spend (value only, no campaign names). Matching priority: (1) client+location+role, (2) fallback to location+role only if no client match (picks up Indeed Flex campaigns for same role+metro)
 - OB Funnel: Created, Verified, RTB
-- Fulfillment: Target (RTB Target = HC), Fill% = RTB ÷ (HC × 2.5) (last column, with progress bar)
+- Fulfillment: Target (RTB Target = HC × 2.5), Fill% = RTB ÷ (HC × 2.5) (last column, with progress bar)
 - Shifts: This is the list of unfilled shifts from ACP, we need to match the location/city, role, client/brand company and update yes if exists shift posted or no if has no shift posted.
 
 **UI rules:**
@@ -137,13 +121,12 @@ Open the HTML in the browser automatically.
 
 ### Final Output
 
-After all 5 reports, show a summary:
+After all 4 reports, show a summary:
 ```
 EOD Reports Complete:
 ✅ Slack Report — ready to paste
 ✅ Funnel Report — opened in browser (docs/reports/...)
-✅ Requisition Status — table above
-✅ Campaign Spend — table above
-✅ Revenue Requests Dashboard — opened in browser (docs/reports/...)
+✅ Requisition Status — opened in browser (docs/reports/...)
+✅ Recruitment Request Dashboard — opened in browser (docs/reports/...)
 📊 Last spend updated: $XX,XXX.XX
 ```
