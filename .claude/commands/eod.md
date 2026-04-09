@@ -53,39 +53,60 @@ This generates the HTML report with:
 
 Open the HTML in the browser automatically.
 
-### Report 3: Requisition Status Table (markdown table)
+### Report 3: Requisition Status Table (HTML — saved and opened in browser)
 
-From the requisitions CSV, generate a table structured as:
-- Category: Location
-- Subcategory: Client
-- Sub-subcategory: Role
+Generate as an HTML file saved to `docs/reports/req-status-YYYY-MM-DD.html` and open it automatically.
 
-Columns: RSVPs | Target | Fill% | Open | Auto-Paused | Draft | Total
+From the requisitions CSV, build a table grouped by State > Metro > Client > Role.
 
-Filter to active statuses only (open + auto-paused + draft). Exclude Indeed Flex Application clients.
+**Columns:** State | Metro | Client | Role | RSVPs | Last Week RSVPs | Target | Fill% | Open | Auto-Paused | Draft | Total
 
-Show ALL markets (not just Claudio's).
+**Last Week RSVPs column:**
+- Find the requisitions file closest to 7 days ago (e.g., if today is Apr 8, look for the Apr 1 file).
+- For each (State, Metro, Client, Role) row, sum the `rsvps` column from the 7-day-old file for matching rows.
+- Show the value. If no match exists in the old file, show `—`.
 
-Group by State > Metro > Client > Role hierarchy.
+**Sorting:** Sort rows ascending by RSVPs (lowest first) so the neediest rows appear at the top.
 
-### Report 4: Campaign Spend Breakdown (markdown table)
+**Conditional formatting:**
+- RSVPs < 50: red background (`#fff0f0`), bold red RSVPs value
+- RSVPs 50–99: amber background (`#fff8e6`)
+- RSVPs ≥ 100: no highlight (white)
+- Fill% < 30%: red text on Fill% cell
+- Fill% 30–69%: amber text
+- Fill% ≥ 70%: green text
+- Draft > 0: yellow cell background (`#fffde7`) on the Draft column cell
+- Auto-Paused > 0: yellow cell background (`#fffde7`) on the Auto-Paused column cell
 
-From the JobsCampaigns CSV, parse campaign names and aggregate spend by:
+**Filters:** Active statuses only (open + auto-paused + draft). Exclude Indeed Flex Application clients. Show ALL markets.
+
+### Report 4: Campaign Spend Breakdown — MTD Only (markdown table)
+
+**This report is MTD (current month only). Never show YTD or full-file data.**
+
+Apply the same MTD filter as Report 1 before aggregating anything:
+- **Preferred:** If the filename starts with the current month (`JobsCampaigns_20260401_*.csv`), all rows are already MTD — use them all.
+- **Fallback (multi-month file):** Filter to campaigns whose **first date in the campaign name** falls in the current month. Exclude campaigns that started in prior months. Campaigns with no date in the name are always included.
+- **No current-month data:** If no campaigns qualify after filtering, show an empty table and note: "No {Month} campaigns in file — download a current-month export from Indeed Analytics."
+
+After filtering to MTD-only rows, aggregate spend by:
 - Category: State
 - Subcategory: Metro
 - Sub-subcategory: Client
 
 Show totals at each level. Flag any campaigns that don't follow the naming convention.
 
-### Report 5: Revenue Requests Cross-Reference Dashboard (HTML)
+Label the report header with the current month (e.g., "April 2026 MTD"), never with the file's full date range.
 
-Cross-reference the revenue team's recruitment requests against FHS requisitions, Indeed campaigns, and OB Funnel data. Generate an HTML dashboard saved to `docs/reports/revenue-requests-crossref-YYYY-MM-DD.html`.
+### Report 5: Recruitment Request Dashboard (HTML)
+
+Cross-reference the revenue team's recruitment requests against FHS requisitions, Indeed campaigns, and OB Funnel data. Generate an HTML dashboard saved to `docs/reports/recruitment-request-dashboard-YYYY-MM-DD.html`.
 
 **Input files:**
 - `US_Recruitment_Requests__us_*.csv` — include ALL rows (Live AND Declined)
-- `requisitions-*.csv` — match reqs by client+location
-- `JobsCampaigns_*.csv` — match Indeed campaigns by client+location (latest file by modification date)
-- `OB Funnel Custom Viewer*.xlsx` — match funnel data (Created, Verified, RTB) by client+location
+- `requisitions-*.csv` — match reqs by client+location+role
+- `JobsCampaigns_*.csv` — match Indeed campaigns by client+location+role (latest file by modification date)
+- `OB Funnel Custom Viewer*.xlsx` — match funnel data (Created, Verified, RTB) by client+location+role
 
 **Row integrity rule (NON-NEGOTIABLE):**
 - Every row in the Revenue Requests file (Live or Declined) MUST appear as its own row in Report 5. NEVER merge, deduplicate, or drop rows — even if they share the same client and location. Two Levy requests = two rows in the report.
@@ -94,22 +115,23 @@ Cross-reference the revenue team's recruitment requests against FHS requisitions
 - Rows with Request Status = "Declined" appear in the table but ALL metric columns (FHS, Indeed, OB Funnel, Fill) are left BLANK. We don't run campaigns for declined requests.
 
 **Client matching rules:**
-- Normalize client names (e.g. "Compass" → "Culinaire", "DC Flex" → "CORT", "Food Glorious" → "Culinaire")
+- Normalize client names (e.g. "Compass" → "Culinaire", "DC Flex" → "CORT", "Food Glorious" → "Culinaire", "Aba Nashville" → "Lettuce")
 - Use metro aliases for location matching (e.g. "DFW" ↔ "Dallas", "Vegas" ↔ "Las Vegas", "Bedford Park" ↔ "Chicago")
 
 **Columns:**
-- P (priority score), Client (shortened), Owner (first name), Role, HC, Start (format: mmm/dd/yyyy e.g. Mar/31/2026), Shifts (Yes/No tag)
-- FHS: Open reqs count (status=open AND status=auto-paused both count as open), Interview (sum of RSVPs from matching reqs — renamed from "RSVPs")
-- Indeed Ads: status emoji (St), # campaigns (Camps), spend (value only, no campaign names)
+- St (request status badge: `O` = Open, `C` = Closed — color-coded, no priority score), Client (shortened), Owner (first name), Role, HC, Start (format: mmm/dd/yyyy e.g. Mar/31/2026), Shifts (Yes/No tag)
+- FHS: Open reqs count (status=open AND status=auto-paused both count as open), Interview (sum of RSVPs from matching reqs after the revenue request submission date), Int. Target (HC × 10 — interview pipeline target)
+- Indeed Ads: status emoji, # campaigns (Camps), spend (value only, no campaign names)
 - OB Funnel: Created, Verified, RTB
-- Fill: Target (HC × 10 — the HC is the headcount revenue needs, we need 10× interviews to fill), Fill% = RTB ÷ HC (last column, with progress bar)
+- Fulfillment: Target (RTB Target = HC), Fill% = RTB ÷ (HC × 2.5) (last column, with progress bar)
+- Shifts: This is the list of unfilled shifts from ACP, we need to match the location/city, role, client/brand company and update yes if exists shift posted or no if has no shift posted.
 
 **UI rules:**
 - Sticky header rows (table scrolls inside container with `max-height: calc(100vh - 60px)`)
 - Large fonts: body 14px, table cells 14-15px, numbers 15px bold, KPI cards 32px
-- Priority rows color-coded: red (≥7), amber (4-6), white (0-3)
-- Sorted by priority descending
-- Summary cards at top: Live Requests, Total HC, High Priority, No FHS, No Indeed, Shifts TBD
+- No priority column. No priority-based row coloring.
+- **Sorted by submission date ascending** (oldest request first — matches Slack submission list order)
+- Summary cards at top: Live Requests, Total HC, No FHS, Shifts TBD
 
 Open the HTML in the browser automatically.
 

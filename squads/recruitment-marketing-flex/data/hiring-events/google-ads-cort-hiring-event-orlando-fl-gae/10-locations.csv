@@ -1,0 +1,9 @@
+Campaign,Location,Target type,Radius,Radius units,Bid adjustment
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Orlando FL 32812",Radius,5,Miles,+25%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Orlando FL",Radius,8,Miles,+20%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Orlando FL",Radius,15,Miles,+10%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Kissimmee FL",Radius,15,Miles,0%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Sanford FL",Radius,15,Miles,0%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Winter Park FL",Radius,15,Miles,0%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Clermont FL",Radius,25,Miles,-15%
+p-b2c-google-search-us-bofu-bau-orlando-industrial-hiring-event-04202026,"Lake Mary FL",Radius,25,Miles,-15%

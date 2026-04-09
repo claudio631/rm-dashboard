@@ -73,10 +73,10 @@ From the requisitions CSV:
 {Location}: {Created} Created → {Verified} Verified (+{N})
 ...
 
-*Indeed Spend Comparison:* Indeed {Month} so far: ${MTD} (+${delta} since last report)
+*Indeed Spend Comparison:* 
+Indeed {Month} so far: ${MTD} (+${delta} since last report)
 
 *Open Campaigns (Status: Open Only)*
-
 {Client}: {Location 1}; {Location 2}; ...
 ```
 

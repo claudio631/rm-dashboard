@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Report 5: Revenue Requests Cross-Reference Dashboard
+Report 5: Recruitment Request Dashboard
 Generates an HTML dashboard cross-referencing Revenue Requests with FHS, Indeed, and OB Funnel data.
 
 CRITICAL: Every "Live" row in Revenue Requests = one row in output. NO merging/dedup.
@@ -14,18 +14,25 @@ import sys
 from collections import defaultdict
 from datetime import datetime, date
 
+import glob
 import openpyxl
 
 # =============================================================================
-# FILE PATHS
+# FILE PATHS — auto-detect latest files
 # =============================================================================
-REVENUE_CSV = os.path.expanduser("~/Downloads/US_Recruitment_Requests__us_ (12).csv")
-FHS_CSV = os.path.expanduser("~/Downloads/requisitions-2026-04-03-687462.csv")
-INDEED_CSV = os.path.expanduser("~/Downloads/CampaignReport_Advanced_2026-04-01_2026-04-03.csv")
-OB_FUNNEL_XLSX = os.path.expanduser("~/Downloads/OB Funnel Custom Viewer (25).xlsx")
-OUTPUT_HTML = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-03.html")
-OUTPUT_XLSX = os.path.expanduser("~/RM-Team-Ai/docs/reports/revenue-requests-crossref-2026-04-03.xlsx")
-REPORT_DATE = "2026-04-03"
+def _latest(pattern):
+    files = sorted(glob.glob(os.path.expanduser(pattern)), key=os.path.getmtime, reverse=True)
+    if not files:
+        raise FileNotFoundError(f"No file found matching: {pattern}")
+    return files[0]
+
+REVENUE_CSV = _latest("~/Downloads/US_Recruitment_Requests__us_*.csv")
+FHS_CSV = _latest("~/Downloads/requisitions-*.csv")
+INDEED_CSV = _latest("~/Downloads/CampaignReport_Advanced_*.csv")
+OB_FUNNEL_XLSX = _latest("~/Downloads/OB Funnel Custom Viewer*.xlsx")
+REPORT_DATE = datetime.now().strftime("%Y-%m-%d")
+OUTPUT_HTML = os.path.expanduser(f"~/RM-Team-Ai/docs/reports/recruitment-request-dashboard-{REPORT_DATE}.html")
+OUTPUT_XLSX = os.path.expanduser(f"~/RM-Team-Ai/docs/reports/recruitment-request-dashboard-{REPORT_DATE}.xlsx")
 FROZEN_DATA_PATH = os.path.expanduser("~/RM-Team-Ai/src/data/frozen-requests.json")
 
 # =============================================================================
@@ -178,6 +185,8 @@ def extract_client_and_location(client_job_str):
     sl = s.lower()
     if sl.startswith("need forklift"):
         return "Stord", "Las Vegas"
+    if "aba nashville" in sl or (sl.startswith("aba") and "lettuce" in sl):
+        return "Lettuce", "Nashville"
     if sl == "material handler":
         return "CTDI", "Dallas"
     if sl.startswith("san antonio & austin"):
@@ -1254,22 +1263,26 @@ def generate_html(processed_rows):
         if is_declined:
             status_label = '<span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span>'
             indeed_st = ""
+            indeed_camps = ""
             indeed_spend = ""
         elif is_complete:
             status_label = '<span style="background:#111827;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">COMPLETE</span>'
             indeed_st = ""
+            indeed_camps = ""
             indeed_spend = ""
         else:
             status_label = ""
             indeed_st = "🟢" if r['indeed']['count'] > 0 else "🔴"
+            indeed_camps = f"{r['indeed']['count']}" if r['indeed']['count'] > 0 else "0"
             indeed_spend = f"${r['indeed']['spend']:,.0f}" if r['indeed']['spend'] > 0 else "$0"
 
-        # Target = HC × 10
+        # Interview Target = HC × 10 (FHS section)
         hc_val = r['hc'] if isinstance(r['hc'], int) else 0
-        target = hc_val * 10
+        int_target = hc_val * 10
 
-        # Fill progress: RTB ÷ (HC × 2.5)
+        # RTB Target = HC; Fill% = RTB ÷ (HC × 2.5)
         ob_rtb = r['ob']['rtb']
+        rtb_target = hc_val
         fill_target = hc_val * 2.5
         if fill_target > 0:
             fill_pct = min((ob_rtb / fill_target) * 100, 100)
@@ -1295,8 +1308,10 @@ def generate_html(processed_rows):
             client_suffix = ''
         fhs_open_html = f'{r["fhs"]["count"]}'
         fhs_interview_html = f'{r["fhs"]["rsvps"]:,}'
-        target_html = f'{target:,}' if target > 0 else '—'
+        target_html = f'{int_target:,}' if int_target > 0 else '—'
+        rtb_target_html = f'{rtb_target}' if rtb_target > 0 else '—'
         indeed_st_html = indeed_st
+        indeed_camps_html = indeed_camps
         indeed_spend_html = indeed_spend
         ob_created_html = f'{r["ob"]["created"]}'
         ob_verified_html = f'{r["ob"]["verified"]}'
@@ -1332,10 +1347,12 @@ def generate_html(processed_rows):
         <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_interview_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{target_html}</td>
         <td style="text-align:center;">{indeed_st_html}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{indeed_camps_html}</td>
         <td style="text-align:right;font-weight:bold;font-size:15px;">{indeed_spend_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_created_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_verified_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_rtb_html}</td>
+        <td style="text-align:center;font-weight:bold;font-size:15px;">{rtb_target_html}</td>
         <td style="min-width:120px;">{fill_cell_html}</td>
     </tr>'''
 
@@ -1344,7 +1361,7 @@ def generate_html(processed_rows):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revenue Requests Cross-Reference Dashboard — {REPORT_DATE}</title>
+    <title>Recruitment Request Dashboard — {REPORT_DATE}</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; font-size: 14px; color: #111827; }}
@@ -1360,7 +1377,7 @@ def generate_html(processed_rows):
         .kpi-card.blue .number {{ color: #2563eb; }}
         .kpi-card.green .number {{ color: #22c55e; }}
         .table-container {{ margin: 0 32px 32px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }}
-        .table-scroll {{ overflow-y: auto; max-height: calc(100vh - 220px); }}
+        .table-scroll {{ overflow-y: auto; max-height: calc(100vh - 60px); }}
         thead tr:first-child th {{ position: sticky; top: 0; z-index: 20; }}
         thead tr:nth-child(2) th {{ position: sticky; top: 34px; z-index: 19; }}
         table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
@@ -1393,7 +1410,7 @@ def generate_html(processed_rows):
 </head>
 <body>
     <div class="header">
-        <h1>Revenue Requests Cross-Reference Dashboard</h1>
+        <h1>Recruitment Request Dashboard</h1>
         <p>Generated {REPORT_DATE} | Every Live revenue request = one row (no merging) | Data: FHS Requisitions, Indeed Campaign Report, OB Funnel</p>
     </div>
 
@@ -1458,20 +1475,22 @@ def generate_html(processed_rows):
                         <th rowspan="2" style="min-width:40px;" data-tip="Headcount — number of workers the revenue team needs to fill">HC</th>
                         <th rowspan="2" style="min-width:55px;" data-tip="Whether shift schedules have been posted for this request">Shifts</th>
                         <th colspan="3" class="group-header" data-tip="Data from FHS (Flex Hiring System) requisitions">FHS Requisitions</th>
-                        <th colspan="2" class="group-header" data-tip="Data from Indeed sponsored job campaigns">Indeed Ads</th>
+                        <th colspan="3" class="group-header" data-tip="Data from Indeed sponsored job campaigns">Indeed Ads</th>
                         <th colspan="3" class="group-header" data-tip="Data from the OB (Onboarding) Funnel — worker pipeline progress">OB Funnel</th>
-                        <th class="group-header" data-tip="Fulfillment progress: RTB workers ÷ (HC × 2.5)">Fulfillment</th>
+                        <th colspan="2" class="group-header" data-tip="Fulfillment progress: RTB vs pipeline target">Fulfillment</th>
                     </tr>
                     <tr>
                         <th class="sub-header" style="text-align:center;" data-tip="Count of FHS requisitions with status Open or Auto-Paused for this client+location+role">Open</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Sum of RSVPs (interview candidates) from FHS reqs created after the revenue request submission date">Interview</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Target interviews needed = HC × 10 (10 interviews per hire)">Target</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Indeed campaign status: Active (campaigns running) or None (no campaigns)">St</th>
+                        <th class="sub-header" style="text-align:center;" data-tip="Number of active Indeed campaigns matching this client+location+role">Camps</th>
                         <th class="sub-header" style="text-align:right;" data-tip="Total Indeed sponsored job spend for matching campaigns (client+location+role)">Spend</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Worker Accounts Created — new workers who signed up via the OB funnel">Created</th>
                         <th class="sub-header" style="text-align:center;" data-tip="1st Role Verified — workers who completed role verification in the OB funnel">Verified</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Ready to Book — workers who completed onboarding and are available for shifts">RTB</th>
-                        <th class="sub-header" style="text-align:center;" data-tip="Fill% = RTB ÷ (HC × 2.5) — percentage of workers ready vs. pipeline target">Fill%</th>
+                        <th class="sub-header" style="text-align:center;" data-tip="RTB Target = HC — number of Ready to Book workers needed">Target</th>
+                        <th class="sub-header" style="text-align:center;" data-tip="Fill% = RTB ÷ (HC × 2.5) — workers ready to book vs. pipeline target">Fill%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1577,12 +1596,14 @@ def generate_excel(processed_rows):
         ('Target', 10),
         # Indeed
         ('Indeed St', 10),
+        ('Camps', 8),
         ('Spend', 12),
         # OB Funnel
         ('Created', 10),
         ('Verified', 10),
         ('RTB', 8),
         # Fill
+        ('RTB Target', 10),
         ('Fill%', 10),
     ]
 
@@ -1655,30 +1676,38 @@ def generate_excel(processed_rows):
         ws.cell(row=row_idx, column=13, value='Active' if has_indeed else 'None').alignment = center_align
         ws.cell(row=row_idx, column=13).font = green_font if has_indeed else red_font
 
-        # Indeed Spend
-        spend = r['indeed']['spend']
-        ws.cell(row=row_idx, column=14, value=spend if spend > 0 else 0).alignment = right_align
-        ws.cell(row=row_idx, column=14).number_format = '$#,##0'
+        # Indeed Camps
+        ws.cell(row=row_idx, column=14, value=r['indeed']['count']).alignment = center_align
         ws.cell(row=row_idx, column=14).font = number_font
 
-        # OB Created
-        ws.cell(row=row_idx, column=15, value=r['ob']['created']).alignment = center_align
+        # Indeed Spend
+        spend = r['indeed']['spend']
+        ws.cell(row=row_idx, column=15, value=spend if spend > 0 else 0).alignment = right_align
+        ws.cell(row=row_idx, column=15).number_format = '$#,##0'
         ws.cell(row=row_idx, column=15).font = number_font
 
-        # OB Verified
-        ws.cell(row=row_idx, column=16, value=r['ob']['verified']).alignment = center_align
+        # OB Created
+        ws.cell(row=row_idx, column=16, value=r['ob']['created']).alignment = center_align
         ws.cell(row=row_idx, column=16).font = number_font
 
-        # OB RTB
-        ws.cell(row=row_idx, column=17, value=r['ob']['rtb']).alignment = center_align
+        # OB Verified
+        ws.cell(row=row_idx, column=17, value=r['ob']['verified']).alignment = center_align
         ws.cell(row=row_idx, column=17).font = number_font
+
+        # OB RTB
+        ws.cell(row=row_idx, column=18, value=r['ob']['rtb']).alignment = center_align
+        ws.cell(row=row_idx, column=18).font = number_font
+
+        # RTB Target = HC
+        ws.cell(row=row_idx, column=19, value=hc_num).alignment = center_align
+        ws.cell(row=row_idx, column=19).font = number_font
 
         # Fill% = RTB / (HC × 2.5)
         ob_rtb = r['ob']['rtb']
         fill_target = hc_num * 2.5
         if fill_target > 0:
             fill_pct = min(ob_rtb / fill_target, 1.0)
-            cell = ws.cell(row=row_idx, column=18, value=fill_pct)
+            cell = ws.cell(row=row_idx, column=20, value=fill_pct)
             cell.number_format = '0%'
             cell.alignment = center_align
             cell.font = number_font
@@ -1689,17 +1718,17 @@ def generate_excel(processed_rows):
             else:
                 cell.font = Font(bold=True, size=12, color="16A34A")
         else:
-            ws.cell(row=row_idx, column=18, value='').alignment = center_align
+            ws.cell(row=row_idx, column=20, value='').alignment = center_align
 
         # Bottom border for all cells
-        for col in range(1, 19):
+        for col in range(1, 20):
             ws.cell(row=row_idx, column=col).border = thin_border
 
     # Freeze header row
     ws.freeze_panes = 'A2'
 
     # Auto-filter
-    ws.auto_filter.ref = f"A1:R{len(processed_rows) + 1}"
+    ws.auto_filter.ref = f"A1:S{len(processed_rows) + 1}"
 
     wb.save(OUTPUT_XLSX)
     return OUTPUT_XLSX

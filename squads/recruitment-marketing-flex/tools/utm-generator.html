@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indeed Flex UTM Generator</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #222538;
+    --border: #2d3150;
+    --accent: #4f6ef7;
+    --accent-hover: #6b86f9;
+    --accent-light: rgba(79,110,247,0.12);
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.1);
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e4f0;
+    --text-muted: #8b8fa8;
+    --text-dim: #5a5e7a;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+  }
+  .logo {
+    width: 36px; height: 36px; background: var(--accent);
+    border-radius: var(--radius); display: flex; align-items: center;
+    justify-content: center; font-size: 18px;
+  }
+  header h1 { font-size: 20px; font-weight: 700; }
+  header p { font-size: 13px; color: var(--text-muted); }
+  .layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1200px;
+  }
+  .panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 24px;
+  }
+  .panel-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--text-muted); margin-bottom: 20px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { margin-bottom: 12px; }
+  label {
+    display: block; font-size: 12px; font-weight: 500; color: var(--text-muted);
+    margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em;
+  }
+  label span.req { color: var(--accent); margin-left: 2px; }
+  label span.auto {
+    background: var(--accent-light); color: var(--accent); border-radius: 4px;
+    padding: 1px 6px; font-size: 10px; margin-left: 6px; text-transform: none;
+    letter-spacing: 0; font-weight: 600;
+  }
+  label span.locked {
+    background: var(--green-bg); color: var(--green); border-radius: 4px;
+    padding: 1px 6px; font-size: 10px; margin-left: 6px; text-transform: none;
+    letter-spacing: 0; font-weight: 600;
+  }
+  input, select {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: 13px;
+    padding: 8px 10px; outline: none; transition: border-color .15s;
+    appearance: none; -webkit-appearance: none;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  input[disabled], select[disabled] {
+    opacity: 0.5; cursor: not-allowed;
+  }
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b8fa8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+  }
+  .locked-field {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 8px 10px; font-size: 13px;
+    color: var(--green); display: flex; align-items: center; gap: 6px;
+  }
+  .locked-field span.lock { font-size: 11px; opacity: 0.6; }
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* Output fields */
+  .field-list { display: flex; flex-direction: column; gap: 8px; }
+  .field-row {
+    display: grid; grid-template-columns: 160px 1fr; gap: 10px; align-items: start;
+  }
+  .field-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;
+    letter-spacing: .04em; padding-top: 6px;
+  }
+  .field-value {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 6px 10px; font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace; color: var(--text);
+    word-break: break-all; line-height: 1.6;
+  }
+  .field-value.highlight { color: var(--accent); }
+  .field-value.green { color: var(--green); }
+  .field-value.yellow { color: var(--yellow); }
+  .field-value.empty { color: var(--text-dim); font-style: italic; font-family: inherit; }
+
+  .copy-row { display: flex; gap: 8px; margin-top: 12px; }
+  .copy-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--accent); color: #fff; border: none; border-radius: var(--radius);
+    padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  .copy-btn:hover { background: var(--accent-hover); }
+  .copy-btn.copied { background: #16a34a; }
+  .copy-btn.secondary {
+    flex: 0; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-muted); font-size: 12px; padding: 9px 14px;
+  }
+  .copy-btn.secondary:hover { color: var(--text); border-color: var(--accent); background: var(--accent-light); }
+
+  /* History */
+  .history-list { margin-top: 4px; }
+  .history-item {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px;
+  }
+  .history-item .h-campaign { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+  .history-item .h-url { font-size: 11px; font-family: monospace; color: var(--text-muted); word-break: break-all; cursor: pointer; }
+  .history-item .h-url:hover { color: var(--text); }
+  .history-item .h-meta { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+  .history-item .h-actions { display: flex; gap: 8px; margin-top: 6px; }
+  .h-btn {
+    font-size: 11px; padding: 3px 8px; border-radius: 4px;
+    border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer;
+  }
+  .h-btn:hover { background: var(--surface); color: var(--text); }
+  .h-btn.del:hover { border-color: var(--red); color: var(--red); }
+  .empty-state { text-align: center; padding: 28px; color: var(--text-dim); font-size: 13px; }
+  .clear-history-btn {
+    font-size: 12px; color: var(--text-dim); background: none; border: none; cursor: pointer; padding: 0;
+  }
+  .clear-history-btn:hover { color: var(--red); }
+  .notice { font-size: 11px; color: var(--text-dim); margin-top: 5px; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 120px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🔗</div>
+  <div>
+    <h1>Indeed Flex UTM Generator</h1>
+    <p>Audience = new · Evergreen = TRUE · Campaign: #ClientRoleCity+State</p>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT: FORM -->
+  <div class="panel">
+    <div class="panel-title">You Provide</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Source <span class="req">*</span></label>
+        <select id="source" onchange="generate()">
+          <option value="indeed" selected>indeed</option>
+          <option value="google">google</option>
+          <option value="meta">meta</option>
+          <option value="instagram">instagram</option>
+          <option value="tiktok">tiktok</option>
+          <option value="linkedin">linkedin</option>
+          <option value="glassdoor">glassdoor</option>
+          <option value="ziprecruiter">ziprecruiter</option>
+          <option value="craigslist">craigslist</option>
+          <option value="reddit">reddit</option>
+          <option value="findajob">findajob</option>
+          <option value="email">email</option>
+          <option value="organic-social">organic-social</option>
+          <option value="physical-display">physical-display</option>
+          <option value="other">other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Job ID for Deeplink <span class="req">*</span></label>
+        <input type="number" id="jobId" placeholder="e.g. 501764" oninput="generate()">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Employer <span class="req">*</span></label>
+        <select id="employer" onchange="generate()">
+          <option value="">-- select --</option>
+          <option value="NA">NA (no specific employer)</option>
+          <optgroup label="── US Employers ──">
+            <option value="cort">CORT</option>
+            <option value="ctdi">CTDI</option>
+            <option value="stord-inc">Stord, Inc</option>
+            <option value="ontrac-final-mile">OnTrac Final Mile</option>
+            <option value="assurant-inc-hyla">Assurant, Inc (Hyla)</option>
+            <option value="innomark-communications-llc">Innomark Communications LLC</option>
+            <option value="afc-industries">AFC Industries</option>
+            <option value="roka-sports-inc">ROKA Sports Inc</option>
+            <option value="ut-austin-parking-and-transportation-services">UT Austin, Parking & Transportation</option>
+            <option value="continental-battery-systems-inc-">Continental Battery Systems</option>
+            <option value="foxconn">Foxconn</option>
+            <option value="rhino-staging---tx">RHINO STAGING - TX</option>
+            <option value="sxsw">SXSW</option>
+            <option value="legends-hospitality">Legends Hospitality</option>
+            <option value="mattress-firm">Mattress Firm</option>
+            <option value="splashbrands-llc">SplashBrands LLC</option>
+            <option value="indeed-inc">Indeed Inc</option>
+            <option value="kex-express-us-llc">KEX Express (US) LLC</option>
+            <option value="proampac-holdings-inc-">ProAmpac Holdings Inc.</option>
+            <option value="tennant-solutions">Tennant Solutions</option>
+          </optgroup>
+          <option value="__custom__">+ New employer…</option>
+        </select>
+        <input type="text" id="employerCustom" placeholder="e.g. my-employer-name" style="display:none;margin-top:6px" oninput="generate()">
+      </div>
+      <div class="form-group">
+        <label>Metro <span class="req">*</span></label>
+        <select id="metro" onchange="generate()">
+          <option value="">-- select --</option>
+          <option value="NA|">NA (Nationwide)</option>
+          <option value="atlanta|GA">Atlanta, GA</option>
+          <option value="austin|TX">Austin, TX</option>
+          <option value="baltimore|MD">Baltimore, MD</option>
+          <option value="charlotte|NC">Charlotte, NC</option>
+          <option value="chicago|IL">Chicago, IL</option>
+          <option value="cincinnati|OH">Cincinnati, OH</option>
+          <option value="cleveland|OH">Cleveland, OH</option>
+          <option value="colorado-springs|CO">Colorado Springs, CO</option>
+          <option value="columbia|SC">Columbia, SC</option>
+          <option value="columbus|OH">Columbus, OH</option>
+          <option value="dallas|TX">Dallas, TX</option>
+          <option value="dayton|OH">Dayton, OH</option>
+          <option value="denver|CO">Denver, CO</option>
+          <option value="fishers|IN">Fishers, IN</option>
+          <option value="fort-mill|SC">Fort Mill, SC</option>
+          <option value="houston|TX">Houston, TX</option>
+          <option value="inland-empire|CA">Inland Empire, CA</option>
+          <option value="jackson|MS">Jackson, MS</option>
+          <option value="las-vegas|NV">Las Vegas, NV</option>
+          <option value="los-angeles|CA">Los Angeles, CA</option>
+          <option value="louisville|KY">Louisville, KY</option>
+          <option value="miami|FL">Miami, FL</option>
+          <option value="nashville|TN">Nashville, TN</option>
+          <option value="newark|NJ">Newark, NJ</option>
+          <option value="new-york|NY">New York, NY</option>
+          <option value="north-haven|CT">North Haven, CT</option>
+          <option value="nw-arkansas|AR">NW Arkansas, AR</option>
+          <option value="orlando|FL">Orlando, FL</option>
+          <option value="philadelphia|PA">Philadelphia, PA</option>
+          <option value="phoenix|AZ">Phoenix, AZ</option>
+          <option value="raleigh|NC">Raleigh, NC</option>
+          <option value="reno|NV">Reno, NV</option>
+          <option value="san-antonio|TX">San Antonio, TX</option>
+          <option value="seattle|WA">Seattle, WA</option>
+          <option value="washington-d-c-|DC">Washington, D.C.</option>
+          <option value="__custom__">+ Custom metro…</option>
+        </select>
+        <input type="text" id="metroCustom" placeholder="metro-code|ST (e.g. memphis|TN)" style="display:none;margin-top:6px" oninput="generate()">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Role <span class="req">*</span></label>
+      <select id="role" onchange="generate()">
+        <option value="">-- select --</option>
+        <option value="NA">NA</option>
+        <optgroup label="── Industrial ──">
+          <option value="warehouse-operative">Warehouse Operative</option>
+          <option value="picker-packer">Picker Packer</option>
+          <option value="industrial-general-labor">Industrial General Labor</option>
+          <option value="assembler">Assembler</option>
+          <option value="forklift-driver">Forklift Driver</option>
+          <option value="loader--crew">Loader / Crew</option>
+          <option value="food-production-operative">Food Production Operative</option>
+          <option value="repair-technician">Repair Technician</option>
+          <option value="material-handler">Material Handler</option>
+          <option value="industrial-team-lead">Industrial Team Lead</option>
+          <option value="machine-operator">Machine Operator</option>
+          <option value="delivery-driver">Delivery Driver</option>
+          <option value="home-delivery-driver">Home Delivery Driver</option>
+          <option value="warehouse-clerk">Warehouse Clerk</option>
+        </optgroup>
+        <optgroup label="── Hospitality ──">
+          <option value="waiting-staff">Waiting Staff</option>
+          <option value="general-staff">General Staff</option>
+          <option value="bartender">Bartender</option>
+          <option value="barista">Barista</option>
+          <option value="kitchen-porter">Kitchen Porter</option>
+          <option value="chef-de-partie">Chef de Partie</option>
+          <option value="head-chef">Head Chef</option>
+          <option value="sous-chef">Sous Chef</option>
+          <option value="prep-cook">Prep Cook</option>
+          <option value="line-cook">Line Cook</option>
+          <option value="catering-assistant">Catering Assistant</option>
+          <option value="concession-stand-worker">Concession Stand Worker</option>
+          <option value="event-staff">Event Staff</option>
+          <option value="server">Server</option>
+          <option value="host">Host</option>
+          <option value="housekeeping">Housekeeping</option>
+          <option value="steward">Steward</option>
+          <option value="dishwasher">Dishwasher</option>
+          <option value="hospitality-general-labor">Hospitality General Labor</option>
+          <option value="hotel-receptionist">Hotel Receptionist</option>
+          <option value="festival-staff">Festival Staff</option>
+        </optgroup>
+        <optgroup label="── Retail ──">
+          <option value="replenishment-assistant">Replenishment Assistant</option>
+          <option value="online-order-assistant">Online Order Assistant</option>
+          <option value="merchandiser">Merchandiser</option>
+          <option value="concession-stand-worker">Concession Stand Worker</option>
+        </optgroup>
+        <optgroup label="── Clerical / Professional ──">
+          <option value="customer-service-representative">Customer Service Representative</option>
+          <option value="administrative-assistant">Administrative Assistant</option>
+        </optgroup>
+        <optgroup label="── Facilities Management ──">
+          <option value="cleaner">Cleaner</option>
+          <option value="fm-general-labor">FM General Labor</option>
+          <option value="door-supervisor">Door Supervisor</option>
+          <option value="parking-services-rep">Parking Services Rep</option>
+        </optgroup>
+        <option value="__custom__">+ Custom role…</option>
+      </select>
+      <input type="text" id="roleCustom" placeholder="role-slug" style="display:none;margin-top:6px" oninput="generate()">
+    </div>
+
+    <div class="divider"></div>
+    <div class="panel-title" style="margin-bottom:12px">Auto-Generated (locked)</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Audience <span class="locked">always: new</span></label>
+        <div class="locked-field"><span class="lock">🔒</span> new</div>
+      </div>
+      <div class="form-group">
+        <label>Evergreen <span class="locked">always: TRUE</span></label>
+        <div class="locked-field"><span class="lock">🔒</span> TRUE</div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Medium <span class="auto">auto</span></label>
+        <div class="locked-field" id="mediumDisplay" style="color:var(--yellow)"><span class="lock">⚡</span> <span id="mediumVal">cpc</span></div>
+      </div>
+      <div class="form-group">
+        <label>Desired Landing Page <span class="auto">auto</span></label>
+        <div class="locked-field" id="lpDisplay" style="color:var(--text-muted);font-size:11px;font-family:monospace;word-break:break-all">
+          <span id="lpVal">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Campaign Name <span class="auto">auto · #ClientRoleCity+State</span></label>
+      <div class="locked-field" id="campaignDisplay" style="color:var(--yellow);font-weight:700">
+        <span class="lock">⚡</span> <span id="campaignVal">fill in fields above</span>
+      </div>
+      <p class="notice">Format: # + 3-letter client + 3-letter role + 4-letter city+state (e.g. #CORLDRОРFL)</p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: OUTPUT + HISTORY -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <div class="panel">
+      <div class="panel-title">Output — All Fields</div>
+
+      <div class="field-list" id="fieldList">
+        <div class="field-row">
+          <div class="field-label">Link Output</div>
+          <div class="field-value empty" id="out-link">Fill in the form →</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Landing Page</div>
+          <div class="field-value" id="out-lp">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Source</div>
+          <div class="field-value highlight" id="out-source">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Medium</div>
+          <div class="field-value yellow" id="out-medium">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Employer</div>
+          <div class="field-value" id="out-employer">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Metro</div>
+          <div class="field-value" id="out-metro">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Role</div>
+          <div class="field-value" id="out-role">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Audience</div>
+          <div class="field-value green">new</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Evergreen</div>
+          <div class="field-value green">TRUE</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Job ID</div>
+          <div class="field-value" id="out-jobid">—</div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Campaign Name</div>
+          <div class="field-value yellow" id="out-campaign">—</div>
+        </div>
+      </div>
+
+      <div class="copy-row">
+        <button class="copy-btn" id="copyBtn" onclick="copyUrl()">📋 Copy Link Output</button>
+        <button class="copy-btn secondary" onclick="copyAll()">Copy All Fields</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>History <span id="historyCount" style="font-weight:400;color:var(--text-dim)"></span></span>
+        <button class="clear-history-btn" onclick="clearHistory()">Clear all</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+// LP map from W2A spreadsheet (US only, Published=True)
+const LP_MAP = {
+  'hiring-event':                     'https://indeedflex.com/find-jobs/lp/hiring-event/',
+  'loader--crew':                     'https://indeedflex.com/find-jobs/lp/loader-crew-member/',
+  'warehouse-operative':              'https://indeedflex.com/find-jobs/lp/warehouse-operative/',
+  'picker-packer':                    'https://indeedflex.com/find-jobs/lp/picker-packer/',
+  'assembler':                        'https://indeedflex.com/find-jobs/lp/assembler/',
+  'forklift-driver':                  'https://indeedflex.com/find-jobs/lp/forklift-driver/',
+  'industrial-general-labor':         'https://indeedflex.com/find-jobs/lp/industrial-general-labor/',
+  'repair-technician':                'https://indeedflex.com/find-jobs/lp/repair-technician/',
+  'industrial-team-lead':             'https://indeedflex.com/find-jobs/lp/team-lead/',
+  'event-staff':                      'https://indeedflex.com/find-jobs/hospitality/lp-event-staff/',
+  'customer-service-representative':  'https://indeedflex.com/find-jobs/lp/customer-service-representative/',
+  'machine-operator':                 'https://indeedflex.com/find-jobs/lp/machine-operator/',
+  'warehouse-clerk':                  'https://indeedflex.com/find-jobs/lp/warehouse-clerk/',
+  'administrative-assistant':         'https://indeedflex.com/find-jobs/lp/admin-assistant/',
+  'server':                           'https://indeedflex.com/find-jobs/lp/server/',
+  'hospitality-general-labor':        'https://indeedflex.com/find-jobs/lp/hospitality-general-labor/',
+  'concession-stand-worker':          'https://indeedflex.com/find-jobs/lp/concession-stand-worker/',
+  'line-cook':                        'https://indeedflex.com/find-jobs/lp/line-cook/',
+  'housekeeper':                      'https://indeedflex.com/find-jobs/lp/housekeeper/',
+  'material-handler':                 'https://indeedflex.com/find-jobs/lp/material-handler/',
+  'dishwasher':                       'https://indeedflex.com/find-jobs/lp/dishwasher/',
+  'busser':                           'https://indeedflex.com/find-jobs/lp/busser/',
+  'barista':                          'https://indeedflex.com/find-jobs/lp/barista/',
+  'bartender':                        'https://indeedflex.com/find-jobs/lp/bartender/',
+  'host':                             'https://indeedflex.com/find-jobs/lp/host/',
+  'prep-cook':                        'https://indeedflex.com/find-jobs/lp/prep-cook/',
+  'bar-back':                         'https://indeedflex.com/find-jobs/lp/bar-back/',
+  'hospitality-team-lead':            'https://indeedflex.com/find-jobs/lp/hospitality-team-lead/',
+};
+
+// Medium per source
+const MEDIUM_MAP = {
+  'indeed':       'cpc',
+  'google':       'cpc',
+  'glassdoor':    'cpc',
+  'ziprecruiter': 'cpc',
+  'findajob':     'cpc',
+  'craigslist':   'job-post',
+  'linkedin':     'cpc',
+  'meta':         'paid-social',
+  'instagram':    'paid-social',
+  'tiktok':       'paid-social',
+  'reddit':       'paid-social',
+  'email':        'email',
+  'organic-social': 'organic',
+  'physical-display': 'physical-display',
+};
+
+// Employer display names
+const EMPLOYER_NAMES = {
+  'cort': 'CORT',
+  'ctdi': 'CTDI',
+  'stord-inc': 'Stord, Inc',
+  'ontrac-final-mile': 'OnTrac Final Mile',
+  'assurant-inc-hyla': 'Assurant (Hyla)',
+  'innomark-communications-llc': 'Innomark',
+  'afc-industries': 'AFC Industries',
+  'roka-sports-inc': 'ROKA Sports',
+  'ut-austin-parking-and-transportation-services': 'UT Austin',
+  'continental-battery-systems-inc-': 'Continental Battery',
+  'foxconn': 'Foxconn',
+  'rhino-staging---tx': 'RHINO STAGING TX',
+  'sxsw': 'SXSW',
+  'legends-hospitality': 'Legends Hospitality',
+  'mattress-firm': 'Mattress Firm',
+  'splashbrands-llc': 'SplashBrands',
+  'indeed-inc': 'Indeed Inc',
+  'kex-express-us-llc': 'KEX Express',
+  'proampac-holdings-inc-': 'ProAmpac',
+  'tennant-solutions': 'Tennant Solutions',
+  'NA': 'NA',
+};
+
+// Role display names
+const ROLE_NAMES = {
+  'loader--crew': 'Loader / Crew',
+  'warehouse-operative': 'Warehouse Operative',
+  'picker-packer': 'Picker Packer',
+  'industrial-general-labor': 'Industrial General Labor',
+  'assembler': 'Assembler',
+  'forklift-driver': 'Forklift Driver',
+  'repair-technician': 'Repair Technician',
+  'material-handler': 'Material Handler',
+  'industrial-team-lead': 'Industrial Team Lead',
+  'machine-operator': 'Machine Operator',
+  'warehouse-clerk': 'Warehouse Clerk',
+  'food-production-operative': 'Food Production Operative',
+  'waiting-staff': 'Waiting Staff',
+  'general-staff': 'General Staff',
+  'bartender': 'Bartender',
+  'barista': 'Barista',
+  'kitchen-porter': 'Kitchen Porter',
+  'chef-de-partie': 'Chef de Partie',
+  'prep-cook': 'Prep Cook',
+  'line-cook': 'Line Cook',
+  'catering-assistant': 'Catering Assistant',
+  'concession-stand-worker': 'Concession Stand Worker',
+  'event-staff': 'Event Staff',
+  'server': 'Server',
+  'host': 'Host',
+  'housekeeping': 'Housekeeping',
+  'steward': 'Steward',
+  'dishwasher': 'Dishwasher',
+  'hospitality-general-labor': 'Hospitality General Labor',
+  'festival-staff': 'Festival Staff',
+  'customer-service-representative': 'Customer Service Rep',
+  'administrative-assistant': 'Administrative Assistant',
+  'cleaner': 'Cleaner',
+  'fm-general-labor': 'FM General Labor',
+  'door-supervisor': 'Door Supervisor',
+  'parking-services-rep': 'Parking Services Rep',
+};
+
+// ── Custom field toggles ──────────────────────────────────────────────────────
+document.getElementById('employer').addEventListener('change', function() {
+  const c = document.getElementById('employerCustom');
+  c.style.display = this.value === '__custom__' ? 'block' : 'none';
+  generate();
+});
+document.getElementById('metro').addEventListener('change', function() {
+  const c = document.getElementById('metroCustom');
+  c.style.display = this.value === '__custom__' ? 'block' : 'none';
+  generate();
+});
+document.getElementById('role').addEventListener('change', function() {
+  const c = document.getElementById('roleCustom');
+  c.style.display = this.value === '__custom__' ? 'block' : 'none';
+  generate();
+});
+
+// ── Getters ───────────────────────────────────────────────────────────────────
+function getMetroCode() {
+  const v = document.getElementById('metro').value;
+  if (!v || v === '__custom__') {
+    const custom = document.getElementById('metroCustom').value.trim();
+    return { code: custom.split('|')[0], state: custom.split('|')[1] || '' };
+  }
+  const parts = v.split('|');
+  return { code: parts[0], state: parts[1] || '' };
+}
+function getRoleCode() {
+  const v = document.getElementById('role').value;
+  if (v === '__custom__') return document.getElementById('roleCustom').value.trim();
+  return v;
+}
+function getEmployerCode() {
+  const v = document.getElementById('employer').value;
+  if (v === '__custom__') return document.getElementById('employerCustom').value.trim();
+  return v;
+}
+function getMedium(source) {
+  return MEDIUM_MAP[source] || 'cpc';
+}
+function getLandingPage(roleCode) {
+  return LP_MAP[roleCode] || 'https://indeedflex.com/find-jobs/lp/hiring-event/';
+}
+
+// ── Campaign name: #COR + LDR + ORFL ─────────────────────────────────────────
+function buildCampaignName(employerCode, roleCode, metroCode, state) {
+  if (!employerCode || !roleCode || !metroCode) return '';
+
+  // 3 letters: employer (first 3 of first word, uppercase)
+  const empName = EMPLOYER_NAMES[employerCode] || employerCode;
+  const client3 = empName.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
+
+  // 3 letters: role (first 3 of first word, uppercase)
+  const roleName = ROLE_NAMES[roleCode] || roleCode;
+  const role3 = roleName.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase();
+
+  // 4 letters: first 2 of city + 2-letter state code
+  const city2 = metroCode.replace(/[^a-zA-Z]/g, '').substring(0, 2).toUpperCase();
+  const state2 = (state || '').toUpperCase().substring(0, 2);
+  const city4 = city2 + state2;
+
+  return `#${client3}-${role3}-${city4}`;
+}
+
+// ── Main generator ────────────────────────────────────────────────────────────
+function generate() {
+  const source = document.getElementById('source').value;
+  const jobId = document.getElementById('jobId').value.trim();
+  const employerCode = getEmployerCode();
+  const { code: metroCode, state } = getMetroCode();
+  const roleCode = getRoleCode();
+
+  const medium = getMedium(source);
+  const lp = getLandingPage(roleCode);
+  const campaign = buildCampaignName(employerCode, roleCode, metroCode, state);
+
+  // Update auto-generated display on left panel
+  document.getElementById('mediumVal').textContent = medium || '—';
+  document.getElementById('lpVal').textContent = lp;
+  document.getElementById('campaignVal').textContent = campaign || 'fill in fields above';
+
+  // Build URL
+  let url = '';
+  if (source && employerCode && metroCode && roleCode && jobId && campaign) {
+    const params = [
+      `utm_source=${source}`,
+      `utm_medium=${medium}`,
+      `link_value=syft://jobs/browse/${jobId}`,
+      `employer=${employerCode}`,
+      `metro=${metroCode}`,
+      `role=${roleCode}`,
+      `utm_campaign=${campaign}`,
+    ].join('&');
+    url = `${lp}?${params}`;
+  }
+
+  // Update right panel output fields
+  document.getElementById('out-link').textContent = url || 'Fill in all required fields →';
+  document.getElementById('out-link').className = url ? 'field-value highlight' : 'field-value empty';
+  document.getElementById('out-lp').textContent = lp;
+  document.getElementById('out-source').textContent = source || '—';
+  document.getElementById('out-medium').textContent = medium || '—';
+  document.getElementById('out-employer').textContent = employerCode ? `${EMPLOYER_NAMES[employerCode] || employerCode} (${employerCode})` : '—';
+  document.getElementById('out-metro').textContent = metroCode ? `${metroCode}${state ? ', ' + state : ''}` : '—';
+  document.getElementById('out-role').textContent = roleCode ? `${ROLE_NAMES[roleCode] || roleCode} (${roleCode})` : '—';
+  document.getElementById('out-jobid').textContent = jobId || '—';
+  document.getElementById('out-campaign').textContent = campaign || '—';
+}
+
+// ── Copy ──────────────────────────────────────────────────────────────────────
+function copyUrl() {
+  const url = document.getElementById('out-link').textContent;
+  if (!url || url.includes('Fill in')) return;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.innerHTML = '✅ Copied!';
+    btn.classList.add('copied');
+    saveToHistory(url);
+    setTimeout(() => { btn.innerHTML = '📋 Copy Link Output'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyAll() {
+  const lines = [
+    `Link Output:          ${document.getElementById('out-link').textContent}`,
+    `Desired Landing Page: ${document.getElementById('out-lp').textContent}`,
+    `Source:               ${document.getElementById('out-source').textContent}`,
+    `Medium:               ${document.getElementById('out-medium').textContent}`,
+    `Employer:             ${document.getElementById('out-employer').textContent}`,
+    `Metro:                ${document.getElementById('out-metro').textContent}`,
+    `Role:                 ${document.getElementById('out-role').textContent}`,
+    `Audience:             new`,
+    `Evergreen?:           TRUE`,
+    `Job ID:               ${document.getElementById('out-jobid').textContent}`,
+    `Campaign Name:        ${document.getElementById('out-campaign').textContent}`,
+  ].join('\n');
+  navigator.clipboard.writeText(lines);
+}
+
+// ── History ───────────────────────────────────────────────────────────────────
+const HISTORY_KEY = 'utm_history_v2';
+function loadHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch(e) { return []; } }
+function saveHistory(h) { localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 50))); }
+
+function saveToHistory(url) {
+  const h = loadHistory();
+  h.unshift({
+    id: Date.now(),
+    url,
+    campaign: document.getElementById('out-campaign').textContent,
+    employer: document.getElementById('out-employer').textContent,
+    metro: document.getElementById('out-metro').textContent,
+    role: document.getElementById('out-role').textContent,
+    ts: new Date().toLocaleString()
+  });
+  saveHistory(h);
+  renderHistory();
+}
+
+function renderHistory() {
+  const h = loadHistory();
+  document.getElementById('historyCount').textContent = h.length ? `(${h.length})` : '';
+  const list = document.getElementById('historyList');
+  if (!h.length) { list.innerHTML = '<div class="empty-state">No history yet.<br>Generate and copy a link to save it here.</div>'; return; }
+  list.innerHTML = h.map(e => `
+    <div class="history-item">
+      <div class="h-campaign">${e.campaign}</div>
+      <div class="h-url" onclick="navigator.clipboard.writeText('${e.url.replace(/'/g, "\\'")}')" title="Click to copy">${e.url}</div>
+      <div class="h-meta">${e.metro} · ${e.role} · ${e.ts}</div>
+      <div class="h-actions">
+        <button class="h-btn" onclick="navigator.clipboard.writeText('${e.url.replace(/'/g, "\\'")}')">Copy URL</button>
+        <button class="h-btn del" onclick="deleteItem(${e.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteItem(id) { saveHistory(loadHistory().filter(e => e.id !== id)); renderHistory(); }
+function clearHistory() { if (confirm('Clear all history?')) { localStorage.removeItem(HISTORY_KEY); renderHistory(); } }
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+generate();
+renderHistory();
+</script>
+</body>
+</html>
