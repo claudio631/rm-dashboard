@@ -14,6 +14,7 @@ components:
     - rm-coordinator.md
     - copywriter.md
     - ppc-paid-media-specialist.md
+    - google-ads-specialist.md
     - seo-content-strategist.md
     - crm-email-specialist.md
     - analytics-performance-lead.md
@@ -42,6 +43,7 @@ components:
     - google-ads-optimization-checklist.md
     - google-ads-audit-checklist.md
     - google-ads-pre-launch-verification.md
+    - google-ads-api-launch-checklist.md
   templates:
     - campaign-brief-tmpl.md
     - weekly-report-tmpl.md
