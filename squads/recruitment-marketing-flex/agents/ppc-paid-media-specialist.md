@@ -61,10 +61,9 @@ channel_delegation:
       when: "Any Indeed Ads campaign"
       status: "Planned — currently handled by Parker directly"
     reddit_ads:
-      agent: "@reddit-ads-specialist (TBD)"
-      scope: "Subreddit targeting, promoted posts, community engagement"
-      when: "Any Reddit ad campaign"
-      status: "Planned — currently handled by Parker directly"
+      agent: "@reddit-ads-specialist (Remy)"
+      scope: "Subreddit targeting, promoted posts, organic monitoring, Reddit Ads API"
+      when: "Any Reddit ad campaign creation, launch, optimization, or subreddit monitoring"
     bing_ads:
       agent: "@bing-ads-specialist (TBD)"
       scope: "Microsoft Advertising, LinkedIn targeting"
