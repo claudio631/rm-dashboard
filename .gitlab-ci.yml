@@ -1,0 +1,72 @@
+image: alpine:latest
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+
+    # Find the latest dashboard HTML
+    - LATEST=$(ls -t docs/reports/recruitment-request-dashboard-*.html 2>/dev/null | head -1)
+    - |
+      if [ -z "$LATEST" ]; then
+        echo "ERROR: No recruitment-request-dashboard-*.html found in docs/reports/"
+        exit 1
+      fi
+    - echo "Publishing $LATEST to GitLab Pages..."
+
+    # Latest report = index.html (what anyone opening the URL sees)
+    - cp "$LATEST" public/index.html
+
+    # Copy all historical dashboard reports for direct linking
+    - cp docs/reports/recruitment-request-dashboard-*.html public/
+
+    # Auto-generate a report index page listing all available dates
+    - |
+      cat > public/reports.html <<'HTMLEOF'
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Recruitment Request Dashboard — Report History</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 700px; margin: 60px auto; padding: 0 24px; color: #1a1a1a; }
+          h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+          p { color: #555; margin-bottom: 32px; }
+          ul { list-style: none; padding: 0; }
+          li { border-bottom: 1px solid #eee; }
+          li a { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; text-decoration: none; color: #2563eb; font-size: 15px; }
+          li a:hover { color: #1d4ed8; }
+          .badge { font-size: 11px; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
+        </style>
+      </head>
+      <body>
+        <h1>Recruitment Request Dashboard</h1>
+        <p>All published reports — most recent first.</p>
+        <ul id="list"></ul>
+        <script>
+          const files = PLACEHOLDER_FILES;
+          const ul = document.getElementById('list');
+          files.forEach((f, i) => {
+            const date = f.replace('recruitment-request-dashboard-', '').replace('.html', '');
+            ul.innerHTML += `<li><a href="${f}"><span>${date}</span>${i === 0 ? '<span class="badge">Latest</span>' : ''}</a></li>`;
+          });
+        </script>
+      </body>
+      </html>
+      HTMLEOF
+
+    # Inject the actual file list into the index page
+    - FILES=$(ls -t public/recruitment-request-dashboard-*.html 2>/dev/null | xargs -n1 basename | python3 -c "import sys,json; print(json.dumps([l.strip() for l in sys.stdin]))")
+    - sed -i "s|PLACEHOLDER_FILES|${FILES}|g" public/reports.html
+
+  artifacts:
+    paths:
+      - public
+    expire_in: 90 days
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
