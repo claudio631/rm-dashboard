@@ -5,6 +5,8 @@ stages:
 
 pages:
   stage: deploy
+  tags:
+    - buildkit-linux-amd64
   script:
     - mkdir -p public
 
