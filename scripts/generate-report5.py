@@ -1255,7 +1255,6 @@ def generate_html(processed_rows):
     total_declined = len(declined_rows)
     total_hc = sum(r['hc'] for r in live_rows if isinstance(r['hc'], int))
     no_fhs = sum(1 for r in live_rows if r['fhs']['count'] == 0)
-    no_indeed = sum(1 for r in live_rows if r['indeed']['count'] == 0)
     shifts_tbd = sum(1 for r in live_rows if not r['shifts'])
 
     rows_html = ""
@@ -1285,19 +1284,10 @@ def generate_html(processed_rows):
 
         if is_declined:
             status_label = '<span style="background:#9ca3af;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">DECLINED</span>'
-            indeed_st = ""
-            indeed_camps = ""
-            indeed_spend = ""
         elif is_complete:
             status_label = '<span style="background:#111827;color:white;padding:2px 6px;border-radius:4px;font-size:11px;">COMPLETE</span>'
-            indeed_st = ""
-            indeed_camps = ""
-            indeed_spend = ""
         else:
             status_label = ""
-            indeed_st = "🟢" if r['indeed']['count'] > 0 else "🔴"
-            indeed_camps = f"{r['indeed']['count']}" if r['indeed']['count'] > 0 else "0"
-            indeed_spend = f"${r['indeed']['spend']:,.0f}" if r['indeed']['spend'] > 0 else "$0"
 
         # Interview Target = HC × 10 (FHS section)
         hc_val = r['hc'] if isinstance(r['hc'], int) else 0
@@ -1305,7 +1295,7 @@ def generate_html(processed_rows):
 
         # RTB Target = HC × 2.5; Fill% = RTB ÷ (HC × 2.5)
         ob_rtb = r['ob']['rtb']
-        rtb_target = round(hc_val * 2.5, 1)
+        rtb_target = round(hc_val * 2.5)
         fill_target = hc_val * 2.5
         if fill_target > 0:
             fill_pct = min((ob_rtb / fill_target) * 100, 100)
@@ -1332,10 +1322,7 @@ def generate_html(processed_rows):
         fhs_open_html = f'{r["fhs"]["count"]}'
         fhs_interview_html = f'{r["fhs"]["rsvps"]:,}'
         target_html = f'{int_target:,}' if int_target > 0 else '—'
-        rtb_target_html = f'{rtb_target}' if rtb_target > 0 else '—'
-        indeed_st_html = indeed_st
-        indeed_camps_html = indeed_camps
-        indeed_spend_html = indeed_spend
+        rtb_target_html = f'{int(rtb_target)}' if rtb_target > 0 else '—'
         ob_created_html = f'{r["ob"]["created"]}'
         ob_verified_html = f'{r["ob"]["verified"]}'
         ob_rtb_html = f'{r["ob"]["rtb"]}'
@@ -1369,9 +1356,6 @@ def generate_html(processed_rows):
         <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_open_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{fhs_interview_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{target_html}</td>
-        <td style="text-align:center;">{indeed_st_html}</td>
-        <td style="text-align:center;font-weight:bold;font-size:15px;">{indeed_camps_html}</td>
-        <td style="text-align:right;font-weight:bold;font-size:15px;">{indeed_spend_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_created_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_verified_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_rtb_html}</td>
@@ -1391,7 +1375,7 @@ def generate_html(processed_rows):
         .header {{ background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); color: white; padding: 24px 32px; }}
         .header h1 {{ font-size: 22px; font-weight: 700; }}
         .header p {{ font-size: 13px; opacity: 0.85; margin-top: 4px; }}
-        .kpi-grid {{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 20px 32px; }}
+        .kpi-grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 20px 32px; }}
         .kpi-card {{ background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }}
         .kpi-card .number {{ font-size: 32px; font-weight: 800; line-height: 1.2; }}
         .kpi-card .label {{ font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }}
@@ -1451,10 +1435,6 @@ def generate_html(processed_rows):
             <div class="label">No FHS</div>
         </div>
         <div class="kpi-card amber">
-            <div class="number">{no_indeed}</div>
-            <div class="label">No Indeed</div>
-        </div>
-        <div class="kpi-card amber">
             <div class="number">{shifts_tbd}</div>
             <div class="label">Shifts TBD</div>
         </div>
@@ -1498,7 +1478,6 @@ def generate_html(processed_rows):
                         <th rowspan="2" style="min-width:40px;" data-tip="Headcount — number of workers the revenue team needs to fill">HC</th>
                         <th rowspan="2" style="min-width:55px;" data-tip="Whether shift schedules have been posted for this request">Shifts</th>
                         <th colspan="3" class="group-header" data-tip="Data from FHS (Flex Hiring System) requisitions">FHS Requisitions</th>
-                        <th colspan="3" class="group-header" data-tip="Data from Indeed sponsored job campaigns">Indeed Ads</th>
                         <th colspan="3" class="group-header" data-tip="Data from the OB (Onboarding) Funnel — worker pipeline progress">OB Funnel</th>
                         <th colspan="2" class="group-header" data-tip="Fulfillment progress: RTB vs pipeline target">Fulfillment</th>
                     </tr>
@@ -1506,9 +1485,6 @@ def generate_html(processed_rows):
                         <th class="sub-header" style="text-align:center;" data-tip="Count of FHS requisitions with status Open or Auto-Paused for this client+location+role">Open</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Sum of RSVPs (interview candidates) from FHS reqs created after the revenue request submission date">Interview</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Target interviews needed = HC × 10 (10 interviews per hire)">Target</th>
-                        <th class="sub-header" style="text-align:center;" data-tip="Indeed campaign status: Active (campaigns running) or None (no campaigns)">St</th>
-                        <th class="sub-header" style="text-align:center;" data-tip="Number of active Indeed campaigns matching this client+location+role">Camps</th>
-                        <th class="sub-header" style="text-align:right;" data-tip="Total Indeed sponsored job spend for matching campaigns (client+location+role)">Spend</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Worker Accounts Created — new workers who signed up via the OB funnel">Created</th>
                         <th class="sub-header" style="text-align:center;" data-tip="1st Role Verified — workers who completed role verification in the OB funnel">Verified</th>
                         <th class="sub-header" style="text-align:center;" data-tip="Ready to Book — workers who completed onboarding and are available for shifts">RTB</th>
@@ -1617,10 +1593,6 @@ def generate_excel(processed_rows):
         ('Open', 8),
         ('Interview', 11),
         ('Target', 10),
-        # Indeed
-        ('Indeed St', 10),
-        ('Camps', 8),
-        ('Spend', 12),
         # OB Funnel
         ('Created', 10),
         ('Verified', 10),
@@ -1677,7 +1649,7 @@ def generate_excel(processed_rows):
 
         if is_declined:
             # Gray fill for entire row
-            for col in range(1, 19):
+            for col in range(1, 16):
                 ws.cell(row=row_idx, column=col).fill = declined_fill
 
         # FHS Open
@@ -1694,43 +1666,28 @@ def generate_excel(processed_rows):
         ws.cell(row=row_idx, column=12, value=target if target > 0 else '').alignment = center_align
         ws.cell(row=row_idx, column=12).font = number_font
 
-        # Indeed Status
-        has_indeed = r['indeed']['count'] > 0
-        ws.cell(row=row_idx, column=13, value='Active' if has_indeed else 'None').alignment = center_align
-        ws.cell(row=row_idx, column=13).font = green_font if has_indeed else red_font
-
-        # Indeed Camps
-        ws.cell(row=row_idx, column=14, value=r['indeed']['count']).alignment = center_align
-        ws.cell(row=row_idx, column=14).font = number_font
-
-        # Indeed Spend
-        spend = r['indeed']['spend']
-        ws.cell(row=row_idx, column=15, value=spend if spend > 0 else 0).alignment = right_align
-        ws.cell(row=row_idx, column=15).number_format = '$#,##0'
-        ws.cell(row=row_idx, column=15).font = number_font
-
         # OB Created
-        ws.cell(row=row_idx, column=16, value=r['ob']['created']).alignment = center_align
-        ws.cell(row=row_idx, column=16).font = number_font
+        ws.cell(row=row_idx, column=13, value=r['ob']['created']).alignment = center_align
+        ws.cell(row=row_idx, column=13).font = number_font
 
         # OB Verified
-        ws.cell(row=row_idx, column=17, value=r['ob']['verified']).alignment = center_align
-        ws.cell(row=row_idx, column=17).font = number_font
+        ws.cell(row=row_idx, column=14, value=r['ob']['verified']).alignment = center_align
+        ws.cell(row=row_idx, column=14).font = number_font
 
         # OB RTB
-        ws.cell(row=row_idx, column=18, value=r['ob']['rtb']).alignment = center_align
-        ws.cell(row=row_idx, column=18).font = number_font
+        ws.cell(row=row_idx, column=15, value=r['ob']['rtb']).alignment = center_align
+        ws.cell(row=row_idx, column=15).font = number_font
 
         # RTB Target = HC × 2.5
-        ws.cell(row=row_idx, column=19, value=round(hc_num * 2.5, 1)).alignment = center_align
-        ws.cell(row=row_idx, column=19).font = number_font
+        ws.cell(row=row_idx, column=16, value=round(hc_num * 2.5)).alignment = center_align
+        ws.cell(row=row_idx, column=16).font = number_font
 
         # Fill% = RTB / (HC × 2.5)
         ob_rtb = r['ob']['rtb']
         fill_target = hc_num * 2.5
         if fill_target > 0:
             fill_pct = min(ob_rtb / fill_target, 1.0)
-            cell = ws.cell(row=row_idx, column=20, value=fill_pct)
+            cell = ws.cell(row=row_idx, column=17, value=fill_pct)
             cell.number_format = '0%'
             cell.alignment = center_align
             cell.font = number_font
@@ -1741,17 +1698,17 @@ def generate_excel(processed_rows):
             else:
                 cell.font = Font(bold=True, size=12, color="16A34A")
         else:
-            ws.cell(row=row_idx, column=20, value='').alignment = center_align
+            ws.cell(row=row_idx, column=17, value='').alignment = center_align
 
         # Bottom border for all cells
-        for col in range(1, 20):
+        for col in range(1, 18):
             ws.cell(row=row_idx, column=col).border = thin_border
 
     # Freeze header row
     ws.freeze_panes = 'A2'
 
     # Auto-filter
-    ws.auto_filter.ref = f"A1:S{len(processed_rows) + 1}"
+    ws.auto_filter.ref = f"A1:Q{len(processed_rows) + 1}"
 
     wb.save(OUTPUT_XLSX)
     return OUTPUT_XLSX
@@ -1847,9 +1804,8 @@ def main():
     # KPI summary
     total_hc = sum(r['hc'] for r in processed if isinstance(r['hc'], int))
     no_fhs = sum(1 for r in processed if r['fhs']['count'] == 0)
-    no_indeed = sum(1 for r in processed if r['indeed']['count'] == 0)
     shifts_tbd = sum(1 for r in processed if not r['shifts'])
-    print(f"KPIs: Live={len(processed)}, HC={total_hc}, NoFHS={no_fhs}, NoIndeed={no_indeed}, ShiftsTBD={shifts_tbd}")
+    print(f"KPIs: Live={len(processed)}, HC={total_hc}, NoFHS={no_fhs}, ShiftsTBD={shifts_tbd}")
 
 
 if __name__ == "__main__":
