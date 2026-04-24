@@ -1810,5 +1810,261 @@
       "rtb": 7
     },
     "frozen_date": "2026-04-09"
+  },
+  "Ryerson - Dallas - Warehoue Operator|2026-02-27": {
+    "fhs": {
+      "count": 15,
+      "rsvps": 1477
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Solaren Risk Management- Downtown Nashville, TN- Event Staff|2026-03-17": {
+    "fhs": {
+      "count": 3,
+      "rsvps": 230
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 110,
+      "verified": 42,
+      "rtb": 38
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Merritt Hospitality LLC, HEI Hotels & Resorts - Hilton Atlanta Airport - Barista|2026-03-25": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 103
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 43,
+      "verified": 14,
+      "rtb": 13
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Levy - Soldier Field - Concessions, 1410 Special Olympics Dr, Chicago, 60605, IL, Cashier|2026-03-25": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 188
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 181.55
+    },
+    "ob": {
+      "created": 99,
+      "verified": 42,
+      "rtb": 39
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Levy - Soldier Field - Concessions, 1410 Special Olympics Dr, Chicago, 60605, IL, Food Preps|2026-03-25": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 84
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 38,
+      "verified": 17,
+      "rtb": 16
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Eurest - Franklin Center - Rustle + Roux - Server|2026-03-27": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Eurest USA, Eurest - Franklin Center - Rustle + Roux, Prep Cook|2026-03-30": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Levy - Texas Motor Speedway|2026-03-30": {
+    "fhs": {
+      "count": 10,
+      "rsvps": 37
+    },
+    "indeed": {
+      "count": 2,
+      "spend": 399.64
+    },
+    "ob": {
+      "created": 15,
+      "verified": 2,
+      "rtb": 1
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Hyatt Regency - Austin - Server/Runner|2026-04-02": {
+    "fhs": {
+      "count": 4,
+      "rsvps": 82
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 357.26
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Legends Hospitality - Dos Equis Pavilion - Legends (R) - Line Cook|2026-04-08": {
+    "fhs": {
+      "count": 5,
+      "rsvps": 15
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 219.83
+    },
+    "ob": {
+      "created": 6,
+      "verified": 3,
+      "rtb": 2
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "HYATT PLACE ATLANTA CENTENNIAL PARK - ATLANTA - BARTENDER|2026-03-06": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 9
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 489.32
+    },
+    "ob": {
+      "created": 4,
+      "verified": 4,
+      "rtb": 3
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Power Stop - Bedford Park - Warehouse Operative|2026-03-09": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 519
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 156,
+      "verified": 88,
+      "rtb": 85
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Power Stop - Hodgkins - Warhouse Operative|2026-03-09": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 519
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 156,
+      "verified": 88,
+      "rtb": 85
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Culinaire (Food Glorious Food) - Dallas - Prep cook|2026-03-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 40
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 500.0
+    },
+    "ob": {
+      "created": 5,
+      "verified": 3,
+      "rtb": 2
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Power Stop- Bedford Park - Driver|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 74
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 599.73
+    },
+    "ob": {
+      "created": 3,
+      "verified": 5,
+      "rtb": 3
+    },
+    "frozen_date": "2026-04-24"
+  },
+  "Bath Concepts- 1800 Industrial Drive Libertyville ,  IL   60048- Call Center Rep|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-04-24"
   }
 }
