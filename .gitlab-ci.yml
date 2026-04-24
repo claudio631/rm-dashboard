@@ -62,7 +62,7 @@ pages:
       HTMLEOF
 
     # Inject the actual file list into the index page
-    - FILES=$(ls -t public/recruitment-request-dashboard-*.html 2>/dev/null | xargs -n1 basename | python3 -c "import sys,json; print(json.dumps([l.strip() for l in sys.stdin]))")
+    - FILES=$(ls -t public/recruitment-request-dashboard-*.html 2>/dev/null | xargs -n1 basename | awk 'BEGIN{printf "["} NR>1{printf ","} {printf "\"%s\"", $0} END{printf "]"}')
     - sed -i "s|PLACEHOLDER_FILES|${FILES}|g" public/reports.html
 
   artifacts:
