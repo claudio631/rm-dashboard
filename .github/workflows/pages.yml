@@ -29,8 +29,8 @@ jobs:
         run: |
           mkdir -p public
 
-          # Latest dashboard report = index.html
-          LATEST=$(ls -t docs/reports/recruitment-request-dashboard-*.html 2>/dev/null | head -1)
+          # Latest dashboard report = index.html (sort by name so YYYY-MM-DD gives correct order)
+          LATEST=$(ls docs/reports/recruitment-request-dashboard-*.html 2>/dev/null | sort | tail -1)
           if [ -z "$LATEST" ]; then
             echo "ERROR: No recruitment-request-dashboard-*.html found in docs/reports/"
             exit 1
@@ -41,8 +41,8 @@ jobs:
           # Copy all historical reports
           cp docs/reports/recruitment-request-dashboard-*.html public/
 
-          # Auto-generate report index
-          FILES=$(ls -t public/recruitment-request-dashboard-*.html 2>/dev/null | xargs -n1 basename | python3 -c "import sys,json; print(json.dumps([l.strip() for l in sys.stdin]))")
+          # Auto-generate report index (newest first)
+          FILES=$(ls public/recruitment-request-dashboard-*.html 2>/dev/null | sort -r | xargs -n1 basename | python3 -c "import sys,json; print(json.dumps([l.strip() for l in sys.stdin]))")
 
           cat > public/reports.html <<HTMLEOF
           <!DOCTYPE html>
