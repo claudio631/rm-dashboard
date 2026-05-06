@@ -117,8 +117,8 @@ Output EXACTLY in this format (Slack markdown — single asterisks for bold):
 
 *Overview*
 • RSVPs: *{N}*
-• Show-ups: *{N}* ({X}% show rate)
-• Onboarded: *{N}* ({X}%)
+• Show-ups: *{N}* ({show_rate}% of RSVPs)
+• Onboarded: *{N}* ({onboard_rate}%)
 • Not moving forward: {N}
 
 *Attribution (how they found the event)*
@@ -136,7 +136,7 @@ Output EXACTLY in this format (Slack markdown — single asterisks for bold):
 • Cost per onboarded worker: ${XX.XX}
 ```
 
-If RSVPs are unknown, show `• RSVPs: —` and omit show rate from the Show-ups line.
+If RSVPs are unknown, show `• RSVPs: —` and show Show-ups without the percentage: `• Show-ups: *{N}*`.
 
 **Multi-day events** — add this block after Overview, before Attribution:
 
