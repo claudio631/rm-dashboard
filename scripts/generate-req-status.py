@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 TODAY    = datetime.today()
 DATE_STR = TODAY.strftime("%Y-%m-%d")
 ACTIVE   = {"open", "auto-paused", "auto_paused", "draft"}
-SKIP_CLIENTS = {"indeed flex upskilling"}  # exclude upskilling; keep IFA for RSVPs
+SKIP_CLIENT_KEYWORDS = {"upskilling"}  # exclude any client whose name contains these words
 
 def latest(pat):
     files = sorted(glob.glob(os.path.expanduser(pat)), key=os.path.getmtime, reverse=True)
@@ -35,7 +35,7 @@ def load_reqs(path, active_only=True):
     rows = []
     with open(path, encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
-            if r.get("client","").strip().lower() in SKIP_CLIENTS:
+            if any(kw in r.get("client","").strip().lower() for kw in SKIP_CLIENT_KEYWORDS):
                 continue
             status = r.get("status","").lower().strip()
             if active_only and status not in ACTIVE:
@@ -46,7 +46,6 @@ def load_reqs(path, active_only=True):
                 "client": r.get("client","").strip(),
                 "role":   r.get("job_title","").strip(),
                 "rsvps":  int(float(r.get("rsvps") or 0)),
-                "target": int(float(r.get("target_rsvps") or 0)),
                 "status": status,
             })
     return rows
@@ -55,11 +54,10 @@ REQS_FILE = latest("~/Downloads/requisitions-*.csv")
 REQS_PREV = prev_week_file("~/Downloads/requisitions-*.csv")
 
 # ── Current groups ────────────────────────────────────────────
-groups = defaultdict(lambda: {"rsvps":0,"open":0,"auto_paused":0,"draft":0,"target":0})
+groups = defaultdict(lambda: {"rsvps":0,"open":0,"auto_paused":0,"draft":0})
 for r in load_reqs(REQS_FILE):
     k = (r["state"], r["metro"], r["client"], r["role"])
     groups[k]["rsvps"]  += r["rsvps"]
-    groups[k]["target"]  = max(groups[k]["target"], r["target"])
     st = r["status"].replace("-","_")
     col = st if st in ("open","auto_paused","draft") else "open"
     groups[k][col] += 1
@@ -72,29 +70,24 @@ if REQS_PREV and REQS_PREV != REQS_FILE:
 
 sorted_groups = sorted(groups.items(), key=lambda x: x[1]["rsvps"])
 
+# ── KPI metrics ───────────────────────────────────────────────
+kpi_drafts      = sum(v["draft"]      for v in groups.values())
+kpi_auto_paused = sum(v["auto_paused"] for v in groups.values())
+kpi_red_metros  = len({k[1] for k, v in groups.items() if v["rsvps"] < 50 and k[1]})
+
 # ── HTML helpers ──────────────────────────────────────────────
 def rsvp_bg(v):
     if v < 50:  return "background:#fff0f0"
     if v < 100: return "background:#fff8e6"
     return ""
 
-def fill_style(pct, has_target):
-    if not has_target: return ""
-    if pct < 30:  return "color:#dc2626;font-weight:600"
-    if pct < 70:  return "color:#d97706;font-weight:600"
-    return "color:#16a34a;font-weight:600"
-
 rows_html = []
 for (state, metro, client, role), v in sorted_groups:
     rsvps   = v["rsvps"]
-    target  = v["target"]
     lw      = prev_map.get((state, metro, client, role))
     lw_str  = str(lw) if lw is not None else "&mdash;"
-    pct     = round(rsvps / target * 100) if target else 0
-    fill    = f"{pct}%" if target else "&mdash;"
     total   = v["open"] + v["auto_paused"] + v["draft"]
     bg      = rsvp_bg(rsvps)
-    fc      = fill_style(pct, bool(target))
     d_bg    = "background:#fffde7" if v["draft"]      > 0 else ""
     p_bg    = "background:#fffde7" if v["auto_paused"] > 0 else ""
     tr_sty  = f' style="{bg}"' if bg else ""
@@ -105,8 +98,6 @@ for (state, metro, client, role), v in sorted_groups:
         f'<td style="white-space:nowrap">{client}</td><td>{role}</td>'
         f'<td style="text-align:center{";"+bg if bg else ""}">{td_r}</td>'
         f'<td style="text-align:center">{lw_str}</td>'
-        f'<td style="text-align:center">{target or "&mdash;"}</td>'
-        f'<td style="text-align:center;{fc}">{fill}</td>'
         f'<td style="text-align:center">{v["open"]}</td>'
         f'<td style="text-align:center;{p_bg}">{v["auto_paused"]}</td>'
         f'<td style="text-align:center;{d_bg}">{v["draft"]}</td>'
@@ -149,9 +140,30 @@ td{{padding:7px 10px;border-bottom:1px solid #f3f4f6;vertical-align:middle}}
 tr:hover td{{background:#f5f5f5}}
 tr.hidden{{display:none}}
 #count{{font-size:12px;color:#6b7280;margin-left:4px}}
+.kpi-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}}
+.kpi-card{{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px 20px}}
+.kpi-card .label{{font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}}
+.kpi-card .number{{font-size:32px;font-weight:700;line-height:1}}
+.kpi-card.red   .number{{color:#dc2626}}
+.kpi-card.amber .number{{color:#d97706}}
+.kpi-card.blue  .number{{color:#2563eb}}
 </style></head><body>
 <h1>Requisition Status &mdash; {TODAY.strftime('%B %d, %Y')}</h1>
 <div class="sub">{len(sorted_groups)} active groups &middot; Last Week = {prev_label} file &middot; Sorted by RSVPs &uarr;</div>
+<div class="kpi-grid">
+  <div class="kpi-card red">
+    <div class="label">Locations in Red Flag</div>
+    <div class="number">{kpi_red_metros}</div>
+  </div>
+  <div class="kpi-card amber">
+    <div class="label">Auto-Paused Reqs</div>
+    <div class="number">{kpi_auto_paused}</div>
+  </div>
+  <div class="kpi-card blue">
+    <div class="label">Draft Reqs</div>
+    <div class="number">{kpi_drafts}</div>
+  </div>
+</div>
 <div class="filters">
   <label>State</label>
   <select id="f-state" onchange="applyFilters()">
@@ -177,8 +189,6 @@ tr.hidden{{display:none}}
     <th>State</th><th>Metro</th><th>Client</th><th>Role</th>
     <th style="text-align:center">RSVPs</th>
     <th style="text-align:center">Last Week RSVPs</th>
-    <th style="text-align:center">Target</th>
-    <th style="text-align:center">Fill%</th>
     <th style="text-align:center">Open</th>
     <th style="text-align:center">Auto-Paused</th>
     <th style="text-align:center">Draft</th>
@@ -223,4 +233,4 @@ with open(out, "w") as f:
 print(f"Saved: {out}  ({len(sorted_groups)} rows)")
 for (state, metro, client, role), v in sorted_groups:
     if any(x in metro.lower() for x in ("monroe","logan")):
-        print(f"  CHECK: {state}|{metro}|{client}|{role} -> rsvps={v['rsvps']} target={v['target']}")
+        print(f"  CHECK: {state}|{metro}|{client}|{role} -> rsvps={v['rsvps']}")

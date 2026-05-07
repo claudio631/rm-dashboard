@@ -2066,5 +2066,197 @@
       "rtb": 0
     },
     "frozen_date": "2026-04-24"
+  },
+  "CORT San Antonio & Austin|2026-01-21": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 207
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 1,
+      "verified": 1,
+      "rtb": 1
+    },
+    "frozen_date": "2026-05-01"
+  },
+  "Legends Hospitality - Dos Equis Pavilion - Legends (R) - Line Cook|2026-04-28": {
+    "fhs": {
+      "count": 5,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 1,
+      "spend": 768.47
+    },
+    "ob": {
+      "created": 11,
+      "verified": 5,
+      "rtb": 2
+    },
+    "frozen_date": "2026-05-01"
+  },
+  "S&S Activewear|2026-05-01": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-05-04"
+  },
+  "Power Stop - Chicago - Warehouse|2026-03-04": {
+    "fhs": {
+      "count": 1,
+      "rsvps": 659
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 178,
+      "verified": 92,
+      "rtb": 45
+    },
+    "frozen_date": "2026-05-05"
+  },
+  "Jayna - Carrollton, TX - Machine Op|2026-04-09": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 189
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 79,
+      "verified": 36,
+      "rtb": 10
+    },
+    "frozen_date": "2026-05-05"
+  },
+  "Houskekeeper - Atlanta - HEI Hotels/Kimpton Sylvan|2026-04-28": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 0
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 0,
+      "verified": 0,
+      "rtb": 0
+    },
+    "frozen_date": "2026-05-05"
+  },
+  "DC Flex - Washington, DC - Prep Cook|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 254
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 117,
+      "verified": 43,
+      "rtb": 17
+    },
+    "frozen_date": "2026-05-06"
+  },
+  "DC Flex - Washington, DC - Dishwasher|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 553
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 254,
+      "verified": 87,
+      "rtb": 23
+    },
+    "frozen_date": "2026-05-06"
+  },
+  "DC Flex - Washington, DC - Buffet Servers|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 270
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 60,
+      "verified": 15,
+      "rtb": 11
+    },
+    "frozen_date": "2026-05-06"
+  },
+  "DC Flex - Washington DC - EVent Servers|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 270
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 60,
+      "verified": 15,
+      "rtb": 11
+    },
+    "frozen_date": "2026-05-06"
+  },
+  "DC Flex - Washington DC - Cashier|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 288
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 139,
+      "verified": 77,
+      "rtb": 43
+    },
+    "frozen_date": "2026-05-06"
+  },
+  "DC Flex - Washington DC - Barista|2026-03-12": {
+    "fhs": {
+      "count": 0,
+      "rsvps": 115
+    },
+    "indeed": {
+      "count": 0,
+      "spend": 0.0
+    },
+    "ob": {
+      "created": 52,
+      "verified": 24,
+      "rtb": 10
+    },
+    "frozen_date": "2026-05-06"
   }
 }

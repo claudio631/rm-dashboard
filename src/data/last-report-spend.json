@@ -1,6 +1,6 @@
 {
-  "last_spend": 67689.91,
-  "last_google_ads_spend": 76459.05,
-  "updated_at": "2026-04-24T00:00:00",
-  "note": "April MTD — Indeed: $67,689.91 (JobsCampaigns_20260101_20260424.csv, Created >= Apr 1), Google Ads: $76,459.05"
+  "last_spend": 0.00,
+  "last_google_ads_spend": 20351.52,
+  "updated_at": "2026-05-07T10:40:00",
+  "note": "May MTD — Indeed: $0.00 (no May JobsCampaigns file yet), Google Ads: $20,351.52 (API, customer 7236100723)"
 }

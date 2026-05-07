@@ -122,6 +122,15 @@ LOCATION_ALIASES = {
     "joliet": "chicago",
     "sparks": "reno",
     "hapeville": "atlanta",
+    "carrollton": "dallas",
+    "irving": "dallas",
+    "grand prairie": "dallas",
+    "euless": "dallas",
+    "mt. juliet": "nashville",
+    "mt juliet": "nashville",
+    "smyrna": "nashville",
+    "hermitage": "nashville",
+    "chester": "philadelphia",
 }
 
 
@@ -440,10 +449,13 @@ def load_revenue_requests():
             if len(row) < 12:
                 continue
             status = row[2].strip()
-            if "Live" not in status and "Declined" not in status and "Complete" not in status:
+            LIVE_STATUSES = ("live", "new", "in review", "mkt re-engagement")
+            status_lower = status.lower()
+            is_live = any(s in status_lower for s in LIVE_STATUSES)
+            is_declined = "declined" in status_lower
+            is_complete = "complete" in status_lower
+            if not is_live and not is_declined and not is_complete:
                 continue
-            is_declined = "Declined" in status
-            is_complete = "Complete" in status
 
             client_job = row[0].strip()
             owner_email = row[1].strip()
@@ -558,6 +570,9 @@ def load_fhs_requisitions():
                 req_date = datetime.strptime(last_updated_str[:10], '%Y-%m-%d').date()
             except (ValueError, TypeError):
                 req_date = None
+
+            if 'upskilling' in client.lower():
+                continue
 
             loc_norm = normalize_location(location)
             rows.append({
@@ -850,8 +865,12 @@ def load_ob_funnel():
     """Load OB Funnel data from Excel, grouped by client+location+role.
     Returns dict keyed by (client_lower, loc_norm, role_lower).
     'Total' rows are stored with role='__total__' for fallback matching.
+    Uses first-value-wins per key to avoid sub-block overwrites in the file.
     """
     data = defaultdict(lambda: {'created': 0, 'verified': 0, 'rtb': 0})
+    seen_created = set()
+    seen_verified = set()
+    seen_rtb = set()
 
     wb = openpyxl.load_workbook(OB_FUNNEL_XLSX, data_only=True)
     ws = wb.active
@@ -893,12 +912,21 @@ def load_ob_funnel():
         role_key = '__total__' if (not has_role_col or not current_role or current_role.lower() == 'total') else current_role.lower().strip()
         key = (current_client.lower().strip(), loc_norm, role_key)
 
-        if "Worker Accounts Created" in metric_str:
-            data[key]['created'] += val
-        elif "1st Role Verified" in metric_str:
-            data[key]['verified'] += val
-        elif "1st OB Task Completed" in metric_str:
-            data[key]['rtb'] += val
+        if metric_str == "Worker Accounts Created":
+            if key not in seen_created:
+                data[key]['created'] = val
+                if val > 0:
+                    seen_created.add(key)
+        elif metric_str == "1st Role Verified (# Workers)":
+            if key not in seen_verified:
+                data[key]['verified'] = val
+                if val > 0:
+                    seen_verified.add(key)
+        elif metric_str == '"Ready to Book" Estimate (# Workers)':
+            if key not in seen_rtb:
+                data[key]['rtb'] = val
+                if val > 0:
+                    seen_rtb.add(key)
 
     wb.close()
     return data
@@ -1336,15 +1364,19 @@ def generate_html(processed_rows):
         row_state = _get_state_from_location(r['location'])
         all_states.add(row_state)
 
-        # Collect role and owner for filters
+        # Collect role, owner, status for filters
         row_role = r.get('role', '').strip()
         row_owner = r.get('owner', '').strip()
+        row_status = 'declined' if is_declined else 'complete' if is_complete else 'open'
         if row_role:
             all_roles.add(row_role)
         if row_owner:
             all_owners.add(row_owner)
 
-        rows_html += f'''<tr style="background:{bg};" data-state="{row_state}" data-role="{row_role}" data-owner="{row_owner}">
+        # Notes key: client|location|role (stable across regenerations)
+        notes_key = f"{r['client']}|{r['location']}|{r.get('role', '')}".replace('"', '&quot;')
+
+        rows_html += f'''<tr style="background:{bg};" data-state="{row_state}" data-role="{row_role}" data-owner="{row_owner}" data-status="{row_status}">
         {status_cell}
         <td style="text-align:center;font-size:13px;">{sub_date_display}</td>
         <td style="text-align:center;font-size:13px;">{r['start_date']}</td>
@@ -1361,6 +1393,7 @@ def generate_html(processed_rows):
         <td style="text-align:center;font-weight:bold;font-size:15px;">{ob_rtb_html}</td>
         <td style="text-align:center;font-weight:bold;font-size:15px;">{rtb_target_html}</td>
         <td style="min-width:120px;">{fill_cell_html}</td>
+        <td class="obs-cell" contenteditable="true" data-key="{notes_key}" style="min-width:180px;font-size:12px;color:#374151;border-left:2px solid #d1d5db;"></td>
     </tr>'''
 
     html = f'''<!DOCTYPE html>
@@ -1384,7 +1417,7 @@ def generate_html(processed_rows):
         .kpi-card.blue .number {{ color: #2563eb; }}
         .kpi-card.green .number {{ color: #22c55e; }}
         .table-container {{ margin: 0 32px 32px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }}
-        .table-scroll {{ overflow-y: auto; max-height: calc(100vh - 60px); }}
+        .table-scroll {{ overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 60px); }}
         thead tr:first-child th {{ position: sticky; top: 0; z-index: 20; }}
         thead tr:nth-child(2) th {{ position: sticky; top: 34px; z-index: 19; }}
         table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
@@ -1413,6 +1446,54 @@ def generate_html(processed_rows):
         .legend {{ margin: 12px 32px; display: flex; gap: 24px; font-size: 12px; color: #6b7280; }}
         .legend span {{ display: inline-flex; align-items: center; gap: 6px; }}
         .legend .dot {{ width: 12px; height: 12px; border-radius: 3px; display: inline-block; }}
+        /* README panel */
+        .readme-wrap {{ margin: 0 32px 12px; }}
+        .readme-wrap details {{ background: white; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }}
+        .readme-wrap summary {{
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 20px; cursor: pointer; list-style: none;
+            background: #f8fafc; border-bottom: 1px solid transparent;
+            font-size: 13px; font-weight: 600; color: #1e3a5f;
+            user-select: none;
+        }}
+        .readme-wrap details[open] summary {{ border-bottom-color: #e5e7eb; }}
+        .readme-wrap summary::-webkit-details-marker {{ display: none; }}
+        .readme-wrap summary .chevron {{ margin-left: auto; transition: transform .2s; font-size: 11px; color: #9ca3af; }}
+        .readme-wrap details[open] summary .chevron {{ transform: rotate(180deg); }}
+        .readme-body {{ padding: 20px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; font-size: 13px; color: #374151; line-height: 1.6; }}
+        .readme-section h3 {{ font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #1e3a5f; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #e5e7eb; }}
+        .readme-section p {{ margin-bottom: 6px; }}
+        .readme-section ul {{ padding-left: 16px; margin-bottom: 6px; }}
+        .readme-section li {{ margin-bottom: 3px; }}
+        .readme-section code {{ background: #f3f4f6; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: monospace; }}
+        .readme-badge {{ display:inline-block; padding:1px 7px; border-radius:4px; font-size:11px; font-weight:700; vertical-align:middle; }}
+        .readme-badge.green {{ background:#dcfce7; color:#166534; }}
+        .readme-badge.gray  {{ background:#f3f4f6; color:#374151; border:1px solid #d1d5db; }}
+        .readme-badge.dark  {{ background:#111827; color:#fff; }}
+        .readme-badge.slate {{ background:#6b7280; color:#fff; }}
+        .readme-badge.red   {{ background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }}
+        .readme-badge.amber {{ background:#fef3c7; color:#92400e; border:1px solid #fde68a; }}
+        .readme-accuracy {{ grid-column: 1 / -1; }}
+        .accuracy-grid {{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-top:8px; }}
+        .accuracy-card {{ background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px; padding:12px 14px; }}
+        .accuracy-card .ac-title {{ font-size:12px; font-weight:700; color:#1e3a5f; margin-bottom:4px; }}
+        .accuracy-card .ac-score {{ font-size:20px; font-weight:800; margin-bottom:2px; }}
+        .accuracy-card .ac-note {{ font-size:11px; color:#6b7280; }}
+        .accuracy-card.high .ac-score {{ color:#16a34a; }}
+        .accuracy-card.medium .ac-score {{ color:#d97706; }}
+        .accuracy-card.low .ac-score {{ color:#dc2626; }}
+        @media (max-width: 640px) {{
+            .header {{ padding: 16px; }}
+            .header h1 {{ font-size: 18px; }}
+            .kpi-grid {{ grid-template-columns: repeat(2, 1fr); padding: 12px 16px; gap: 10px; }}
+            .kpi-card .number {{ font-size: 24px; }}
+            .table-container {{ margin: 0 0 16px; border-radius: 0; }}
+            .legend {{ margin: 8px 16px; flex-wrap: wrap; gap: 12px; }}
+            .filter-bar {{ margin: 8px 16px !important; gap: 8px !important; }}
+            .readme-wrap {{ margin: 0 0 12px; }}
+            .readme-body {{ grid-template-columns: 1fr; }}
+            .accuracy-grid {{ grid-template-columns: 1fr 1fr; }}
+        }}
     </style>
 </head>
 <body>
@@ -1445,8 +1526,113 @@ def generate_html(processed_rows):
         <span>Ordered by revenue team submission date</span>
     </div>
 
-    <div style="margin: 12px 32px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <label style="font-size:13px; font-weight:600; color:#374151;">State:</label>
+    <div class="readme-wrap">
+      <details>
+        <summary>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><circle cx="10" cy="10" r="9" stroke="#2563eb" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="12" font-weight="700" fill="#2563eb">?</text></svg>
+          How to read this dashboard — data sources, calculations &amp; accuracy
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="readme-body">
+
+          <div class="readme-section">
+            <h3>What is this dashboard?</h3>
+            <p>Every row is one revenue team request (from <code>US_Recruitment_Requests</code>). Requests are <strong>never merged</strong> — two requests for the same client and city appear as two separate rows. Sorted oldest-to-newest by submission date.</p>
+            <p><strong>Status badges:</strong> <span class="readme-badge green">O</span> Open / Live &nbsp; <span class="readme-badge dark">C</span> Complete &nbsp; <span class="readme-badge slate">D</span> Declined</p>
+            <p>Declined and Complete rows are grayed out. Their metric cells are intentionally blank — we don't track pipeline for requests we're not actively running.</p>
+          </div>
+
+          <div class="readme-section">
+            <h3>FHS Requisitions (Open · Interview · Target)</h3>
+            <p><strong>Open</strong> — count of FHS requisitions with status <code>open</code> or <code>auto-paused</code> that match this request's client + location + role. A value of 0 = no live req in FHS yet (flagged in the <em>No FHS</em> KPI card).</p>
+            <p><strong>Interview</strong> — sum of RSVPs (candidates who signed up for an interview) from all matching FHS reqs created <em>after</em> the revenue request submission date.</p>
+            <p><strong>Target</strong> = HC × 10. Rule of thumb: 10 interview candidates needed per hire.</p>
+            <p><em>Matching priority:</em> first tries client + location + role; falls back to location + role only (picks up Indeed Flex reqs for the same metro).</p>
+          </div>
+
+          <div class="readme-section">
+            <h3>OB Funnel (Created · Verified · RTB)</h3>
+            <p>Sourced from the <strong>OB Funnel Custom Viewer</strong> Tableau export. The funnel tracks workers in the onboarding pipeline for the last 30 rolling days.</p>
+            <ul>
+              <li><strong>Created</strong> — workers who created an account and applied</li>
+              <li><strong>Verified</strong> — passed 1st role verification step</li>
+              <li><strong>RTB (Ready to Book)</strong> — completed full onboarding, available for shifts</li>
+            </ul>
+            <p>Matching uses the same client + metro logic as FHS. Values roll up the <em>Total</em> sub-row (all roles combined for that client/location).</p>
+          </div>
+
+          <div class="readme-section">
+            <h3>Fulfillment (Target · Fill%)</h3>
+            <p><strong>RTB Target</strong> = HC × 2.5. We aim for 2.5× the headcount in Ready-to-Book workers to have buffer for no-shows and cancellations.</p>
+            <p><strong>Fill%</strong> = RTB ÷ (HC × 2.5), capped at 100%.</p>
+            <p>Progress bar colors: <span style="color:#ef4444;font-weight:700;">red &lt;25%</span> · <span style="color:#f59e0b;font-weight:700;">amber &lt;50%</span> · <span style="color:#22c55e;font-weight:700;">green ≥50%</span></p>
+          </div>
+
+          <div class="readme-section">
+            <h3>Shifts column</h3>
+            <p><span class="readme-badge green">Yes</span> = shift schedules are posted in ACP for this client + location + role. <span class="readme-badge amber">No</span> = no shift posted yet.</p>
+            <p>Shifts data is manually maintained. A "No" doesn't mean shifts won't happen — it means they haven't been entered in ACP yet.</p>
+          </div>
+
+          <div class="readme-section">
+            <h3>Notes column</h3>
+            <p>Free-text field you can type into directly in the browser. Notes are <strong>saved in your browser's localStorage</strong> — they persist across page refreshes on the same device but are not shared with others and will not survive clearing browser data.</p>
+          </div>
+
+          <div class="readme-section readme-accuracy accuracy-grid-wrapper">
+            <h3>Complete / Frozen rows</h3>
+            <p>When a request moves to <strong>Complete</strong>, its FHS, OB Funnel, and Indeed metrics are <em>frozen</em> at the values recorded on completion day. This prevents historical records from being overwritten as the pipeline data rolls forward. Frozen data is stored in <code>src/data/frozen-requests.json</code>.</p>
+          </div>
+
+          <div class="readme-section readme-accuracy">
+            <h3>Data accuracy &amp; what to expect</h3>
+            <div class="accuracy-grid">
+              <div class="accuracy-card high">
+                <div class="ac-title">FHS Requisitions</div>
+                <div class="ac-score">High</div>
+                <div class="ac-note">Direct CSV export from FHS. Refreshed every EOD run. Match accuracy depends on consistent naming — slight variations (e.g. "Nashville, TN" vs "Nashville") may cause misses.</div>
+              </div>
+              <div class="accuracy-card medium">
+                <div class="ac-title">OB Funnel</div>
+                <div class="ac-score">Medium</div>
+                <div class="ac-note">30-day rolling window. Values represent all workers in that metro for the client — not exclusively for your request. Shared metros (e.g. CORT Chicago) aggregate all CORT Chicago workers regardless of specific event.</div>
+              </div>
+              <div class="accuracy-card medium">
+                <div class="ac-title">Indeed Campaigns</div>
+                <div class="ac-score">Medium</div>
+                <div class="ac-note">Matched by campaign name keywords (client + city + role). Spend is cumulative for the file's date range — may include prior-month campaigns still running. A missing "⚠️" does not always mean no campaign exists.</div>
+              </div>
+              <div class="accuracy-card high">
+                <div class="ac-title">Row completeness</div>
+                <div class="ac-score">High</div>
+                <div class="ac-note">Every row in the Revenue Requests CSV appears here — no rows are dropped or merged. If you see a request in the CSV it will be here.</div>
+              </div>
+              <div class="accuracy-card low">
+                <div class="ac-title">Shifts (ACP)</div>
+                <div class="ac-score">Manual</div>
+                <div class="ac-note">Shifts data depends on ACP being up to date. Treated as best-effort — verify directly in ACP for critical decisions.</div>
+              </div>
+              <div class="accuracy-card medium">
+                <div class="ac-title">Fill% reliability</div>
+                <div class="ac-score">Indicative</div>
+                <div class="ac-note">RTB is a leading indicator — workers in the pipeline are not guaranteed to show or complete shifts. Use Fill% to spot low-supply requests early, not as a confirmed fulfillment number.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </details>
+    </div>
+
+    <div class="filter-bar" style="margin: 12px 32px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label style="font-size:13px; font-weight:600; color:#374151;">Status:</label>
+        <select id="statusFilter" onchange="applyFilters()" style="padding:6px 12px; border-radius:6px; border:1px solid #d1d5db; font-size:13px; background:white; cursor:pointer;">
+            <option value="all">All</option>
+            <option value="open">Open</option>
+            <option value="declined">Declined</option>
+            <option value="complete">Complete</option>
+        </select>
+        <label style="font-size:13px; font-weight:600; color:#374151; margin-left:8px;">State:</label>
         <select id="stateFilter" onchange="applyFilters()" style="padding:6px 12px; border-radius:6px; border:1px solid #d1d5db; font-size:13px; background:white; cursor:pointer;">
             <option value="all">All States</option>
             {''.join(f'<option value="{s}">{s}</option>' for s in sorted(all_states))}
@@ -1480,6 +1666,7 @@ def generate_html(processed_rows):
                         <th colspan="3" class="group-header" data-tip="Data from FHS (Flex Hiring System) requisitions">FHS Requisitions</th>
                         <th colspan="3" class="group-header" data-tip="Data from the OB (Onboarding) Funnel — worker pipeline progress">OB Funnel</th>
                         <th colspan="2" class="group-header" data-tip="Fulfillment progress: RTB vs pipeline target">Fulfillment</th>
+                        <th rowspan="2" style="min-width:180px;" data-tip="Manual observations — saved in your browser (localStorage)">Notes</th>
                     </tr>
                     <tr>
                         <th class="sub-header" style="text-align:center;" data-tip="Count of FHS requisitions with status Open or Auto-Paused for this client+location+role">Open</th>
@@ -1520,17 +1707,19 @@ def generate_html(processed_rows):
     }});
 
     function applyFilters() {{
-        const stateVal = document.getElementById('stateFilter').value;
-        const roleVal = document.getElementById('roleFilter').value;
-        const ownerVal = document.getElementById('ownerFilter').value;
+        const statusVal = document.getElementById('statusFilter').value;
+        const stateVal  = document.getElementById('stateFilter').value;
+        const roleVal   = document.getElementById('roleFilter').value;
+        const ownerVal  = document.getElementById('ownerFilter').value;
         const rows = document.querySelectorAll('#mainTable tbody tr');
         let visible = 0;
-        const anyFilter = stateVal !== 'all' || roleVal !== 'all' || ownerVal !== 'all';
+        const anyFilter = statusVal !== 'all' || stateVal !== 'all' || roleVal !== 'all' || ownerVal !== 'all';
         rows.forEach(row => {{
-            const matchState = stateVal === 'all' || row.dataset.state === stateVal;
-            const matchRole = roleVal === 'all' || row.dataset.role === roleVal;
-            const matchOwner = ownerVal === 'all' || row.dataset.owner === ownerVal;
-            if (matchState && matchRole && matchOwner) {{
+            const matchStatus = statusVal === 'all' || row.dataset.status === statusVal;
+            const matchState  = stateVal  === 'all' || row.dataset.state  === stateVal;
+            const matchRole   = roleVal   === 'all' || row.dataset.role   === roleVal;
+            const matchOwner  = ownerVal  === 'all' || row.dataset.owner  === ownerVal;
+            if (matchStatus && matchState && matchRole && matchOwner) {{
                 row.style.display = '';
                 visible++;
             }} else {{
@@ -1539,6 +1728,26 @@ def generate_html(processed_rows):
         }});
         document.getElementById('rowCount').textContent = anyFilter ? visible + ' of ' + rows.length + ' rows' : '';
     }}
+
+    // Notes — persisted in localStorage keyed by client|location|role
+    const NOTES_KEY = 'rrd_notes';
+    function loadNotes() {{
+        try {{ return JSON.parse(localStorage.getItem(NOTES_KEY) || '{{}}'); }} catch {{ return {{}}; }}
+    }}
+    function saveNotes(notes) {{
+        localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+    }}
+    const notes = loadNotes();
+    document.querySelectorAll('.obs-cell').forEach(cell => {{
+        const key = cell.dataset.key;
+        if (notes[key]) cell.textContent = notes[key];
+        cell.addEventListener('blur', () => {{
+            const n = loadNotes();
+            if (cell.textContent.trim()) n[key] = cell.textContent.trim();
+            else delete n[key];
+            saveNotes(n);
+        }});
+    }});
     </script>
 </body>
 </html>'''

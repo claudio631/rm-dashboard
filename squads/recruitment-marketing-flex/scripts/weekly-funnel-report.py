@@ -129,6 +129,10 @@ def parse_xlsx(filepath):
     daily_data = {}  # (client, location) -> stage -> [val_per_date]
     current_client = None
     current_location = None
+    # Only use 'Total' aggregate rows — skip individual role sub-rows to avoid double-counting.
+    # The export has: Location|Total (aggregate), then Location|RoleA, Location|RoleB as sub-rows.
+    # Using all rows would triple-count: Total + each role's value.
+    in_total_block = False  # True while processing the 'Total' aggregate block for a location
 
     for row in ws.iter_rows(min_row=2, max_row=ws.max_row, values_only=True):
         row = list(row)
@@ -136,6 +140,15 @@ def parse_xlsx(filepath):
             current_client = str(row[0]).strip()
         if row[1]:
             current_location = str(row[1]).strip()
+
+        # c2 (index 2) marks block type: 'Total' = location aggregate; role name = sub-row
+        if stage_col == 3 and row[2] is not None:
+            in_total_block = (str(row[2]).strip() == 'Total')
+
+        # Skip role-specific sub-rows when we have a 3-col format
+        if stage_col == 3 and not in_total_block:
+            continue
+
         stage = row[stage_col]
         if not stage:
             continue
@@ -146,14 +159,17 @@ def parse_xlsx(filepath):
         if key not in data:
             data[key] = {}
             daily_data[key] = {}
-        data[key][stage] = int(grand_total) if grand_total else 0
+        # First-value-wins per (key, stage) — Total block rows appear before role rows
+        if stage not in data[key]:
+            data[key][stage] = int(grand_total) if grand_total else 0
 
         # Extract per-day values
         day_vals = []
         for col_idx, _ in date_cols:
             v = row[col_idx]
             day_vals.append(int(v) if v else 0)
-        daily_data[key][stage] = day_vals
+        if stage not in daily_data[key]:
+            daily_data[key][stage] = day_vals
 
     return data, week_start, week_end, daily_data, iso_dates
 
