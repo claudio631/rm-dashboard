@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Weekly OB Funnel Report — All Markets (Apr 15 '26 to May 14 '26)</title>
+<style>
+    @media print {
+        body { margin: 0; font-size: 9pt; }
+        .page-break { page-break-before: always; }
+        @page { size: landscape; margin: 1cm; }
+        .date-filter { display: none !important; }
+    }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #1a1a1a;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+    h1 {
+        font-size: 22px;
+        border-bottom: 3px solid #0066cc;
+        padding-bottom: 8px;
+        margin-bottom: 5px;
+    }
+    h2 {
+        font-size: 16px;
+        color: #0066cc;
+        margin-top: 25px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 4px;
+    }
+    h3 { font-size: 14px; margin-top: 15px; }
+    .meta { color: #666; font-size: 12px; margin-bottom: 20px; }
+    .date-filter {
+        background: #eef3f8;
+        border: 1px solid #c4d4e4;
+        border-radius: 6px;
+        padding: 10px 18px;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .date-filter label {
+        font-weight: 600;
+        font-size: 13px;
+        color: #2c3e50;
+    }
+    .date-filter input[type="date"] {
+        padding: 5px 10px;
+        border: 1px solid #aab;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: inherit;
+    }
+    .date-filter button {
+        padding: 6px 16px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .date-filter button:hover { background: #0052a3; }
+    .date-filter .preset {
+        padding: 4px 10px;
+        background: #fff;
+        border: 1px solid #aab;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        color: #333;
+    }
+    .date-filter .preset:hover { background: #dde5ee; }
+    .date-filter .preset.active { background: #0066cc; color: white; border-color: #0066cc; }
+    .date-filter .range-info {
+        font-size: 12px;
+        color: #555;
+        margin-left: auto;
+    }
+    .summary-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 15px 20px;
+        margin: 15px 0;
+    }
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 15px 0;
+    }
+    .kpi-card {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 12px;
+        text-align: center;
+    }
+    .kpi-card .value { font-size: 24px; font-weight: bold; }
+    .kpi-card .label { font-size: 11px; color: #666; margin-top: 4px; }
+    .kpi-card.red { border-left: 4px solid #dc3545; }
+    .kpi-card.yellow { border-left: 4px solid #ffc107; }
+    .kpi-card.green { border-left: 4px solid #28a745; }
+    #funnel-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 10px 0;
+        font-size: 12px;
+    }
+    #funnel-table th {
+        background: #2c3e50;
+        color: white;
+        padding: 8px 6px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        cursor: help;
+    }
+    #funnel-table th:first-child { text-align: left; min-width: 200px; position: sticky; left: 0; z-index: 30; background: #2c3e50; }
+    #funnel-table th[data-tip] { cursor: help; position: relative; }
+    #col-tooltip {
+        display: none;
+        position: fixed;
+        background: #1a1a1a;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 400;
+        padding: 10px 14px;
+        border-radius: 6px;
+        z-index: 200;
+        min-width: 240px;
+        max-width: 340px;
+        line-height: 1.6;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+        pointer-events: none;
+        white-space: pre-line;
+    }
+    #funnel-table td {
+        padding: 5px 6px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+        vertical-align: top;
+    }
+    #funnel-table td:first-child { text-align: left; position: sticky; left: 0; z-index: 5; background: inherit; }
+    #funnel-table tr:not(.total-row):not(.market-row):not(.spacer):not(.spacer-after-total) td:first-child { background: #fff; }
+    #funnel-table tr.market-row td:first-child { background: #f0f4f8; }
+    #funnel-table tr.total-row td:first-child { background: #2c3e50; z-index: 15; }
+    #funnel-table tr.spacer td:first-child, #funnel-table tr.spacer-after-total td:first-child { background: #fff; }
+    #funnel-table td:last-child { text-align: left; min-width: 140px; }
+    tr.market-row { background: #f0f4f8; font-weight: 600; }
+    tr.market-row td { border-bottom: 1px solid #ccc; }
+    tr.total-row { background: #2c3e50; color: white; font-weight: 700; }
+    tr.total-row td { position: sticky; top: 30px; z-index: 10; background: #2c3e50; }
+    tr.total-row td { border-bottom: 2px solid #1a252f; }
+    tr.total-row .green, tr.total-row .yellow, tr.total-row .red, tr.total-row .num, tr.total-row .na { color: white; }
+    tr.total-row td { color: white; }
+    tr.total-row td span { color: white !important; }
+    tr.spacer-after-total td { border: none; height: 8px; background: white; position: sticky; top: 61px; z-index: 9; }
+    tr.spacer td { border: none; height: 8px; background: white; }
+    tr:hover:not(.spacer):not(.spacer-after-total):not(.total-row) { background: #f5f7fa; }
+    .green { color: #28a745; font-weight: 600; }
+    .yellow { color: #b8860b; font-weight: 600; }
+    .red { color: #dc3545; font-weight: 600; }
+    .na { color: #999; }
+    .num { color: #333; }
+    .legend-table { max-width: 700px; }
+    .legend-table td { padding: 4px 10px; }
+    .req-legend { max-width: 600px; margin-top: 10px; }
+    .req-legend td { padding: 3px 8px; font-size: 12px; }
+    .footer {
+        margin-top: 30px;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+        color: #999;
+        font-size: 11px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Weekly OB Funnel Report — All Markets</h1>
+<div class="meta">
+    <strong>Period:</strong> <span id="period-display">Apr 15 '26 — May 14 '26</span> &nbsp;|&nbsp;
+    <strong>Generated:</strong> 2026-05-14 &nbsp;|&nbsp;
+    <strong>Source:</strong> OB Funnel Custom Viewer (Tableau) + Requisitions CSV &nbsp;|&nbsp;
+    <strong>Agent:</strong> Fiona (@funnel-specialist)
+</div>
+
+<div class="date-filter">
+    <label>Date Range:</label>
+    <input type="date" id="date-start">
+    <span>to</span>
+    <input type="date" id="date-end">
+    <button onclick="applyDateRange()">Apply</button>
+    <span style="color:#999">|</span>
+    <button class="preset" onclick="setPreset('7d')">Last 7d</button>
+    <button class="preset" onclick="setPreset('14d')">Last 14d</button>
+    <button class="preset" onclick="setPreset('30d')" id="preset-30d">Full Range</button>
+    <span class="range-info" id="range-info"></span>
+</div>
+
+<div id="kpi-grid" class="kpi-grid"></div>
+
+<div id="summary-box" class="summary-box"></div>
+
+<h2>Conditional Formatting</h2>
+<table class="legend-table">
+<tr><th>Stage</th><th>🟢 Good</th><th>🟡 Watch</th><th>🔴 Critical</th><th>2025 Benchmark</th></tr>
+<tr><td>Acct &rarr; Verified</td><td class="green">&ge; 55%</td><td class="yellow">40-54%</td><td class="red">&lt; 40%</td><td>56.0%</td></tr>
+<tr><td>Verified &rarr; OB Task</td><td class="green">&ge; 85%</td><td class="yellow">75-84%</td><td class="red">&lt; 75%</td><td>93.0%</td></tr>
+<tr><td>OB Task &rarr; PlatformV</td><td class="green">&ge; 65%</td><td class="yellow">50-64%</td><td class="red">&lt; 50%</td><td>69.1%</td></tr>
+<tr><td>PlatformV &rarr; Booked</td><td class="green">&ge; 40%</td><td class="yellow">15-39%</td><td class="red">&lt; 15%</td><td>50.4%</td></tr>
+<tr><td>Booked &rarr; Completed</td><td class="green">&ge; 80%</td><td class="yellow">60-79%</td><td class="red">&lt; 60%</td><td>84.6%</td></tr>
+<tr><td>Overall CR%</td><td class="green">&ge; 15%</td><td class="yellow">8-14.9%</td><td class="red">&lt; 8%</td><td>15.4%</td></tr>
+</table>
+
+<table class='req-legend'><tr><th colspan='2'>Open Reqs Column</th></tr><tr><td>✅ N reqs</td><td>Active requisitions — demand exists, workers can book</td></tr><tr><td>⚠️ N reqs</td><td>Reqs near full (RSVPs &ge; 80% of target)</td></tr><tr><td>❌ No reqs</td><td>No open requisitions — verified workers CANNOT book (red flag if PlatV &gt; 0)</td></tr></table>
+
+<h2>Full Funnel — By Location & Client</h2>
+<table id="funnel-table">
+<thead>
+<tr>
+    <th data-tip="Market location or client name">Market / Client</th>
+    <th data-tip="Accounts Created&#10;Workers who created an account on the Indeed Flex platform">Accts</th>
+    <th data-tip="1st Role Verified&#10;Workers who completed identity verification and got their first role verified">Verif</th>
+    <th data-tip="Accounts to Verified %&#10;Formula: Verified / Accts x 100&#10;Benchmark: 56.0%&#10;Green >= 55% | Yellow >= 40% | Red < 40%">A&rarr;V</th>
+    <th data-tip="1st OB Task Completed&#10;Workers who completed their first onboarding task (training, compliance)">OB Task</th>
+    <th data-tip="Verified to OB Task %&#10;Formula: OB Task / Verified x 100&#10;Benchmark: 93.0%&#10;Green >= 85% | Yellow >= 75% | Red < 75%">V&rarr;OB</th>
+    <th data-tip="Platform Verified&#10;Workers fully verified on the platform, eligible to be booked for shifts">PlatV</th>
+    <th data-tip="OB Task to Platform Verified %&#10;Formula: PlatV / OB Task x 100&#10;Benchmark: 69.1%&#10;Green >= 65% | Yellow >= 50% | Red < 50%">OB&rarr;PV</th>
+    <th data-tip="Ready to Book Estimate&#10;Workers estimated as ready to be booked for their first shift">Ready</th>
+    <th data-tip="1st Shift Booked&#10;Workers who got booked for their very first shift">Booked</th>
+    <th data-tip="Platform Verified to Booked %&#10;Formula: Booked / PlatV x 100&#10;Benchmark: 50.4%&#10;Green >= 40% | Yellow >= 15% | Red < 15%">PV&rarr;Bk</th>
+    <th data-tip="1st Shift Completed&#10;Workers who successfully completed their first shift">Comp</th>
+    <th data-tip="Booked to Completed %&#10;Formula: Completed / Booked x 100&#10;Benchmark: 84.6%&#10;Green >= 80% | Yellow >= 60% | Red < 60%">Bk&rarr;Co</th>
+    <th data-tip="Overall Conversion Rate&#10;Formula: Completed / Accts Created x 100&#10;End-to-end funnel efficiency&#10;Benchmark: 15.4%&#10;Green >= 15% | Yellow >= 8% | Red < 8%">CR%</th>
+    <th data-tip="Open Requisitions (FHS)&#10;Active job requisitions (open + auto-paused + draft)&#10;Shows RSVPs / Target and fill %">Open Reqs</th>
+</tr>
+</thead>
+<tbody id="funnel-tbody">
+<tr class="total-row">
+    <td><strong>ALL MARKETS TOTAL</strong></td>
+    <td class="num">6970</td>
+    <td class="num">2931</td><td><span class="yellow">🟡 42.1%</span></td>
+    <td class="num">2649</td><td><span class="green">🟢 90.4%</span></td>
+    <td class="num">1785</td><td><span class="green">🟢 67.4%</span></td>
+    <td class="num">1155</td>
+    <td class="num">592</td><td><span class="yellow">🟡 33.2%</span></td>
+    <td class="num">448</td><td><span class="yellow">🟡 75.7%</span></td>
+    <td><span class="red">🔴 6.4%</span></td>
+    <td><span class="green">✅ 102 reqs</span><br><span style="font-size:10px;color:#666">3579/14472 RSVPs (25%)</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>DALLAS</strong></td>
+    <td class="num">1178</td>
+    <td class="num">465</td><td><span class="red">🔴 39.5%</span></td>
+    <td class="num">409</td><td><span class="green">🟢 88.0%</span></td>
+    <td class="num">295</td><td><span class="green">🟢 72.1%</span></td>
+    <td class="num">187</td>
+    <td class="num">98</td><td><span class="yellow">🟡 33.2%</span></td>
+    <td class="num">87</td><td><span class="green">🟢 88.8%</span></td>
+    <td><span class="red">🔴 7.4%</span></td>
+    <td><span class="green">✅ 21 reqs</span><br><span style="font-size:10px;color:#666">1070/2690 RSVPs (40%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Legends Hospitality</td>
+    <td class="num">332</td>
+    <td class="num">124</td><td><span class="red">🔴 37.3%</span></td>
+    <td class="num">108</td><td><span class="green">🟢 87.1%</span></td>
+    <td class="num">70</td><td><span class="yellow">🟡 64.8%</span></td>
+    <td class="num">40</td>
+    <td class="num">9</td><td><span class="red">🔴 12.9%</span></td>
+    <td class="num">8</td><td><span class="green">🟢 88.9%</span></td>
+    <td><span class="red">🔴 2.4%</span></td>
+    <td><span class="green">✅ 9 reqs</span><br><span style="font-size:10px;color:#666">180/1190 RSVPs (15%)</span><br><span style="font-size:9px;color:#999">Bartender, Dishwasher, Hospitality Team lea</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CTDI</td>
+    <td class="num">217</td>
+    <td class="num">125</td><td><span class="green">🟢 57.6%</span></td>
+    <td class="num">110</td><td><span class="green">🟢 88.0%</span></td>
+    <td class="num">82</td><td><span class="green">🟢 74.5%</span></td>
+    <td class="num">63</td>
+    <td class="num">57</td><td><span class="green">🟢 69.5%</span></td>
+    <td class="num">49</td><td><span class="green">🟢 86.0%</span></td>
+    <td><span class="green">🟢 22.6%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Levy Restaurants</td>
+    <td class="num">127</td>
+    <td class="num">33</td><td><span class="red">🔴 26.0%</span></td>
+    <td class="num">27</td><td><span class="yellow">🟡 81.8%</span></td>
+    <td class="num">22</td><td><span class="green">🟢 81.5%</span></td>
+    <td class="num">16</td>
+    <td class="num">2</td><td><span class="red">🔴 9.1%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 1.6%</span></td>
+    <td><span class="green">✅ 5 reqs</span><br><span style="font-size:10px;color:#666">61/400 RSVPs (15%)</span><br><span style="font-size:9px;color:#999">Prep Cook, Server</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Indeed Inc</td>
+    <td class="num">116</td>
+    <td class="num">47</td><td><span class="yellow">🟡 40.5%</span></td>
+    <td class="num">44</td><td><span class="green">🟢 93.6%</span></td>
+    <td class="num">36</td><td><span class="green">🟢 81.8%</span></td>
+    <td class="num">26</td>
+    <td class="num">7</td><td><span class="yellow">🟡 19.4%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 6.0%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">93/900 RSVPs (10%)</span><br><span style="font-size:9px;color:#999">Concession Stand Wor</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Jayna</td>
+    <td class="num">70</td>
+    <td class="num">30</td><td><span class="yellow">🟡 42.9%</span></td>
+    <td class="num">26</td><td><span class="green">🟢 86.7%</span></td>
+    <td class="num">18</td><td><span class="green">🟢 69.2%</span></td>
+    <td class="num">6</td>
+    <td class="num">3</td><td><span class="yellow">🟡 16.7%</span></td>
+    <td class="num">2</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 2.9%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">67</td>
+    <td class="num">13</td><td><span class="red">🔴 19.4%</span></td>
+    <td class="num">11</td><td><span class="yellow">🟡 84.6%</span></td>
+    <td class="num">9</td><td><span class="green">🟢 81.8%</span></td>
+    <td class="num">5</td>
+    <td class="num">2</td><td><span class="yellow">🟡 22.2%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 3.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Johnstone Supply</td>
+    <td class="num">66</td>
+    <td class="num">29</td><td><span class="yellow">🟡 43.9%</span></td>
+    <td class="num">25</td><td><span class="green">🟢 86.2%</span></td>
+    <td class="num">19</td><td><span class="green">🟢 76.0%</span></td>
+    <td class="num">10</td>
+    <td class="num">3</td><td><span class="yellow">🟡 15.8%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 4.5%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Smurfit Kappa</td>
+    <td class="num">40</td>
+    <td class="num">11</td><td><span class="red">🔴 27.5%</span></td>
+    <td class="num">11</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">9</td><td><span class="green">🟢 81.8%</span></td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="red">🔴 11.1%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 2.5%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Culinaire</td>
+    <td class="num">30</td>
+    <td class="num">13</td><td><span class="yellow">🟡 43.3%</span></td>
+    <td class="num">12</td><td><span class="green">🟢 92.3%</span></td>
+    <td class="num">6</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">4</td>
+    <td class="num">2</td><td><span class="yellow">🟡 33.3%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 6.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Shutterfly</td>
+    <td class="num">18</td>
+    <td class="num">6</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">6</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">5</td><td><span class="green">🟢 83.3%</span></td>
+    <td class="num">3</td>
+    <td class="num">3</td><td><span class="green">🟢 60.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 16.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Foxconn</td>
+    <td class="num">13</td>
+    <td class="num">5</td><td><span class="red">🔴 38.5%</span></td>
+    <td class="num">3</td><td><span class="red">🔴 60.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">2</td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 7.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Six Flags</td>
+    <td class="num">13</td>
+    <td class="num">1</td><td><span class="red">🔴 7.7%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- G Texas Catering</td>
+    <td class="num">11</td>
+    <td class="num">3</td><td><span class="red">🔴 27.3%</span></td>
+    <td class="num">2</td><td><span class="red">🔴 66.7%</span></td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Green Worldwide Shipping</td>
+    <td class="num">9</td>
+    <td class="num">5</td><td><span class="green">🟢 55.6%</span></td>
+    <td class="num">5</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 20.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="yellow">🟡 11.1%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Kenco</td>
+    <td class="num">6</td>
+    <td class="num">2</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Legendz Way Distribution Solution..</td>
+    <td class="num">5</td>
+    <td class="num">1</td><td><span class="red">🔴 20.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">1</td><td><span class="na">—</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 20.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ NFI</td>
+    <td class="num">4</td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 25.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Culinaire International</td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Galt Medical</td>
+    <td class="num">3</td>
+    <td class="num">1</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Mobis</td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- HANOVER COLD STORAGE</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Logoplaste</td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @  BSN Sports</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 50.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ JP Fulfillment</td>
+    <td class="num">2</td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 50.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Merritt Hospitality LLC</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- The Hillman Group</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Chartwells Higher Education</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- RHINO STAGING</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Revinate(Formerly Navis)</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- White Glove Storage & Delivery</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Cornerstone Automation Systems, LLC</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Facility Solutions Group</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Firstsource</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Overhead Door</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Park City Club</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Pearson</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Quest Medical, Inc</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Sigma</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- White Felt</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Will Rogers Memorial Center (Craf..</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>CHICAGO</strong></td>
+    <td class="num">786</td>
+    <td class="num">350</td><td><span class="yellow">🟡 44.5%</span></td>
+    <td class="num">348</td><td><span class="green">🟢 99.4%</span></td>
+    <td class="num">275</td><td><span class="green">🟢 79.0%</span></td>
+    <td class="num">163</td>
+    <td class="num">80</td><td><span class="yellow">🟡 29.1%</span></td>
+    <td class="num">59</td><td><span class="yellow">🟡 73.8%</span></td>
+    <td><span class="red">🔴 7.5%</span></td>
+    <td><span class="green">✅ 13 reqs</span><br><span style="font-size:10px;color:#666">342/892 RSVPs (38%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">388</td>
+    <td class="num">150</td><td><span class="red">🔴 38.7%</span></td>
+    <td class="num">150</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">115</td><td><span class="green">🟢 76.7%</span></td>
+    <td class="num">59</td>
+    <td class="num">33</td><td><span class="yellow">🟡 28.7%</span></td>
+    <td class="num">25</td><td><span class="yellow">🟡 75.8%</span></td>
+    <td><span class="red">🔴 6.4%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">80/200 RSVPs (40%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Levy Restaurants</td>
+    <td class="num">164</td>
+    <td class="num">68</td><td><span class="yellow">🟡 41.5%</span></td>
+    <td class="num">68</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">54</td><td><span class="green">🟢 79.4%</span></td>
+    <td class="num">33</td>
+    <td class="num">18</td><td><span class="yellow">🟡 33.3%</span></td>
+    <td class="num">14</td><td><span class="yellow">🟡 77.8%</span></td>
+    <td><span class="yellow">🟡 8.5%</span></td>
+    <td><span class="green">✅ 10 reqs</span><br><span style="font-size:10px;color:#666">239/610 RSVPs (39%)</span><br><span style="font-size:9px;color:#999">Bartender, Dishwasher, Hospitality Team lea</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Power Stop</td>
+    <td class="num">136</td>
+    <td class="num">71</td><td><span class="yellow">🟡 52.2%</span></td>
+    <td class="num">70</td><td><span class="green">🟢 98.6%</span></td>
+    <td class="num">56</td><td><span class="green">🟢 80.0%</span></td>
+    <td class="num">34</td>
+    <td class="num">14</td><td><span class="yellow">🟡 25.0%</span></td>
+    <td class="num">6</td><td><span class="red">🔴 42.9%</span></td>
+    <td><span class="red">🔴 4.4%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">80</td>
+    <td class="num">46</td><td><span class="green">🟢 57.5%</span></td>
+    <td class="num">45</td><td><span class="green">🟢 97.8%</span></td>
+    <td class="num">37</td><td><span class="green">🟢 82.2%</span></td>
+    <td class="num">29</td>
+    <td class="num">12</td><td><span class="yellow">🟡 32.4%</span></td>
+    <td class="num">11</td><td><span class="green">🟢 91.7%</span></td>
+    <td><span class="yellow">🟡 13.8%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Bon Appetit Management Company, Inc</td>
+    <td class="num">11</td>
+    <td class="num">8</td><td><span class="green">🟢 72.7%</span></td>
+    <td class="num">8</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 87.5%</span></td>
+    <td class="num">4</td>
+    <td class="num">1</td><td><span class="red">🔴 14.3%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="yellow">🟡 9.1%</span></td>
+    <td><span class="yellow">⚠️ 1 reqs</span><br><span style="font-size:10px;color:#666">23/22 RSVPs (105%)</span><br><span style="font-size:9px;color:#999">Line Cook</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">7</td>
+    <td class="num">7</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">6</td><td><span class="green">🟢 85.7%</span></td>
+    <td class="num">4</td>
+    <td class="num">2</td><td><span class="yellow">🟡 33.3%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 28.6%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>LAS VEGAS</strong></td>
+    <td class="num">691</td>
+    <td class="num">303</td><td><span class="yellow">🟡 43.8%</span></td>
+    <td class="num">279</td><td><span class="green">🟢 92.1%</span></td>
+    <td class="num">195</td><td><span class="green">🟢 69.9%</span></td>
+    <td class="num">139</td>
+    <td class="num">59</td><td><span class="yellow">🟡 30.3%</span></td>
+    <td class="num">45</td><td><span class="yellow">🟡 76.3%</span></td>
+    <td><span class="red">🔴 6.5%</span></td>
+    <td><span class="green">✅ 13 reqs</span><br><span style="font-size:10px;color:#666">88/3940 RSVPs (2%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">528</td>
+    <td class="num">246</td><td><span class="yellow">🟡 46.6%</span></td>
+    <td class="num">223</td><td><span class="green">🟢 90.7%</span></td>
+    <td class="num">157</td><td><span class="green">🟢 70.4%</span></td>
+    <td class="num">114</td>
+    <td class="num">43</td><td><span class="yellow">🟡 27.4%</span></td>
+    <td class="num">33</td><td><span class="yellow">🟡 76.7%</span></td>
+    <td><span class="red">🔴 6.2%</span></td>
+    <td><span class="green">✅ 8 reqs</span><br><span style="font-size:10px;color:#666">88/2920 RSVPs (3%)</span><br><span style="font-size:9px;color:#999">Picker Packer</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">161</td>
+    <td class="num">55</td><td><span class="red">🔴 34.2%</span></td>
+    <td class="num">54</td><td><span class="green">🟢 98.2%</span></td>
+    <td class="num">36</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">25</td>
+    <td class="num">16</td><td><span class="green">🟢 44.4%</span></td>
+    <td class="num">12</td><td><span class="yellow">🟡 75.0%</span></td>
+    <td><span class="red">🔴 7.5%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">0/160 RSVPs (0%)</span><br><span style="font-size:9px;color:#999">Assembler</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">2</td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>ATLANTA</strong></td>
+    <td class="num">629</td>
+    <td class="num">274</td><td><span class="yellow">🟡 43.6%</span></td>
+    <td class="num">247</td><td><span class="green">🟢 90.1%</span></td>
+    <td class="num">153</td><td><span class="yellow">🟡 61.9%</span></td>
+    <td class="num">94</td>
+    <td class="num">36</td><td><span class="yellow">🟡 23.5%</span></td>
+    <td class="num">24</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 3.8%</span></td>
+    <td><span class="yellow">⚠️ 11 reqs</span><br><span style="font-size:10px;color:#666">1538/1690 RSVPs (91%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">446</td>
+    <td class="num">185</td><td><span class="yellow">🟡 41.5%</span></td>
+    <td class="num">166</td><td><span class="green">🟢 89.7%</span></td>
+    <td class="num">100</td><td><span class="yellow">🟡 60.2%</span></td>
+    <td class="num">61</td>
+    <td class="num">25</td><td><span class="yellow">🟡 25.0%</span></td>
+    <td class="num">16</td><td><span class="yellow">🟡 64.0%</span></td>
+    <td><span class="red">🔴 3.6%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">120/1350 RSVPs (9%)</span><br><span style="font-size:9px;color:#999">Forklift Driver, Picker Packer</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Merritt Hospitality LLC</td>
+    <td class="num">133</td>
+    <td class="num">56</td><td><span class="yellow">🟡 42.1%</span></td>
+    <td class="num">51</td><td><span class="green">🟢 91.1%</span></td>
+    <td class="num">35</td><td><span class="green">🟢 68.6%</span></td>
+    <td class="num">20</td>
+    <td class="num">4</td><td><span class="red">🔴 11.4%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 75.0%</span></td>
+    <td><span class="red">🔴 2.3%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">0/60 RSVPs (0%)</span><br><span style="font-size:9px;color:#999">Bartender</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Material in Motion</td>
+    <td class="num">21</td>
+    <td class="num">13</td><td><span class="green">🟢 61.9%</span></td>
+    <td class="num">10</td><td><span class="yellow">🟡 76.9%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 70.0%</span></td>
+    <td class="num">6</td>
+    <td class="num">3</td><td><span class="green">🟢 42.9%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="yellow">🟡 14.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Indeed Inc</td>
+    <td class="num">7</td>
+    <td class="num">7</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 57.1%</span></td>
+    <td class="num">3</td>
+    <td class="num">2</td><td><span class="green">🟢 50.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="yellow">🟡 14.3%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">5/280 RSVPs (2%)</span><br><span style="font-size:9px;color:#999">Industrial Admin Ass, Loader / Crew, Server</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ UPSMI</td>
+    <td class="num">7</td>
+    <td class="num">5</td><td><span class="green">🟢 71.4%</span></td>
+    <td class="num">5</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 20.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- LowCountry Catering LLC</td>
+    <td class="num">5</td>
+    <td class="num">3</td><td><span class="green">🟢 60.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">1</td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="green">🟢 20.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">3</td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- District Catering</td>
+    <td class="num">3</td>
+    <td class="num">1</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @  Republic National Di..</td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>WASHINGTON, D.C.</strong></td>
+    <td class="num">593</td>
+    <td class="num">221</td><td><span class="red">🔴 37.3%</span></td>
+    <td class="num">200</td><td><span class="green">🟢 90.5%</span></td>
+    <td class="num">126</td><td><span class="yellow">🟡 63.0%</span></td>
+    <td class="num">73</td>
+    <td class="num">4</td><td><span class="red">🔴 3.2%</span></td>
+    <td class="num">2</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 0.3%</span></td>
+    <td><span class="green">✅ 5 reqs</span><br><span style="font-size:10px;color:#666">27/840 RSVPs (3%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">425</td>
+    <td class="num">167</td><td><span class="red">🔴 39.3%</span></td>
+    <td class="num">152</td><td><span class="green">🟢 91.0%</span></td>
+    <td class="num">100</td><td><span class="green">🟢 65.8%</span></td>
+    <td class="num">64</td>
+    <td class="num">1</td><td><span class="red">🔴 1.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">168</td>
+    <td class="num">54</td><td><span class="red">🔴 32.1%</span></td>
+    <td class="num">48</td><td><span class="green">🟢 88.9%</span></td>
+    <td class="num">26</td><td><span class="yellow">🟡 54.2%</span></td>
+    <td class="num">9</td>
+    <td class="num">3</td><td><span class="red">🔴 11.5%</span></td>
+    <td class="num">2</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 1.2%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">27/800 RSVPs (3%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>NASHVILLE</strong></td>
+    <td class="num">581</td>
+    <td class="num">266</td><td><span class="yellow">🟡 45.8%</span></td>
+    <td class="num">240</td><td><span class="green">🟢 90.2%</span></td>
+    <td class="num">140</td><td><span class="yellow">🟡 58.3%</span></td>
+    <td class="num">94</td>
+    <td class="num">59</td><td><span class="green">🟢 42.1%</span></td>
+    <td class="num">48</td><td><span class="green">🟢 81.4%</span></td>
+    <td><span class="yellow">🟡 8.3%</span></td>
+    <td><span class="green">✅ 6 reqs</span><br><span style="font-size:10px;color:#666">103/720 RSVPs (14%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">121</td>
+    <td class="num">59</td><td><span class="yellow">🟡 48.8%</span></td>
+    <td class="num">54</td><td><span class="green">🟢 91.5%</span></td>
+    <td class="num">31</td><td><span class="yellow">🟡 57.4%</span></td>
+    <td class="num">28</td>
+    <td class="num">18</td><td><span class="green">🟢 58.1%</span></td>
+    <td class="num">15</td><td><span class="green">🟢 83.3%</span></td>
+    <td><span class="yellow">🟡 12.4%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Lettuce Entertain You Enterprises..</td>
+    <td class="num">104</td>
+    <td class="num">45</td><td><span class="yellow">🟡 43.3%</span></td>
+    <td class="num">43</td><td><span class="green">🟢 95.6%</span></td>
+    <td class="num">24</td><td><span class="yellow">🟡 55.8%</span></td>
+    <td class="num">11</td>
+    <td class="num">11</td><td><span class="green">🟢 45.8%</span></td>
+    <td class="num">8</td><td><span class="yellow">🟡 72.7%</span></td>
+    <td><span class="red">🔴 7.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Solaren Risk Management</td>
+    <td class="num">92</td>
+    <td class="num">45</td><td><span class="yellow">🟡 48.9%</span></td>
+    <td class="num">42</td><td><span class="green">🟢 93.3%</span></td>
+    <td class="num">28</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">17</td>
+    <td class="num">9</td><td><span class="yellow">🟡 32.1%</span></td>
+    <td class="num">8</td><td><span class="green">🟢 88.9%</span></td>
+    <td><span class="yellow">🟡 8.7%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">7/300 RSVPs (2%)</span><br><span style="font-size:9px;color:#999">Event Staff</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">78</td>
+    <td class="num">34</td><td><span class="yellow">🟡 43.6%</span></td>
+    <td class="num">30</td><td><span class="green">🟢 88.2%</span></td>
+    <td class="num">20</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">12</td>
+    <td class="num">10</td><td><span class="green">🟢 50.0%</span></td>
+    <td class="num">8</td><td><span class="green">🟢 80.0%</span></td>
+    <td><span class="yellow">🟡 10.3%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">96/300 RSVPs (32%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Ingram Content Group</td>
+    <td class="num">62</td>
+    <td class="num">31</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">26</td><td><span class="yellow">🟡 83.9%</span></td>
+    <td class="num">14</td><td><span class="yellow">🟡 53.8%</span></td>
+    <td class="num">7</td>
+    <td class="num">4</td><td><span class="yellow">🟡 28.6%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 6.5%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">46</td>
+    <td class="num">19</td><td><span class="yellow">🟡 41.3%</span></td>
+    <td class="num">19</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">10</td><td><span class="yellow">🟡 52.6%</span></td>
+    <td class="num">10</td>
+    <td class="num">4</td><td><span class="green">🟢 40.0%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 75.0%</span></td>
+    <td><span class="red">🔴 6.5%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CTDI</td>
+    <td class="num">26</td>
+    <td class="num">12</td><td><span class="yellow">🟡 46.2%</span></td>
+    <td class="num">10</td><td><span class="yellow">🟡 83.3%</span></td>
+    <td class="num">3</td><td><span class="red">🔴 30.0%</span></td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Assurant, Inc (Hyla)</td>
+    <td class="num">23</td>
+    <td class="num">10</td><td><span class="yellow">🟡 43.5%</span></td>
+    <td class="num">8</td><td><span class="yellow">🟡 80.0%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">3</td>
+    <td class="num">2</td><td><span class="green">🟢 50.0%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 4.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Asurion</td>
+    <td class="num">12</td>
+    <td class="num">4</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">2</td><td><span class="red">🔴 50.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Cold Chain Technologies</td>
+    <td class="num">4</td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Superior Communications</td>
+    <td class="num">4</td>
+    <td class="num">1</td><td><span class="red">🔴 25.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Gathr Outdoors</td>
+    <td class="num">3</td>
+    <td class="num">1</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 33.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- F&B Cosmetics</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ Superior Communications</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- C&W Services</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Ultimate Linings</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>ORLANDO</strong></td>
+    <td class="num">379</td>
+    <td class="num">141</td><td><span class="red">🔴 37.2%</span></td>
+    <td class="num">133</td><td><span class="green">🟢 94.3%</span></td>
+    <td class="num">104</td><td><span class="green">🟢 78.2%</span></td>
+    <td class="num">72</td>
+    <td class="num">74</td><td><span class="green">🟢 71.2%</span></td>
+    <td class="num">56</td><td><span class="yellow">🟡 75.7%</span></td>
+    <td><span class="yellow">🟡 14.8%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">28/700 RSVPs (4%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">377</td>
+    <td class="num">139</td><td><span class="red">🔴 36.9%</span></td>
+    <td class="num">132</td><td><span class="green">🟢 95.0%</span></td>
+    <td class="num">103</td><td><span class="green">🟢 78.0%</span></td>
+    <td class="num">72</td>
+    <td class="num">74</td><td><span class="green">🟢 71.8%</span></td>
+    <td class="num">56</td><td><span class="yellow">🟡 75.7%</span></td>
+    <td><span class="yellow">🟡 14.9%</span></td>
+    <td><span class="green">✅ 3 reqs</span><br><span style="font-size:10px;color:#666">28/600 RSVPs (5%)</span><br><span style="font-size:9px;color:#999">Loader / Crew</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Assurant, Inc (Hyla)</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>CINCINNATI</strong></td>
+    <td class="num">351</td>
+    <td class="num">145</td><td><span class="yellow">🟡 41.3%</span></td>
+    <td class="num">122</td><td><span class="yellow">🟡 84.1%</span></td>
+    <td class="num">69</td><td><span class="yellow">🟡 56.6%</span></td>
+    <td class="num">44</td>
+    <td class="num">29</td><td><span class="green">🟢 42.0%</span></td>
+    <td class="num">23</td><td><span class="yellow">🟡 79.3%</span></td>
+    <td><span class="red">🔴 6.6%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">41/0 RSVPs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Tennant Solutions</td>
+    <td class="num">144</td>
+    <td class="num">69</td><td><span class="yellow">🟡 47.9%</span></td>
+    <td class="num">55</td><td><span class="yellow">🟡 79.7%</span></td>
+    <td class="num">31</td><td><span class="yellow">🟡 56.4%</span></td>
+    <td class="num">18</td>
+    <td class="num">14</td><td><span class="green">🟢 45.2%</span></td>
+    <td class="num">11</td><td><span class="yellow">🟡 78.6%</span></td>
+    <td><span class="red">🔴 7.6%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">41/0 RSVPs</span><br><span style="font-size:9px;color:#999">Picker Packer</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CTDI</td>
+    <td class="num">86</td>
+    <td class="num">34</td><td><span class="red">🔴 39.5%</span></td>
+    <td class="num">30</td><td><span class="green">🟢 88.2%</span></td>
+    <td class="num">16</td><td><span class="yellow">🟡 53.3%</span></td>
+    <td class="num">9</td>
+    <td class="num">4</td><td><span class="yellow">🟡 25.0%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 4.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT Housewares</td>
+    <td class="num">61</td>
+    <td class="num">24</td><td><span class="red">🔴 39.3%</span></td>
+    <td class="num">21</td><td><span class="green">🟢 87.5%</span></td>
+    <td class="num">13</td><td><span class="yellow">🟡 61.9%</span></td>
+    <td class="num">10</td>
+    <td class="num">6</td><td><span class="green">🟢 46.2%</span></td>
+    <td class="num">3</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 4.9%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">14</td>
+    <td class="num">5</td><td><span class="red">🔴 35.7%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 80.0%</span></td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">2</td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="yellow">🟡 14.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Innomark Communications LLC</td>
+    <td class="num">13</td>
+    <td class="num">5</td><td><span class="red">🔴 38.5%</span></td>
+    <td class="num">5</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 80.0%</span></td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 25.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 7.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- The Hillman Group</td>
+    <td class="num">12</td>
+    <td class="num">2</td><td><span class="red">🔴 16.7%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Polymet Corporation</td>
+    <td class="num">7</td>
+    <td class="num">3</td><td><span class="yellow">🟡 42.9%</span></td>
+    <td class="num">2</td><td><span class="red">🔴 66.7%</span></td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="yellow">🟡 14.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Green Tokai Co., Ltd.</td>
+    <td class="num">6</td>
+    <td class="num">1</td><td><span class="red">🔴 16.7%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 16.7%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Gold Medal Products</td>
+    <td class="num">4</td>
+    <td class="num">1</td><td><span class="red">🔴 25.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- AFC Industries</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Enable Injections</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Pacific Manufacturing Ohio</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Takumi Stamping INC</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>PAULSBORO</strong></td>
+    <td class="num">298</td>
+    <td class="num">131</td><td><span class="yellow">🟡 44.0%</span></td>
+    <td class="num">115</td><td><span class="green">🟢 87.8%</span></td>
+    <td class="num">67</td><td><span class="yellow">🟡 58.3%</span></td>
+    <td class="num">53</td>
+    <td class="num">41</td><td><span class="green">🟢 61.2%</span></td>
+    <td class="num">31</td><td><span class="yellow">🟡 75.6%</span></td>
+    <td><span class="yellow">🟡 10.4%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">210/600 RSVPs (35%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">257</td>
+    <td class="num">107</td><td><span class="yellow">🟡 41.6%</span></td>
+    <td class="num">96</td><td><span class="green">🟢 89.7%</span></td>
+    <td class="num">54</td><td><span class="yellow">🟡 56.2%</span></td>
+    <td class="num">40</td>
+    <td class="num">30</td><td><span class="green">🟢 55.6%</span></td>
+    <td class="num">21</td><td><span class="yellow">🟡 70.0%</span></td>
+    <td><span class="yellow">🟡 8.2%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">210/600 RSVPs (35%)</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">41</td>
+    <td class="num">24</td><td><span class="green">🟢 58.5%</span></td>
+    <td class="num">19</td><td><span class="yellow">🟡 79.2%</span></td>
+    <td class="num">13</td><td><span class="green">🟢 68.4%</span></td>
+    <td class="num">13</td>
+    <td class="num">11</td><td><span class="green">🟢 84.6%</span></td>
+    <td class="num">10</td><td><span class="green">🟢 90.9%</span></td>
+    <td><span class="green">🟢 24.4%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>AUSTIN</strong></td>
+    <td class="num">280</td>
+    <td class="num">121</td><td><span class="yellow">🟡 43.2%</span></td>
+    <td class="num">109</td><td><span class="green">🟢 90.1%</span></td>
+    <td class="num">77</td><td><span class="green">🟢 70.6%</span></td>
+    <td class="num">57</td>
+    <td class="num">29</td><td><span class="yellow">🟡 37.7%</span></td>
+    <td class="num">23</td><td><span class="yellow">🟡 79.3%</span></td>
+    <td><span class="yellow">🟡 8.2%</span></td>
+    <td><span class="green">✅ 8 reqs</span><br><span style="font-size:10px;color:#666">13/1560 RSVPs (1%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- University of Texas - Housing and..</td>
+    <td class="num">104</td>
+    <td class="num">46</td><td><span class="yellow">🟡 44.2%</span></td>
+    <td class="num">43</td><td><span class="green">🟢 93.5%</span></td>
+    <td class="num">29</td><td><span class="green">🟢 67.4%</span></td>
+    <td class="num">24</td>
+    <td class="num">17</td><td><span class="green">🟢 58.6%</span></td>
+    <td class="num">15</td><td><span class="green">🟢 88.2%</span></td>
+    <td><span class="yellow">🟡 14.4%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">100</td>
+    <td class="num">29</td><td><span class="red">🔴 29.0%</span></td>
+    <td class="num">26</td><td><span class="green">🟢 89.7%</span></td>
+    <td class="num">19</td><td><span class="green">🟢 73.1%</span></td>
+    <td class="num">14</td>
+    <td class="num">5</td><td><span class="yellow">🟡 26.3%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 80.0%</span></td>
+    <td><span class="red">🔴 4.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">55</td>
+    <td class="num">33</td><td><span class="green">🟢 60.0%</span></td>
+    <td class="num">28</td><td><span class="yellow">🟡 84.8%</span></td>
+    <td class="num">20</td><td><span class="green">🟢 71.4%</span></td>
+    <td class="num">11</td>
+    <td class="num">6</td><td><span class="yellow">🟡 30.0%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 7.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Chartwells Higher Education</td>
+    <td class="num">8</td>
+    <td class="num">5</td><td><span class="green">🟢 62.5%</span></td>
+    <td class="num">5</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 80.0%</span></td>
+    <td class="num">3</td>
+    <td class="num">1</td><td><span class="yellow">🟡 25.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Indeed Inc</td>
+    <td class="num">3</td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 7 reqs</span><br><span style="font-size:10px;color:#666">13/1500 RSVPs (1%)</span><br><span style="font-size:9px;color:#999">Event Staff, Hospitality General , Line Cook</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- RHINO STAGING</td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Chatsworth Products</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Revinate(Formerly Navis)</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- White Glove Storage & Delivery</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Balcones Country Club</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- SXSW</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Soho House Austin</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>COLUMBUS</strong></td>
+    <td class="num">242</td>
+    <td class="num">119</td><td><span class="yellow">🟡 49.2%</span></td>
+    <td class="num">101</td><td><span class="yellow">🟡 84.9%</span></td>
+    <td class="num">57</td><td><span class="yellow">🟡 56.4%</span></td>
+    <td class="num">37</td>
+    <td class="num">10</td><td><span class="yellow">🟡 17.5%</span></td>
+    <td class="num">2</td><td><span class="red">🔴 20.0%</span></td>
+    <td><span class="red">🔴 0.8%</span></td>
+    <td><span class="yellow">⚠️ 5 reqs</span><br><span style="font-size:10px;color:#666">78/40 RSVPs (195%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CTDI</td>
+    <td class="num">163</td>
+    <td class="num">81</td><td><span class="yellow">🟡 49.7%</span></td>
+    <td class="num">64</td><td><span class="yellow">🟡 79.0%</span></td>
+    <td class="num">35</td><td><span class="yellow">🟡 54.7%</span></td>
+    <td class="num">23</td>
+    <td class="num">3</td><td><span class="red">🔴 8.6%</span></td>
+    <td class="num">2</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 1.2%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">58</td>
+    <td class="num">20</td><td><span class="red">🔴 34.5%</span></td>
+    <td class="num">20</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">10</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">8</td>
+    <td class="num">2</td><td><span class="yellow">🟡 20.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">13</td>
+    <td class="num">13</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">12</td><td><span class="green">🟢 92.3%</span></td>
+    <td class="num">9</td><td><span class="green">🟢 75.0%</span></td>
+    <td class="num">4</td>
+    <td class="num">4</td><td><span class="green">🟢 44.4%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ UPSMI</td>
+    <td class="num">4</td>
+    <td class="num">2</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Yamada North America</td>
+    <td class="num">3</td>
+    <td class="num">2</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 50.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Indeed Inc</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 4 reqs</span><br><span style="font-size:10px;color:#666">78/0 RSVPs</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>PHILADELPHIA</strong></td>
+    <td class="num">200</td>
+    <td class="num">85</td><td><span class="yellow">🟡 42.5%</span></td>
+    <td class="num">78</td><td><span class="green">🟢 91.8%</span></td>
+    <td class="num">63</td><td><span class="green">🟢 80.8%</span></td>
+    <td class="num">52</td>
+    <td class="num">31</td><td><span class="green">🟢 49.2%</span></td>
+    <td class="num">24</td><td><span class="yellow">🟡 77.4%</span></td>
+    <td><span class="yellow">🟡 12.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">186</td>
+    <td class="num">78</td><td><span class="yellow">🟡 41.9%</span></td>
+    <td class="num">72</td><td><span class="green">🟢 92.3%</span></td>
+    <td class="num">59</td><td><span class="green">🟢 81.9%</span></td>
+    <td class="num">48</td>
+    <td class="num">28</td><td><span class="green">🟢 47.5%</span></td>
+    <td class="num">21</td><td><span class="yellow">🟡 75.0%</span></td>
+    <td><span class="yellow">🟡 11.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">14</td>
+    <td class="num">7</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">6</td><td><span class="green">🟢 85.7%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">4</td>
+    <td class="num">3</td><td><span class="green">🟢 75.0%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 21.4%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>MIDDLEBURG HEIGHTS</strong></td>
+    <td class="num">176</td>
+    <td class="num">65</td><td><span class="red">🔴 36.9%</span></td>
+    <td class="num">58</td><td><span class="green">🟢 89.2%</span></td>
+    <td class="num">32</td><td><span class="yellow">🟡 55.2%</span></td>
+    <td class="num">23</td>
+    <td class="num">14</td><td><span class="green">🟢 43.8%</span></td>
+    <td class="num">4</td><td><span class="red">🔴 28.6%</span></td>
+    <td><span class="red">🔴 2.3%</span></td>
+    <td><span class="green">✅ 2 reqs</span><br><span style="font-size:10px;color:#666">41/200 RSVPs (20%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">176</td>
+    <td class="num">65</td><td><span class="red">🔴 36.9%</span></td>
+    <td class="num">58</td><td><span class="green">🟢 89.2%</span></td>
+    <td class="num">32</td><td><span class="yellow">🟡 55.2%</span></td>
+    <td class="num">23</td>
+    <td class="num">14</td><td><span class="green">🟢 43.8%</span></td>
+    <td class="num">4</td><td><span class="red">🔴 28.6%</span></td>
+    <td><span class="red">🔴 2.3%</span></td>
+    <td><span class="green">✅ 2 reqs</span><br><span style="font-size:10px;color:#666">41/200 RSVPs (20%)</span><br><span style="font-size:9px;color:#999">Warehouse Operative</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>HOUSTON</strong></td>
+    <td class="num">172</td>
+    <td class="num">70</td><td><span class="yellow">🟡 40.7%</span></td>
+    <td class="num">64</td><td><span class="green">🟢 91.4%</span></td>
+    <td class="num">44</td><td><span class="green">🟢 68.8%</span></td>
+    <td class="num">17</td>
+    <td class="num">4</td><td><span class="red">🔴 9.1%</span></td>
+    <td class="num">4</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 2.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">156</td>
+    <td class="num">65</td><td><span class="yellow">🟡 41.7%</span></td>
+    <td class="num">59</td><td><span class="green">🟢 90.8%</span></td>
+    <td class="num">41</td><td><span class="green">🟢 69.5%</span></td>
+    <td class="num">16</td>
+    <td class="num">3</td><td><span class="red">🔴 7.3%</span></td>
+    <td class="num">3</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 1.9%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Mitsubishi - Clerical</td>
+    <td class="num">6</td>
+    <td class="num">2</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">2</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Sterling Client Services LLC</td>
+    <td class="num">3</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Westchase Catering Group Inc</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- RHINO STAGING</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Eurest USA</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ AdvantageXPO@Cantel M..</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Staffmark @ CEVA Logistics</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>CHARLOTTE</strong></td>
+    <td class="num">133</td>
+    <td class="num">45</td><td><span class="red">🔴 33.8%</span></td>
+    <td class="num">38</td><td><span class="yellow">🟡 84.4%</span></td>
+    <td class="num">22</td><td><span class="yellow">🟡 57.9%</span></td>
+    <td class="num">9</td>
+    <td class="num">5</td><td><span class="yellow">🟡 22.7%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 60.0%</span></td>
+    <td><span class="red">🔴 2.3%</span></td>
+    <td><span class="green">✅ 2 reqs</span><br><span style="font-size:10px;color:#666">0/100 RSVPs (0%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- CORT</td>
+    <td class="num">132</td>
+    <td class="num">44</td><td><span class="red">🔴 33.3%</span></td>
+    <td class="num">37</td><td><span class="yellow">🟡 84.1%</span></td>
+    <td class="num">21</td><td><span class="yellow">🟡 56.8%</span></td>
+    <td class="num">8</td>
+    <td class="num">5</td><td><span class="yellow">🟡 23.8%</span></td>
+    <td class="num">3</td><td><span class="yellow">🟡 60.0%</span></td>
+    <td><span class="red">🔴 2.3%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>NEWARK</strong></td>
+    <td class="num">113</td>
+    <td class="num">49</td><td><span class="yellow">🟡 43.4%</span></td>
+    <td class="num">40</td><td><span class="yellow">🟡 81.6%</span></td>
+    <td class="num">22</td><td><span class="yellow">🟡 55.0%</span></td>
+    <td class="num">13</td>
+    <td class="num">9</td><td><span class="green">🟢 40.9%</span></td>
+    <td class="num">7</td><td><span class="yellow">🟡 77.8%</span></td>
+    <td><span class="red">🔴 6.2%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">113</td>
+    <td class="num">49</td><td><span class="yellow">🟡 43.4%</span></td>
+    <td class="num">40</td><td><span class="yellow">🟡 81.6%</span></td>
+    <td class="num">22</td><td><span class="yellow">🟡 55.0%</span></td>
+    <td class="num">13</td>
+    <td class="num">9</td><td><span class="green">🟢 40.9%</span></td>
+    <td class="num">7</td><td><span class="yellow">🟡 77.8%</span></td>
+    <td><span class="red">🔴 6.2%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>RENO</strong></td>
+    <td class="num">72</td>
+    <td class="num">32</td><td><span class="yellow">🟡 44.4%</span></td>
+    <td class="num">27</td><td><span class="yellow">🟡 84.4%</span></td>
+    <td class="num">18</td><td><span class="green">🟢 66.7%</span></td>
+    <td class="num">13</td>
+    <td class="num">2</td><td><span class="red">🔴 11.1%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 1.4%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">56</td>
+    <td class="num">23</td><td><span class="yellow">🟡 41.1%</span></td>
+    <td class="num">19</td><td><span class="yellow">🟡 82.6%</span></td>
+    <td class="num">14</td><td><span class="green">🟢 73.7%</span></td>
+    <td class="num">10</td>
+    <td class="num">1</td><td><span class="red">🔴 7.1%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td><span class="red">🔴 1.8%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Continental Battery Systems, Inc.</td>
+    <td class="num">15</td>
+    <td class="num">8</td><td><span class="yellow">🟡 53.3%</span></td>
+    <td class="num">7</td><td><span class="green">🟢 87.5%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 57.1%</span></td>
+    <td class="num">3</td>
+    <td class="num">1</td><td><span class="yellow">🟡 25.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>ERLANGER</strong></td>
+    <td class="num">66</td>
+    <td class="num">31</td><td><span class="yellow">🟡 47.0%</span></td>
+    <td class="num">26</td><td><span class="yellow">🟡 83.9%</span></td>
+    <td class="num">17</td><td><span class="green">🟢 65.4%</span></td>
+    <td class="num">8</td>
+    <td class="num">6</td><td><span class="yellow">🟡 35.3%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 6.1%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">66</td>
+    <td class="num">31</td><td><span class="yellow">🟡 47.0%</span></td>
+    <td class="num">26</td><td><span class="yellow">🟡 83.9%</span></td>
+    <td class="num">17</td><td><span class="green">🟢 65.4%</span></td>
+    <td class="num">8</td>
+    <td class="num">6</td><td><span class="yellow">🟡 35.3%</span></td>
+    <td class="num">4</td><td><span class="yellow">🟡 66.7%</span></td>
+    <td><span class="red">🔴 6.1%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>MCCARRAN</strong></td>
+    <td class="num">23</td>
+    <td class="num">16</td><td><span class="green">🟢 69.6%</span></td>
+    <td class="num">13</td><td><span class="yellow">🟡 81.2%</span></td>
+    <td class="num">7</td><td><span class="yellow">🟡 53.8%</span></td>
+    <td class="num">5</td>
+    <td class="num">2</td><td><span class="yellow">🟡 28.6%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 4.3%</span></td>
+    <td><span class="green">✅ 2 reqs</span><br><span style="font-size:10px;color:#666">0/80 RSVPs (0%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Stord, Inc</td>
+    <td class="num">23</td>
+    <td class="num">16</td><td><span class="green">🟢 69.6%</span></td>
+    <td class="num">13</td><td><span class="yellow">🟡 81.2%</span></td>
+    <td class="num">7</td><td><span class="yellow">🟡 53.8%</span></td>
+    <td class="num">5</td>
+    <td class="num">2</td><td><span class="yellow">🟡 28.6%</span></td>
+    <td class="num">1</td><td><span class="red">🔴 50.0%</span></td>
+    <td><span class="red">🔴 4.3%</span></td>
+    <td><span class="green">✅ 2 reqs</span><br><span style="font-size:10px;color:#666">0/80 RSVPs (0%)</span><br><span style="font-size:9px;color:#999">Picker Packer, Warehouse Operative</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>DAYTON</strong></td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">0/380 RSVPs (0%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Green Tokai Co., Ltd.</td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>INLAND EMPIRE</strong></td>
+    <td class="num">2</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Rittal</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- iHerb</td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="na">—</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>SAN ANTONIO</strong></td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="green">✅ 1 reqs</span><br><span style="font-size:10px;color:#666">0/40 RSVPs (0%)</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- Upstage Center</td>
+    <td class="num">2</td>
+    <td class="num">1</td><td><span class="yellow">🟡 50.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr><tr class="market-row">
+    <td><strong>FORT MILL</strong></td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr>
+    <td>&nbsp;&nbsp;- OnTrac Final Mile</td>
+    <td class="num">1</td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td><td><span class="green">🟢 100.0%</span></td>
+    <td class="num">1</td>
+    <td class="num">0</td><td><span class="red">🔴 0.0%</span></td>
+    <td class="num">0</td><td><span class="na">—</span></td>
+    <td><span class="red">🔴 0.0%</span></td>
+    <td><span class="red">❌ No reqs</span></td>
+</tr>
+<tr class="spacer"><td colspan="15"></td></tr>
+</tbody>
+</table>
+
+<div class="footer">
+    Report generated by Fiona (@funnel-specialist) &middot; Template: weekly-funnel-report-tmpl.md &middot; Squad: recruitment-marketing-flex<br>
+    Data source: OB Funnel Custom Viewer (Tableau) + Requisitions CSV &middot; Benchmarks: 2025 full-year baseline (52,987 accounts &rarr; 8,146 completed = 15.4%)
+</div>
+
+<script>
+// === Embedded data ===
+const DAILY = {"CORT|Chicago":{"0":[16,9,10,8,10,25,11,16,34,28,6,14,24,12,9,37,15,6,7,8,17,10,32,2,0,1,5,0,16,0],"1":[2,0,2,0,0,10,4,4,23,20,0,0,9,3,2,20,12,0,0,0,3,2,29,1,0,0,4,0,0,0],"2":[2,1,2,0,0,10,4,4,23,20,0,0,9,3,2,20,12,0,0,0,3,2,28,1,0,0,4,0,0,0],"3":[0,0,1,0,0,7,2,1,21,17,0,0,8,3,1,18,11,0,0,0,2,2,19,0,0,0,2,0,0,0],"4":[0,0,1,0,0,5,2,1,14,6,0,0,5,2,1,5,3,0,0,0,1,1,12,0,0,0,0,0,0,0],"5":[0,0,1,0,0,3,1,1,7,2,0,0,2,0,0,5,5,0,0,0,0,0,6,0,0,0,0,0,0,0],"6":[0,0,1,0,0,3,1,0,6,1,0,0,2,0,0,4,3,0,0,0,0,0,4,0,0,0,0,0,0,0]},"CORT|Orlando":{"0":[14,0,4,1,4,48,31,21,18,10,6,7,11,12,37,30,10,6,12,15,8,13,11,10,6,9,5,7,11,0],"1":[0,0,0,0,0,28,12,0,1,0,0,0,0,0,34,28,2,2,1,2,0,5,5,5,4,2,1,4,3,0],"2":[0,0,0,0,0,27,12,0,1,0,0,0,0,0,33,27,2,2,1,2,0,5,2,5,4,2,1,4,2,0],"3":[0,0,0,0,0,18,12,0,1,0,0,0,0,0,30,24,1,1,1,1,0,4,2,3,1,0,1,3,0,0],"4":[0,0,0,0,0,14,11,0,1,0,0,0,0,0,19,19,0,0,1,0,0,3,0,2,0,0,1,1,0,0],"5":[0,0,0,0,0,13,9,0,0,0,0,0,0,0,23,19,0,1,1,0,0,4,0,2,0,0,1,1,0,0],"6":[0,0,0,0,0,10,7,0,0,0,0,0,0,0,18,16,0,1,1,0,0,2,0,1,0,0,0,0,0,0]},"CORT|Washington, D.C.":{"0":[8,13,7,5,5,7,4,6,15,14,8,7,13,6,13,14,5,2,3,6,4,0,0,1,0,0,1,1,0,0],"1":[3,2,4,2,0,2,1,0,5,3,3,3,7,3,4,4,1,1,0,3,0,0,0,1,0,0,1,1,0,0],"2":[3,2,3,1,0,1,1,0,5,3,3,3,6,3,4,4,0,1,0,3,0,0,0,1,0,0,1,0,0,0],"3":[2,1,2,1,0,1,1,0,1,3,1,3,6,1,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[1,1,0,0,0,0,1,0,0,2,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CORT|Las Vegas":{"0":[7,8,12,1,3,11,9,8,9,4,13,3,10,9,9,5,7,0,3,14,9,4,0,1,0,0,0,0,2,0],"1":[1,4,5,0,0,2,0,4,5,1,3,1,4,2,2,3,1,0,0,7,3,4,0,1,0,0,0,0,2,0],"2":[1,4,5,0,0,2,0,4,4,1,3,1,4,2,2,3,1,0,0,7,3,4,0,1,0,0,0,0,2,0],"3":[1,2,4,0,0,1,0,1,4,0,2,1,4,2,2,3,1,0,0,3,3,2,0,0,0,0,0,0,0,0],"4":[1,2,4,0,0,1,0,0,4,0,1,1,4,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0],"5":[1,1,4,0,0,0,0,0,1,0,1,0,3,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0],"6":[0,1,3,0,0,0,0,0,1,0,1,0,2,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0]},"CORT|Houston":{"0":[10,9,17,9,7,5,2,14,13,9,12,3,4,20,6,12,4,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[2,3,9,3,5,0,1,6,8,5,5,1,1,8,1,3,4,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[2,3,7,3,4,0,1,5,7,5,5,1,1,7,1,3,4,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[2,2,4,3,1,0,1,4,5,4,3,0,1,6,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[1,1,1,1,0,0,0,1,2,1,2,0,0,5,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CORT|Charlotte":{"0":[7,7,8,3,2,3,7,11,11,6,2,8,5,8,10,11,6,6,6,2,3,0,0,0,0,0,0,0,0,0],"1":[0,0,4,1,0,1,0,5,6,4,2,5,1,3,2,2,2,2,2,1,1,0,0,0,0,0,0,0,0,0],"2":[0,0,4,1,0,1,0,5,5,1,2,4,1,3,1,2,2,1,2,1,1,0,0,0,0,0,0,0,0,0],"3":[0,0,2,0,0,1,0,3,0,0,1,3,1,2,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,1,0,0,1,2,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0]},"CORT|Nashville":{"0":[6,4,3,4,1,3,3,7,10,3,3,1,3,1,1,4,3,1,1,1,2,3,1,1,3,0,3,1,1,0],"1":[4,0,2,4,0,0,0,3,7,1,1,1,1,1,0,0,2,1,0,0,0,1,1,1,2,0,1,0,0,0],"2":[3,0,2,4,0,0,0,3,7,1,1,1,1,1,0,0,2,1,0,0,0,1,1,0,0,0,1,0,0,0],"3":[3,0,2,3,0,0,0,2,5,1,0,0,0,0,0,0,2,1,0,0,0,0,1,0,0,0,0,0,0,0],"4":[3,0,1,1,0,0,0,1,3,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0],"5":[2,0,1,1,0,0,0,0,3,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,0,1,1,0,0,0,0,2,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CORT|Austin":{"0":[4,6,3,2,3,2,2,3,5,9,2,2,2,3,3,2,0,0,1,0,1,0,0,0,0,0,0,0,0,0],"1":[3,5,2,1,1,1,0,1,2,5,2,2,2,2,0,2,0,0,1,0,1,0,0,0,0,0,0,0,0,0],"2":[3,5,2,1,1,1,0,1,2,5,1,0,2,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0],"3":[2,5,2,1,1,1,0,0,2,3,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],"4":[0,3,0,0,1,1,0,0,2,2,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0],"5":[0,3,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},"CORT|Atlanta":{"0":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Las Vegas":{"0":[22,18,29,15,14,19,26,36,33,12,28,14,22,35,20,21,24,11,14,35,16,20,1,0,0,1,2,6,29,5],"1":[6,9,16,8,5,5,9,20,15,8,12,8,9,14,12,10,9,2,10,20,7,11,1,0,0,0,0,0,16,4],"2":[6,8,14,8,4,5,8,19,15,7,12,8,9,12,11,10,8,2,8,18,7,10,0,0,0,0,0,0,14,0],"3":[4,4,12,8,2,2,8,11,12,7,10,3,5,10,10,9,5,1,6,13,4,8,0,0,0,0,0,0,3,0],"4":[2,3,9,5,2,2,4,8,11,4,8,3,4,9,8,7,5,0,2,10,3,5,0,0,0,0,0,0,0,0],"5":[0,2,5,1,0,0,0,4,6,3,2,0,3,3,2,1,1,0,2,5,2,1,0,0,0,0,0,0,0,0],"6":[0,2,4,1,0,0,0,2,6,3,2,0,2,2,2,1,1,0,1,3,1,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Atlanta":{"0":[20,6,17,9,9,11,13,20,16,15,9,10,22,12,18,10,10,12,12,20,23,17,12,18,14,12,17,31,28,3],"1":[7,2,9,6,3,5,0,7,7,6,6,4,9,3,6,4,6,8,5,7,14,10,3,6,8,3,5,14,10,2],"2":[7,2,9,5,2,5,0,6,6,4,5,4,9,2,5,4,5,8,5,5,13,10,3,6,8,3,5,11,9,0],"3":[5,2,8,4,0,2,0,6,4,4,4,2,6,2,3,2,3,7,2,2,7,6,2,2,2,2,3,6,2,0],"4":[4,2,8,3,0,2,0,6,4,2,4,2,2,0,3,2,2,2,2,0,2,4,2,1,0,1,1,0,0,0],"5":[0,0,1,0,0,2,0,3,2,2,2,1,3,0,0,1,1,2,1,0,1,0,1,0,0,1,0,0,1,0],"6":[0,0,1,0,0,1,0,2,1,2,1,1,2,0,0,1,0,2,0,0,1,0,1,0,0,0,0,0,0,0]},"Stord, Inc|Erlanger":{"0":[2,0,3,1,2,2,2,5,3,2,2,4,2,1,4,3,5,0,2,3,5,4,1,3,2,0,2,0,0,1],"1":[1,0,3,0,0,2,2,4,1,1,0,0,0,0,3,0,1,0,2,2,1,1,1,2,1,0,2,0,0,1],"2":[0,0,2,0,0,1,2,3,1,1,0,0,0,0,3,0,1,0,2,1,2,1,1,2,1,0,2,0,0,0],"3":[0,0,2,0,0,1,2,2,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,2,1,0,2,0,0,0],"4":[0,0,2,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0],"5":[0,0,0,0,0,0,2,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]},"Stord, Inc|Reno":{"0":[7,5,5,3,3,4,6,7,1,1,0,0,1,4,5,3,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"1":[1,2,2,2,1,1,0,5,0,1,0,0,1,2,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"2":[1,2,1,2,1,0,0,4,0,1,0,0,1,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[1,2,0,1,1,0,0,4,0,0,0,0,1,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,2,0,1,0,0,0,3,0,0,0,0,1,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|McCarran":{"0":[0,2,1,1,0,0,0,0,0,2,0,3,3,2,0,2,2,1,1,2,1,0,0,0,0,0,0,0,0,0],"1":[0,2,1,1,0,0,0,0,0,2,0,2,1,1,0,1,2,1,0,1,1,0,0,0,0,0,0,0,0,0],"2":[0,2,1,1,0,0,0,0,0,2,0,2,1,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0],"3":[0,2,0,1,0,0,0,0,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,2,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Washington, D.C.":{"0":[13,32,14,10,6,27,17,21,33,22,21,17,21,28,26,26,22,14,14,24,14,1,0,1,0,0,0,1,0,0],"1":[1,6,3,4,0,3,7,8,17,8,9,6,11,11,15,7,7,7,7,16,11,1,0,1,0,0,0,1,0,0],"2":[1,5,3,3,0,2,6,8,17,8,9,6,10,10,14,7,7,6,7,13,8,1,0,1,0,0,0,0,0,0],"3":[1,4,2,3,0,2,5,6,13,6,5,4,7,3,8,3,6,5,5,4,7,1,0,0,0,0,0,0,0,0],"4":[0,3,2,2,0,2,3,5,7,2,4,3,2,3,7,2,2,4,3,1,6,1,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Austin":{"0":[3,6,3,2,2,2,6,6,4,3,3,2,0,4,2,4,6,4,3,5,3,3,4,5,3,4,5,0,3,0],"1":[0,2,1,0,0,0,0,2,2,2,2,1,0,2,0,0,3,0,2,0,1,0,0,4,1,0,1,0,3,0],"2":[0,2,1,0,0,0,0,2,2,2,2,1,0,1,0,0,2,0,2,0,1,0,0,3,1,0,1,0,3,0],"3":[0,2,1,0,0,0,0,2,1,1,2,1,0,1,0,0,2,0,2,0,1,0,0,1,0,0,1,0,1,0],"4":[0,2,0,0,0,0,0,0,1,1,1,1,0,1,0,0,2,0,2,0,1,0,0,1,0,0,0,0,1,0],"5":[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Chicago":{"0":[5,0,2,3,1,5,0,5,7,10,2,5,7,1,2,1,6,3,1,2,3,0,6,1,0,1,1,0,0,0],"1":[4,0,2,0,0,4,0,4,6,8,0,0,4,0,2,1,2,0,0,1,2,0,4,1,0,0,1,0,0,0],"2":[4,0,2,0,0,4,0,3,6,8,0,0,4,0,2,1,2,0,0,1,2,0,4,1,0,0,1,0,0,0],"3":[2,0,2,0,0,4,0,2,6,7,0,0,4,0,0,1,2,0,0,1,2,0,4,0,0,0,0,0,0,0],"4":[2,0,2,0,0,4,0,1,5,6,0,0,4,0,0,0,0,0,0,1,1,0,3,0,0,0,0,0,0,0],"5":[0,0,2,0,0,1,0,0,1,1,0,0,2,0,0,0,1,0,0,1,2,0,1,0,0,0,0,0,0,0],"6":[0,0,2,0,0,1,0,0,1,1,0,0,2,0,0,0,0,0,0,1,2,0,1,0,0,0,0,0,0,0]},"Stord, Inc|Dallas":{"0":[0,3,0,0,0,0,2,0,1,2,0,0,3,0,1,3,1,2,0,1,1,2,7,7,5,6,2,10,5,3],"1":[0,2,0,0,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,1,1,1,1,2,0,0,0,0,0,1],"2":[0,2,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,2,0,0,0,0,0,0],"3":[0,2,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0]},"Stord, Inc|Columbus":{"0":[1,1,0,0,0,1,0,1,0,2,0,0,2,1,1,1,1,0,3,0,0,4,3,2,4,3,1,10,16,0],"1":[0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,2,0,0,2,0,0,1,0,0,0,11,0],"2":[0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,2,0,0,2,0,0,1,0,0,0,11,0],"3":[0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,2,0,0,1,0,0,0,0,0,0,3,0],"4":[0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,2,0,0,1,0,0,0,0,0,0,2,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Nashville":{"0":[1,1,2,4,2,3,2,6,4,17,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0],"1":[1,0,0,0,0,0,0,0,0,14,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0],"2":[1,0,0,0,0,0,0,0,0,14,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Paulsboro":{"0":[6,0,2,2,2,6,6,13,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[3,0,1,0,1,4,0,11,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[2,0,0,0,1,3,0,9,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,1,2,0,6,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,1,2,0,6,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,1,1,0,6,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,1,1,0,6,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Philadelphia":{"0":[2,0,0,1,1,0,0,1,2,3,1,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[1,0,0,0,0,0,0,1,2,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[1,0,0,0,0,0,0,1,2,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[1,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[1,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Cincinnati":{"0":[1,2,0,1,1,0,0,1,0,0,0,0,0,1,4,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0],"1":[0,1,0,0,0,0,0,1,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,1,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Stord, Inc|Houston":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Paulsboro":{"0":[6,4,6,5,6,4,7,6,6,9,3,3,10,15,12,17,18,6,4,18,10,4,7,9,9,7,6,16,19,5],"1":[1,2,3,1,3,2,0,2,4,4,1,0,4,4,5,11,9,2,2,8,2,0,1,3,5,3,4,8,10,3],"2":[1,2,3,1,3,2,0,2,4,3,1,0,4,4,4,9,7,2,2,8,2,0,1,3,5,3,4,7,9,0],"3":[1,2,1,0,2,2,0,1,3,2,0,0,3,3,4,6,5,0,1,2,1,0,1,1,5,1,1,3,3,0],"4":[1,2,0,0,1,0,0,1,3,1,0,0,3,3,3,5,3,0,1,2,1,0,1,1,3,0,1,2,2,0],"5":[0,2,1,0,0,1,0,0,1,0,0,0,2,1,1,4,4,0,1,2,1,0,1,0,3,1,0,2,2,0],"6":[0,2,1,0,0,1,0,0,1,0,0,0,2,1,1,3,3,0,1,2,1,0,0,0,0,1,0,0,1,0]},"OnTrac Final Mile|Philadelphia":{"0":[4,1,6,3,2,2,1,11,1,3,3,1,6,3,8,2,22,11,9,21,12,50,1,0,1,0,1,0,0,1],"1":[2,0,3,2,1,0,0,5,1,0,1,0,0,0,0,0,2,2,1,4,4,46,1,0,1,0,1,0,0,1],"2":[2,0,2,1,1,0,0,4,1,0,1,0,0,0,0,0,2,1,1,4,4,45,1,0,1,0,1,0,0,0],"3":[1,0,2,1,1,0,0,4,0,0,0,0,0,0,0,0,2,1,1,2,2,39,1,0,1,0,1,0,0,0],"4":[1,0,2,1,0,0,0,4,0,0,0,0,0,0,0,0,1,0,1,2,1,32,1,0,1,0,1,0,0,0],"5":[1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,1,0,0,1,21,1,0,0,0,0,0,0,0],"6":[1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1,0,0,1,15,1,0,0,0,0,0,0,0]},"OnTrac Final Mile|Middleburg Heights":{"0":[6,13,7,1,10,1,6,9,13,5,5,7,15,7,8,8,9,5,5,7,5,7,6,4,4,1,2,0,0,0],"1":[0,6,4,0,0,1,1,1,7,2,2,2,3,2,2,4,5,1,2,3,2,5,2,4,3,1,0,0,0,0],"2":[1,5,4,0,0,1,1,1,7,1,2,2,2,2,2,2,5,1,2,3,2,5,2,1,3,1,0,0,0,0],"3":[0,3,3,0,0,1,0,0,4,0,1,1,2,1,0,1,4,1,1,1,2,1,1,0,3,1,0,0,0,0],"4":[0,3,3,0,0,1,0,0,4,0,1,1,2,1,0,1,2,1,0,1,0,0,0,0,1,1,0,0,0,0],"5":[0,2,1,0,0,0,0,0,3,0,1,1,1,0,0,1,1,0,0,0,1,0,1,0,1,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Nashville":{"0":[10,3,6,7,1,10,4,7,6,7,2,0,3,11,7,4,3,3,4,6,4,3,1,1,1,0,3,2,2,0],"1":[4,0,3,4,0,3,0,3,3,5,0,0,2,5,4,3,3,2,4,6,0,1,0,0,1,0,1,2,0,0],"2":[4,0,3,4,0,3,0,3,2,5,0,0,1,5,2,3,3,2,4,6,0,0,0,0,1,0,1,2,0,0],"3":[2,0,3,2,0,2,0,0,2,2,0,0,1,4,1,3,2,2,3,1,0,0,0,0,0,0,0,1,0,0],"4":[2,0,2,1,0,2,0,0,2,2,0,0,1,4,1,3,1,2,3,1,0,0,0,0,0,0,0,1,0,0],"5":[1,0,1,0,0,2,0,0,1,2,0,0,1,2,0,3,1,1,2,1,0,0,0,0,0,0,0,0,0,0],"6":[1,0,1,0,0,2,0,0,1,2,0,0,1,1,0,3,1,0,1,1,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Newark":{"0":[2,2,4,4,0,3,1,3,3,1,3,0,2,9,5,1,10,9,1,13,3,8,3,6,4,1,6,2,4,0],"1":[0,0,2,3,0,2,0,1,1,0,1,0,0,3,2,0,4,2,1,10,2,3,1,3,1,0,3,2,2,0],"2":[0,0,2,3,0,2,0,1,1,0,1,0,0,3,2,0,3,2,1,7,1,2,1,1,1,0,3,2,1,0],"3":[0,0,1,0,0,2,0,1,0,0,1,0,0,2,2,0,3,2,1,2,1,0,0,1,0,0,2,1,0,0],"4":[0,0,1,0,0,1,0,0,0,0,1,0,0,2,0,0,2,2,1,2,1,0,0,0,0,0,0,0,0,0],"5":[0,0,1,0,0,1,0,0,0,0,1,0,0,1,2,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0],"6":[0,0,1,0,0,1,0,0,0,0,1,0,0,1,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Columbus":{"0":[0,0,0,1,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,1,3,0,1,0,0,0,2,2,0],"1":[0,0,0,1,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,1,3,0,1,0,0,0,2,2,0],"2":[0,0,0,1,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,1,3,0,1,0,0,0,1,2,0],"3":[0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,3,0,0,0,0,0,0,2,0],"4":[0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Chicago":{"0":[1,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"1":[1,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"2":[1,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"3":[0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"4":[0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"5":[0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Atlanta":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Las Vegas":{"0":[0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Reno":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Orlando":{"0":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Fort Mill":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"OnTrac Final Mile|Charlotte":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CTDI|Dallas":{"0":[8,27,6,0,2,3,5,4,12,8,1,8,14,7,6,8,6,4,6,10,7,11,40,3,3,1,3,1,3,0],"1":[2,25,3,0,1,1,1,1,7,3,1,3,3,1,2,2,4,2,3,3,3,4,36,3,3,1,3,1,3,0],"2":[2,25,3,0,0,0,1,1,6,3,1,3,2,1,1,1,2,2,3,3,1,4,36,3,1,1,2,0,2,0],"3":[1,21,2,0,0,0,0,0,4,3,1,3,2,1,1,1,0,2,2,2,0,4,29,0,1,0,1,0,1,0],"4":[1,17,1,0,0,0,0,0,3,3,0,2,2,1,1,1,0,2,1,2,0,4,21,0,1,0,0,0,0,0],"5":[1,16,1,0,0,0,0,0,2,0,0,1,0,0,0,0,0,1,1,2,0,3,28,0,1,0,0,0,0,0],"6":[1,15,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,1,1,2,0,2,23,0,1,0,0,0,0,0]},"CTDI|Columbus":{"0":[9,4,5,4,3,10,6,9,5,8,10,3,8,4,6,11,6,5,6,4,7,7,2,6,2,1,2,6,4,0],"1":[5,4,3,2,2,1,1,5,2,4,6,1,2,2,3,4,3,4,4,2,3,5,2,2,1,0,2,4,2,0],"2":[4,3,3,1,2,0,0,5,2,3,6,1,2,1,3,2,1,3,3,2,1,5,2,1,1,0,1,4,2,0],"3":[2,2,1,1,1,0,0,2,2,1,5,0,1,1,2,1,1,0,3,2,0,3,2,0,0,0,0,1,1,0],"4":[1,2,0,1,1,0,0,2,2,1,3,0,0,1,2,0,0,0,3,1,0,2,0,0,0,0,0,1,0,0],"5":[1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CTDI|Cincinnati":{"0":[0,1,1,1,1,4,1,2,3,4,3,2,4,6,11,1,6,2,1,6,4,5,1,1,0,2,1,4,8,0],"1":[0,0,0,0,0,1,0,1,0,2,1,1,2,3,5,0,2,1,1,3,0,2,0,1,0,1,1,1,5,0],"2":[0,0,0,0,0,1,0,1,0,2,0,0,2,3,5,0,2,1,1,3,0,2,0,1,0,1,1,1,3,0],"3":[0,0,0,0,0,1,0,0,0,2,0,0,2,1,4,0,0,0,0,1,0,2,0,1,0,0,1,1,0,0],"4":[0,0,0,0,0,1,0,0,0,2,0,0,2,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,1,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,1,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CTDI|Nashville":{"0":[1,1,2,0,0,0,1,1,2,3,1,1,2,0,0,3,0,0,1,3,0,0,0,1,0,0,1,1,1,0],"1":[1,0,1,0,0,0,0,1,1,2,1,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,1,0],"2":[0,0,1,0,0,0,0,1,1,2,0,0,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,1,0],"3":[0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Legends Hospitality|Dallas":{"0":[9,6,8,5,1,13,7,9,13,22,12,7,24,19,12,16,17,12,10,12,12,12,11,26,6,3,5,11,9,3],"1":[3,3,4,0,0,3,1,2,4,8,5,3,12,6,5,3,7,4,2,5,2,5,5,18,2,1,2,5,3,1],"2":[3,3,3,0,0,3,1,2,4,6,5,3,11,6,3,3,7,4,2,4,1,4,3,17,2,1,1,4,2,0],"3":[0,2,2,0,0,2,1,2,2,4,3,3,8,4,3,3,5,4,0,2,1,4,2,10,1,1,0,0,1,0],"4":[0,1,1,0,0,2,1,0,2,3,2,3,4,1,3,1,3,0,0,2,1,3,0,6,1,0,0,0,0,0],"5":[0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,1,0,1,0,0,1,1,1,0,0,0,0,0],"6":[0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,1,0,1,0,0,1,0,1,0,0,0,0,0]},"Levy Restaurants|Chicago":{"0":[5,12,10,7,1,7,6,4,9,6,3,8,14,14,2,7,16,5,1,3,7,3,2,1,0,2,4,2,3,0],"1":[2,10,3,0,0,4,3,2,6,4,0,0,7,5,1,4,8,0,0,0,2,3,1,0,0,0,3,0,0,0],"2":[2,10,3,0,0,4,3,2,6,4,0,0,7,5,1,4,8,0,0,0,2,3,1,0,0,0,3,0,0,0],"3":[2,6,1,0,0,4,3,0,6,4,0,0,7,5,0,4,6,0,0,0,1,3,1,0,0,0,1,0,0,0],"4":[2,3,1,0,0,3,3,0,4,1,0,0,5,4,0,2,3,0,0,0,0,1,1,0,0,0,0,0,0,0],"5":[0,2,0,0,0,2,1,0,2,0,0,0,3,2,0,1,3,0,0,0,1,0,1,0,0,0,0,0,0,0],"6":[0,1,0,0,0,2,1,0,2,0,0,0,2,2,0,1,2,0,0,0,0,0,1,0,0,0,0,0,0,0]},"Levy Restaurants|Dallas":{"0":[2,1,1,2,1,3,3,8,5,7,3,3,12,7,4,5,6,1,2,7,7,2,11,5,2,1,4,4,6,2],"1":[0,1,0,0,0,0,0,1,3,3,0,0,6,1,1,0,2,0,0,2,2,0,1,2,1,1,2,0,3,1],"2":[0,1,0,0,0,0,0,1,3,2,0,0,5,1,1,0,2,0,0,2,1,0,1,2,1,0,2,0,2,0],"3":[0,0,0,0,0,0,0,1,3,1,0,0,5,1,0,0,2,0,0,2,1,0,1,2,1,0,1,0,1,0],"4":[0,0,0,0,0,0,0,1,3,1,0,0,2,1,0,0,1,0,0,2,1,0,0,2,1,0,1,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Tennant Solutions|Cincinnati":{"0":[7,10,4,2,1,1,1,4,9,6,4,7,17,6,20,4,0,0,2,5,1,3,2,1,1,4,5,4,13,0],"1":[4,7,4,1,0,1,0,0,4,4,0,2,8,0,15,1,0,0,0,3,1,0,0,0,1,0,1,0,12,0],"2":[4,6,1,0,0,1,0,0,3,3,0,1,7,0,13,1,0,0,0,3,0,0,0,0,1,0,1,0,10,0],"3":[2,4,1,0,0,0,0,0,2,2,0,0,4,0,8,1,0,0,0,0,0,0,0,0,1,0,1,0,5,0],"4":[2,2,1,0,0,0,0,0,2,2,0,0,3,0,4,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0],"5":[2,4,1,0,0,0,0,0,0,2,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,3,1,0,0,0,0,0,0,2,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Power Stop|Chicago":{"0":[8,1,7,7,0,5,5,6,7,8,6,5,11,7,2,2,13,10,2,2,11,2,2,0,0,1,5,1,0,0],"1":[3,1,4,0,0,4,3,3,5,7,0,0,7,5,2,2,9,0,0,2,6,1,1,0,0,0,5,1,0,0],"2":[3,1,4,0,0,4,3,3,5,6,0,0,7,5,2,2,9,0,0,2,6,1,1,0,0,0,5,1,0,0],"3":[2,1,2,0,0,3,2,3,5,5,0,0,6,5,2,2,8,0,0,1,3,1,1,0,0,0,3,1,0,0],"4":[1,1,2,0,0,1,2,3,3,0,0,0,5,4,1,2,4,0,0,0,1,1,1,0,0,0,1,1,0,0],"5":[1,1,1,0,0,0,1,1,2,1,0,0,2,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0],"6":[0,0,1,0,0,0,1,0,2,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Merritt Hospitality LLC|Atlanta":{"0":[0,1,3,0,3,1,0,7,9,6,2,6,8,7,8,5,7,9,4,1,8,4,7,6,4,3,6,6,2,0],"1":[0,0,3,0,1,0,0,2,4,3,1,2,1,3,2,2,5,6,2,0,4,2,1,2,3,0,2,3,2,0],"2":[0,0,3,0,1,0,0,2,4,3,1,2,1,2,2,2,4,6,2,0,4,2,1,1,3,0,2,2,1,0],"3":[0,0,3,0,1,0,0,2,3,2,0,2,1,1,2,1,2,4,2,0,2,2,1,0,1,0,1,1,1,0],"4":[0,0,3,0,1,0,0,1,1,2,0,2,1,0,1,1,1,1,2,0,0,2,0,0,0,0,1,0,0,0],"5":[0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]},"Merritt Hospitality LLC|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Indeed Inc|Dallas":{"0":[2,7,2,1,3,4,3,5,4,7,5,3,9,5,1,4,5,6,3,3,3,4,5,5,6,1,4,4,2,0],"1":[0,4,0,0,0,1,0,1,2,5,3,2,8,2,0,1,3,2,1,0,1,2,2,3,0,1,0,1,2,0],"2":[0,4,0,0,0,1,0,1,2,5,3,2,7,2,0,1,3,1,1,0,1,2,2,3,0,1,0,0,2,0],"3":[0,3,0,0,0,1,0,0,2,4,2,2,7,2,0,1,3,1,1,0,1,2,1,2,0,0,0,0,1,0],"4":[0,3,0,0,0,1,0,0,2,3,1,1,4,2,0,1,3,1,0,0,0,2,1,1,0,0,0,0,0,0],"5":[0,0,0,0,0,1,0,0,0,1,0,1,0,2,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,1,0,0,0,1,0,1,0,2,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0]},"Indeed Inc|Atlanta":{"0":[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,2,0,1,0,0,0,0,0,0,1,1,0,0,0,0],"1":[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,2,0,1,0,0,0,0,0,0,1,1,0,0,0,0],"2":[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,2,0,1,0,0,0,0,0,0,1,1,0,0,0,0],"3":[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]},"Indeed Inc|Austin":{"0":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],"1":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],"2":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],"3":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],"4":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Indeed Inc|Columbus":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Lettuce Entertain You Enterprises, Inc|Nashville":{"0":[3,4,4,2,3,5,2,4,8,7,0,1,7,5,5,7,6,3,3,2,4,1,6,6,1,2,1,1,1,0],"1":[2,0,2,0,0,1,0,0,7,3,0,1,4,3,2,2,5,0,0,0,3,0,2,4,1,2,0,0,1,0],"2":[2,0,2,0,0,1,0,0,7,3,0,1,4,3,2,2,4,0,0,0,3,0,1,4,1,2,0,0,1,0],"3":[1,0,2,0,0,1,0,0,3,2,0,0,1,3,2,1,3,0,0,0,1,0,1,1,0,1,0,0,1,0],"4":[1,0,1,0,0,1,0,0,3,1,0,0,0,0,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[1,0,1,0,0,0,0,0,3,1,0,0,0,0,1,1,2,0,0,0,0,0,0,1,0,0,0,0,0,0],"6":[0,0,1,0,0,0,0,0,2,1,0,0,0,0,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0]},"University of Texas - Housing and Dining|Austin":{"0":[0,2,0,0,0,2,2,0,2,0,2,0,1,4,3,4,10,9,8,10,14,12,6,9,2,0,1,0,1,0],"1":[0,2,0,0,0,1,0,0,1,0,1,0,0,1,0,0,5,3,4,3,8,3,4,9,1,0,0,0,0,0],"2":[0,2,0,0,0,1,0,0,1,0,1,0,0,1,0,0,5,3,4,2,8,2,4,8,1,0,0,0,0,0],"3":[0,2,0,0,0,1,0,0,1,0,1,0,0,1,0,0,5,2,4,2,6,1,0,3,0,0,0,0,0,0],"4":[0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,5,2,3,2,5,0,0,3,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,3,2,4,0,0,2,0,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,3,2,4,0,0,1,0,0,0,0,0,0]},"Solaren Risk Management|Nashville":{"0":[7,2,5,4,3,3,5,8,10,7,0,2,4,4,1,2,4,3,1,3,2,2,3,3,1,0,1,1,1,0],"1":[4,0,3,2,0,0,0,3,8,4,0,1,3,1,1,2,3,1,0,1,2,0,1,1,1,0,1,1,1,0],"2":[4,0,3,2,0,0,0,2,8,4,0,1,3,1,1,2,3,1,0,1,2,0,1,0,0,0,1,1,1,0],"3":[2,0,3,2,0,0,0,2,6,3,0,0,0,1,1,1,3,0,0,0,2,0,1,0,0,0,1,0,0,0],"4":[2,0,1,1,0,0,0,2,4,2,0,0,0,0,1,1,2,0,0,0,0,0,0,0,0,0,1,0,0,0],"5":[1,0,0,1,0,0,0,1,2,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,1,0,0,0,1,2,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Jayna|Dallas":{"0":[3,6,0,1,2,2,4,3,7,3,3,4,5,0,1,2,6,4,1,4,0,0,0,0,2,0,0,0,6,1],"1":[0,4,0,0,0,0,1,2,4,2,2,3,2,0,0,0,3,2,0,2,0,0,0,0,0,0,0,0,3,0],"2":[0,4,0,0,0,0,1,2,2,2,2,3,2,0,0,0,2,2,0,2,0,0,0,0,0,0,0,0,2,0],"3":[0,4,0,0,0,0,0,1,1,2,1,1,2,0,0,0,2,2,0,1,0,0,0,0,0,0,0,0,1,0],"4":[0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0],"6":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]},"Johnstone Supply|Dallas":{"0":[2,3,0,0,0,0,2,0,2,8,2,5,5,7,4,1,12,4,1,5,0,0,0,0,0,0,0,0,3,0],"1":[0,2,0,0,0,0,0,0,0,2,2,3,3,2,2,0,7,1,0,2,0,0,0,0,0,0,0,0,3,0],"2":[0,1,0,0,0,0,0,0,0,2,2,2,3,2,1,0,6,1,0,2,0,0,0,0,0,0,0,0,3,0],"3":[0,1,0,0,0,0,0,0,0,2,2,1,2,1,1,0,5,1,0,1,0,0,0,0,0,0,0,0,2,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,2,1,1,0,5,0,0,1,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0]},"Ingram Content Group|Nashville":{"0":[2,1,1,0,1,3,1,1,1,4,0,1,6,5,4,4,4,2,0,2,2,1,0,1,5,0,2,6,2,0],"1":[1,0,1,0,0,1,0,0,1,1,0,0,0,2,2,1,3,2,0,2,0,0,0,1,4,0,1,6,2,0],"2":[1,0,1,0,0,1,0,0,1,1,0,0,0,2,1,1,1,2,0,2,0,0,0,1,2,0,1,6,2,0],"3":[0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,0,0,1,0,1,5,1,0],"4":[0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,2,0,0],"5":[0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]},"CORT Housewares|Cincinnati":{"0":[0,0,0,0,0,1,0,0,1,1,0,1,3,4,5,3,3,1,3,2,2,3,4,3,5,1,3,7,4,1],"1":[0,0,0,0,0,1,0,0,0,1,0,0,0,2,1,0,2,1,2,1,0,2,0,2,3,1,0,3,1,1],"2":[0,0,0,0,0,1,0,0,0,1,0,0,0,2,1,0,2,1,1,0,0,2,0,2,3,1,0,3,1,0],"3":[0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,2,1,0,0,0,1,0,2,2,1,0,0,0,0],"4":[0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,0,1,1,1,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,2,1,0,0,0,1,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Smurfit Kappa|Dallas":{"0":[1,4,0,1,2,1,0,0,2,0,0,1,1,0,1,1,3,0,1,3,3,0,2,4,0,3,1,1,4,0],"1":[0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,0,0,0,0,1,1,0,3,0],"2":[0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,0,0,0,0,1,1,0,3,0],"3":[0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,3,0],"4":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],"5":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Culinaire|Dallas":{"0":[0,3,2,0,0,1,2,1,1,3,0,0,2,3,1,2,2,0,0,2,0,1,0,2,0,0,2,0,0,0],"1":[0,2,1,0,0,1,0,0,1,2,0,0,2,1,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0],"2":[0,2,1,0,0,1,0,0,1,2,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0],"3":[0,1,1,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"4":[0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"5":[0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Assurant, Inc (Hyla)|Nashville":{"0":[1,1,0,1,1,2,1,3,3,2,0,1,1,0,1,0,1,1,0,0,1,1,0,0,0,1,0,0,0,0],"1":[1,0,0,1,0,2,0,0,2,1,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0],"2":[0,0,0,1,0,2,0,0,2,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Assurant, Inc (Hyla)|Orlando":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Innomark Communications LLC|Cincinnati":{"0":[0,1,0,0,1,1,0,0,0,1,0,0,0,0,0,1,1,0,1,1,1,2,0,2,0,0,0,0,0,0],"1":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0],"2":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0],"3":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ Material in Motion|Atlanta":{"0":[1,0,3,0,0,0,0,0,1,0,0,0,1,0,0,1,1,2,0,2,0,1,1,0,0,2,1,1,2,1],"1":[0,0,3,0,0,0,0,0,1,0,0,0,0,0,0,1,1,2,0,1,0,1,1,0,0,0,0,1,0,1],"2":[0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,1,1,2,0,0,0,1,1,0,0,0,0,1,0,0],"3":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0],"4":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,1,0,0,0,0,0,0,0],"5":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ Shutterfly|Dallas":{"0":[1,0,0,0,0,1,1,0,0,2,0,2,0,2,1,1,0,1,0,0,0,0,1,3,0,0,0,1,1,0],"1":[1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0],"2":[1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0],"3":[1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"4":[1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Continental Battery Systems, Inc.|Reno":{"0":[1,3,3,1,1,1,2,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,2,2,0,0,0,1,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,2,2,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,2,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Foxconn|Dallas":{"0":[1,0,0,0,0,1,0,0,0,1,0,0,2,1,0,0,1,0,1,0,1,0,3,0,0,0,0,0,1,0],"1":[0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]},"Six Flags|Dallas":{"0":[0,1,0,0,0,0,0,0,0,1,0,0,1,1,2,0,0,0,1,0,0,0,0,2,1,0,1,0,2,0],"1":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"The Hillman Group|Cincinnati":{"0":[1,1,0,0,0,1,0,0,1,0,0,0,1,1,0,2,0,0,0,0,0,0,2,1,1,0,0,0,0,0],"1":[0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"The Hillman Group|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ Asurion|Nashville":{"0":[1,0,0,0,0,2,0,2,1,1,0,0,0,0,0,0,2,0,1,0,0,1,0,0,1,0,0,0,0,0],"1":[1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Bon Appetit Management Company, Inc|Chicago":{"0":[0,1,0,0,0,1,0,0,0,1,0,0,1,1,0,1,2,0,0,1,0,1,0,1,0,0,0,0,0,0],"1":[0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,2,0,0,0,0,1,0,0,0,0,0,0,0,0],"2":[0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,2,0,0,0,0,1,0,0,0,0,0,0,0,0],"3":[0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,1,2,0,0,0,0,1,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"G Texas Catering|Dallas":{"0":[0,0,1,0,0,0,0,1,0,0,0,0,2,0,1,1,2,0,0,0,0,0,0,1,0,0,0,1,1,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ UPSMI|Atlanta":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1],"1":[0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ UPSMI|Columbus":{"0":[1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"1":[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Chartwells Higher Education|Austin":{"0":[2,1,1,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[1,1,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[1,1,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Chartwells Higher Education|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]},"Green Worldwide Shipping|Dallas":{"0":[0,0,0,0,0,2,3,2,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,1,2,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,1,2,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]},"Green Tokai Co., Ltd.|Cincinnati":{"0":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,2,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Green Tokai Co., Ltd.|Dayton":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Polymet Corporation|Cincinnati":{"0":[0,0,0,0,0,0,0,0,0,1,0,0,1,0,3,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Mitsubishi - Clerical|Houston":{"0":[0,0,0,0,1,0,0,0,0,2,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0],"1":[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ Kenco|Dallas":{"0":[0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],"1":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"2":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"3":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Legendz Way Distribution Solutions, LTD.|Dallas":{"0":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]},"LowCountry Catering LLC|Atlanta":{"0":[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,1,0,1,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]},"RHINO STAGING|Austin":{"0":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"RHINO STAGING|Houston":{"0":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"RHINO STAGING|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Cold Chain Technologies|Nashville":{"0":[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0],"1":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],"2":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Gold Medal Products|Cincinnati":{"0":[0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ NFI|Dallas":{"0":[2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"1":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Superior Communications|Nashville":{"0":[1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0],"1":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Culinaire International|Dallas":{"0":[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"District Catering|Atlanta":{"0":[0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Galt Medical|Dallas":{"0":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Gathr Outdoors|Nashville":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @  Republic National Distibuting Co (RNDC)|Atlanta":{"0":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ Mobis|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Sterling Client Services LLC|Houston":{"0":[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Yamada North America|Columbus":{"0":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],"1":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Chatsworth Products|Austin":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"F&B Cosmetics|Nashville":{"0":[0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"HANOVER COLD STORAGE|Dallas":{"0":[0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Logoplaste|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Revinate(Formerly Navis)|Dallas":{"0":[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Revinate(Formerly Navis)|Austin":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @  BSN Sports|Dallas":{"0":[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ JP Fulfillment|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ Superior Communications|Nashville":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Upstage Center|San Antonio":{"0":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Westchase Catering Group Inc|Houston":{"0":[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"White Glove Storage & Delivery|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"White Glove Storage & Delivery|Austin":{"0":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"AFC Industries|Cincinnati":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Balcones Country Club|Austin":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"C&W Services|Nashville":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Cornerstone Automation Systems, LLC|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Enable Injections|Cincinnati":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Eurest USA|Houston":{"0":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Facility Solutions Group|Dallas":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Firstsource|Dallas":{"0":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Overhead Door|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Pacific Manufacturing Ohio|Cincinnati":{"0":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Park City Club|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Pearson|Dallas":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Quest Medical, Inc|Dallas":{"0":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Rittal|Inland Empire":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"SXSW|Austin":{"0":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Sigma|Dallas":{"0":[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Soho House Austin|Austin":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ AdvantageXPO@Cantel Medical|Houston":{"0":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Staffmark @ CEVA Logistics|Houston":{"0":[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Takumi Stamping INC|Cincinnati":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Ultimate Linings|Nashville":{"0":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"White Felt|Dallas":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"Will Rogers Memorial Center (Craft Culinary)|Dallas":{"0":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"iHerb|Inland Empire":{"0":[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}};
+const DATES = ["2026-04-15","2026-04-16","2026-04-17","2026-04-18","2026-04-19","2026-04-20","2026-04-21","2026-04-22","2026-04-23","2026-04-24","2026-04-25","2026-04-26","2026-04-27","2026-04-28","2026-04-29","2026-04-30","2026-05-01","2026-05-02","2026-05-03","2026-05-04","2026-05-05","2026-05-06","2026-05-07","2026-05-08","2026-05-09","2026-05-10","2026-05-11","2026-05-12","2026-05-13","2026-05-14"];
+const MARKETS = [{"loc":"Dallas","clients":[{"n":"Legends Hospitality","s":"Legends Hospitality"},{"n":"CTDI","s":"CTDI"},{"n":"Levy Restaurants","s":"Levy Restaurants"},{"n":"Indeed Inc","s":"Indeed Inc"},{"n":"Jayna","s":"Jayna"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"Johnstone Supply","s":"Johnstone Supply"},{"n":"Smurfit Kappa","s":"Smurfit Kappa"},{"n":"Culinaire","s":"Culinaire"},{"n":"Staffmark @ Shutterfly","s":"Staffmark @ Shutterfly"},{"n":"Foxconn","s":"Foxconn"},{"n":"Six Flags","s":"Six Flags"},{"n":"G Texas Catering","s":"G Texas Catering"},{"n":"Green Worldwide Shipping","s":"Green Worldwide Shipping"},{"n":"Staffmark @ Kenco","s":"Staffmark @ Kenco"},{"n":"Legendz Way Distribution Solutions, LTD.","s":"Legendz Way Distribution Solution.."},{"n":"Staffmark @ NFI","s":"Staffmark @ NFI"},{"n":"Culinaire International","s":"Culinaire International"},{"n":"Galt Medical","s":"Galt Medical"},{"n":"Staffmark @ Mobis","s":"Staffmark @ Mobis"},{"n":"HANOVER COLD STORAGE","s":"HANOVER COLD STORAGE"},{"n":"Logoplaste","s":"Logoplaste"},{"n":"Staffmark @  BSN Sports","s":"Staffmark @  BSN Sports"},{"n":"Staffmark @ JP Fulfillment","s":"Staffmark @ JP Fulfillment"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"Merritt Hospitality LLC","s":"Merritt Hospitality LLC"},{"n":"The Hillman Group","s":"The Hillman Group"},{"n":"Chartwells Higher Education","s":"Chartwells Higher Education"},{"n":"RHINO STAGING","s":"RHINO STAGING"},{"n":"Revinate(Formerly Navis)","s":"Revinate(Formerly Navis)"},{"n":"White Glove Storage & Delivery","s":"White Glove Storage & Delivery"},{"n":"Cornerstone Automation Systems, LLC","s":"Cornerstone Automation Systems, LLC"},{"n":"Facility Solutions Group","s":"Facility Solutions Group"},{"n":"Firstsource","s":"Firstsource"},{"n":"Overhead Door","s":"Overhead Door"},{"n":"Park City Club","s":"Park City Club"},{"n":"Pearson","s":"Pearson"},{"n":"Quest Medical, Inc","s":"Quest Medical, Inc"},{"n":"Sigma","s":"Sigma"},{"n":"White Felt","s":"White Felt"},{"n":"Will Rogers Memorial Center (Craft Culinary)","s":"Will Rogers Memorial Center (Craf.."}]},{"loc":"Chicago","clients":[{"n":"CORT","s":"CORT"},{"n":"Levy Restaurants","s":"Levy Restaurants"},{"n":"Power Stop","s":"Power Stop"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"Bon Appetit Management Company, Inc","s":"Bon Appetit Management Company, Inc"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Las Vegas","clients":[{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"CORT","s":"CORT"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Atlanta","clients":[{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"Merritt Hospitality LLC","s":"Merritt Hospitality LLC"},{"n":"Staffmark @ Material in Motion","s":"Staffmark @ Material in Motion"},{"n":"Indeed Inc","s":"Indeed Inc"},{"n":"Staffmark @ UPSMI","s":"Staffmark @ UPSMI"},{"n":"LowCountry Catering LLC","s":"LowCountry Catering LLC"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"District Catering","s":"District Catering"},{"n":"Staffmark @  Republic National Distibuting Co (RNDC)","s":"Staffmark @  Republic National Di.."},{"n":"CORT","s":"CORT"}]},{"loc":"Washington, D.C.","clients":[{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"CORT","s":"CORT"}]},{"loc":"Nashville","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"Lettuce Entertain You Enterprises, Inc","s":"Lettuce Entertain You Enterprises.."},{"n":"Solaren Risk Management","s":"Solaren Risk Management"},{"n":"CORT","s":"CORT"},{"n":"Ingram Content Group","s":"Ingram Content Group"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"CTDI","s":"CTDI"},{"n":"Assurant, Inc (Hyla)","s":"Assurant, Inc (Hyla)"},{"n":"Staffmark @ Asurion","s":"Staffmark @ Asurion"},{"n":"Cold Chain Technologies","s":"Cold Chain Technologies"},{"n":"Superior Communications","s":"Superior Communications"},{"n":"Gathr Outdoors","s":"Gathr Outdoors"},{"n":"F&B Cosmetics","s":"F&B Cosmetics"},{"n":"Staffmark @ Superior Communications","s":"Staffmark @ Superior Communications"},{"n":"C&W Services","s":"C&W Services"},{"n":"Ultimate Linings","s":"Ultimate Linings"}]},{"loc":"Orlando","clients":[{"n":"CORT","s":"CORT"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"Assurant, Inc (Hyla)","s":"Assurant, Inc (Hyla)"}]},{"loc":"Cincinnati","clients":[{"n":"Tennant Solutions","s":"Tennant Solutions"},{"n":"CTDI","s":"CTDI"},{"n":"CORT Housewares","s":"CORT Housewares"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"Innomark Communications LLC","s":"Innomark Communications LLC"},{"n":"The Hillman Group","s":"The Hillman Group"},{"n":"Polymet Corporation","s":"Polymet Corporation"},{"n":"Green Tokai Co., Ltd.","s":"Green Tokai Co., Ltd."},{"n":"Gold Medal Products","s":"Gold Medal Products"},{"n":"AFC Industries","s":"AFC Industries"},{"n":"Enable Injections","s":"Enable Injections"},{"n":"Pacific Manufacturing Ohio","s":"Pacific Manufacturing Ohio"},{"n":"Takumi Stamping INC","s":"Takumi Stamping INC"}]},{"loc":"Paulsboro","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"Stord, Inc","s":"Stord, Inc"}]},{"loc":"Austin","clients":[{"n":"University of Texas - Housing and Dining","s":"University of Texas - Housing and.."},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"CORT","s":"CORT"},{"n":"Chartwells Higher Education","s":"Chartwells Higher Education"},{"n":"Indeed Inc","s":"Indeed Inc"},{"n":"RHINO STAGING","s":"RHINO STAGING"},{"n":"Chatsworth Products","s":"Chatsworth Products"},{"n":"Revinate(Formerly Navis)","s":"Revinate(Formerly Navis)"},{"n":"White Glove Storage & Delivery","s":"White Glove Storage & Delivery"},{"n":"Balcones Country Club","s":"Balcones Country Club"},{"n":"SXSW","s":"SXSW"},{"n":"Soho House Austin","s":"Soho House Austin"}]},{"loc":"Columbus","clients":[{"n":"CTDI","s":"CTDI"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"Staffmark @ UPSMI","s":"Staffmark @ UPSMI"},{"n":"Yamada North America","s":"Yamada North America"},{"n":"Indeed Inc","s":"Indeed Inc"}]},{"loc":"Philadelphia","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"},{"n":"Stord, Inc","s":"Stord, Inc"}]},{"loc":"Middleburg Heights","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Houston","clients":[{"n":"CORT","s":"CORT"},{"n":"Mitsubishi - Clerical","s":"Mitsubishi - Clerical"},{"n":"Sterling Client Services LLC","s":"Sterling Client Services LLC"},{"n":"Westchase Catering Group Inc","s":"Westchase Catering Group Inc"},{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"RHINO STAGING","s":"RHINO STAGING"},{"n":"Eurest USA","s":"Eurest USA"},{"n":"Staffmark @ AdvantageXPO@Cantel Medical","s":"Staffmark @ AdvantageXPO@Cantel M.."},{"n":"Staffmark @ CEVA Logistics","s":"Staffmark @ CEVA Logistics"}]},{"loc":"Charlotte","clients":[{"n":"CORT","s":"CORT"},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Newark","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Reno","clients":[{"n":"Stord, Inc","s":"Stord, Inc"},{"n":"Continental Battery Systems, Inc.","s":"Continental Battery Systems, Inc."},{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]},{"loc":"Erlanger","clients":[{"n":"Stord, Inc","s":"Stord, Inc"}]},{"loc":"McCarran","clients":[{"n":"Stord, Inc","s":"Stord, Inc"}]},{"loc":"Dayton","clients":[{"n":"Green Tokai Co., Ltd.","s":"Green Tokai Co., Ltd."}]},{"loc":"Inland Empire","clients":[{"n":"Rittal","s":"Rittal"},{"n":"iHerb","s":"iHerb"}]},{"loc":"San Antonio","clients":[{"n":"Upstage Center","s":"Upstage Center"}]},{"loc":"Fort Mill","clients":[{"n":"OnTrac Final Mile","s":"OnTrac Final Mile"}]}];
+const REQ = {"Dallas|__market__":{"r":21,"s":1070,"t":2690},"Dallas|Legends Hospitality":{"r":9,"s":180,"t":1190},"Dallas|Levy Restaurants":{"r":5,"s":61,"t":400},"Dallas|Indeed Inc":{"r":3,"s":93,"t":900},"Chicago|__market__":{"r":13,"s":342,"t":892},"Chicago|CORT":{"r":1,"s":80,"t":200},"Chicago|Levy Restaurants":{"r":10,"s":239,"t":610},"Chicago|Bon Appetit Management Company, Inc":{"r":1,"s":23,"t":22},"Las Vegas|__market__":{"r":13,"s":88,"t":3940},"Las Vegas|CORT":{"r":1,"s":0,"t":160},"Las Vegas|Stord, Inc":{"r":8,"s":88,"t":2920},"Atlanta|__market__":{"r":11,"s":1538,"t":1690},"Atlanta|Stord, Inc":{"r":4,"s":120,"t":1350},"Atlanta|Merritt Hospitality LLC":{"r":1,"s":0,"t":60},"Atlanta|Indeed Inc":{"r":3,"s":5,"t":280},"Washington, D.C.|__market__":{"r":5,"s":27,"t":840},"Washington, D.C.|CORT":{"r":4,"s":27,"t":800},"Nashville|__market__":{"r":6,"s":103,"t":720},"Nashville|CORT":{"r":1,"s":96,"t":300},"Nashville|Solaren Risk Management":{"r":3,"s":7,"t":300},"Orlando|__market__":{"r":4,"s":28,"t":700},"Orlando|CORT":{"r":3,"s":28,"t":600},"Cincinnati|__market__":{"r":4,"s":41,"t":0},"Cincinnati|Tennant Solutions":{"r":4,"s":41,"t":0},"Paulsboro|__market__":{"r":4,"s":210,"t":600},"Paulsboro|OnTrac Final Mile":{"r":4,"s":210,"t":600},"Austin|__market__":{"r":8,"s":13,"t":1560},"Austin|Indeed Inc":{"r":7,"s":13,"t":1500},"Columbus|__market__":{"r":5,"s":78,"t":40},"Columbus|Indeed Inc":{"r":4,"s":78,"t":0},"Middleburg Heights|__market__":{"r":2,"s":41,"t":200},"Middleburg Heights|OnTrac Final Mile":{"r":2,"s":41,"t":200},"Charlotte|__market__":{"r":2,"s":0,"t":100},"McCarran|__market__":{"r":2,"s":0,"t":80},"McCarran|Stord, Inc":{"r":2,"s":0,"t":80},"Dayton|__market__":{"r":1,"s":0,"t":380},"San Antonio|__market__":{"r":1,"s":0,"t":40},"__total__":{"r":102,"s":3579,"t":14472}};
+const HAS_REQS = true;
+const OWNER = "ALL MARKETS";
+const COLSPAN = 15;
+const THRESHOLDS = {av:[55,40],vo:[85,75],op:[65,50],pb:[40,15],bc:[80,60],cr:[15,8]};
+
+// === Helpers ===
+function safeDiv(a,b) { return b>0 ? a/b*100 : null; }
+
+function fmtPct(val, key, forceWhite) {
+    if (val===null) return '<span class="na">&mdash;</span>';
+    const [gMin,yMin] = THRESHOLDS[key];
+    let cls = val>=gMin ? 'green' : val>=yMin ? 'yellow' : 'red';
+    const icon = cls==='green' ? '🟢' : cls==='yellow' ? '🟡' : '🔴';
+    return `<span class="${cls}">${icon} ${val.toFixed(1)}%</span>`;
+}
+
+function fmtReq(reqInfo, platv, isTotal) {
+    if (!reqInfo || reqInfo.r===0) {
+        return platv>0 ? '<span class="red">❌ No reqs</span>' : '<span class="na">&mdash;</span>';
+    }
+    const fillPct = reqInfo.t>0 ? reqInfo.s/reqInfo.t*100 : null;
+    let cls='green', icon='✅';
+    if (fillPct!==null && fillPct>=80) { cls='yellow'; icon='⚠️'; }
+    const fillStr = fillPct!==null ? ` (${fillPct.toFixed(0)}%)` : '';
+    let h = `<span class="${cls}">${icon} ${reqInfo.r} reqs</span>`;
+    h += `<br><span style="font-size:10px;color:#666">${reqInfo.s}/${reqInfo.t} RSVPs${fillStr}</span>`;
+    return h;
+}
+
+function sumRange(arr, si, ei) {
+    let s=0; for(let i=si;i<=ei;i++) s+=(arr[i]||0); return s;
+}
+
+// === Compute and render ===
+function computeAndRender(startIdx, endIdx) {
+    // Sum daily values for each client+location within the date range
+    // stage indices: 0=Accts,1=Verif,2=OBTask,3=PlatV,4=Ready,5=Booked,6=Comp
+    const clientData = {};  // "client|loc" -> [a,v,ob,pv,rd,bk,co]
+    for (const [key, stages] of Object.entries(DAILY)) {
+        const vals = [0,0,0,0,0,0,0];
+        for (let si=0; si<7; si++) {
+            if (stages[si]) vals[si] = sumRange(stages[si], startIdx, endIdx);
+        }
+        clientData[key] = vals;
+    }
+
+    // Build market aggregates, re-sort by accts descending
+    const marketAgg = [];
+    for (const mkt of MARKETS) {
+        const loc = mkt.loc;
+        const mTotal = [0,0,0,0,0,0,0];
+        const mClients = [];
+        for (const cl of mkt.clients) {
+            const key = `${cl.n}|${loc}`;
+            const vals = clientData[key] || [0,0,0,0,0,0,0];
+            for (let i=0;i<7;i++) mTotal[i]+=vals[i];
+            mClients.push({name:cl.n, short:cl.s, vals});
+        }
+        // Re-sort clients by accts descending
+        mClients.sort((a,b)=>b.vals[0]-a.vals[0]);
+        marketAgg.push({loc, total:mTotal, clients:mClients});
+    }
+    // Re-sort markets by accts descending
+    marketAgg.sort((a,b)=>b.total[0]-a.total[0]);
+
+    // Grand total
+    const gt = [0,0,0,0,0,0,0];
+    for (const m of marketAgg) for(let i=0;i<7;i++) gt[i]+=m.total[i];
+
+    // Render KPIs
+    const cr = safeDiv(gt[6],gt[0]);
+    const crDisp = cr!==null ? cr.toFixed(1)+'%' : '0.0%';
+    const vnb = gt[3]-gt[5];
+    const crClass = (cr||0)<8?'red':(cr||0)<15?'yellow':'green';
+    document.getElementById('kpi-grid').innerHTML = `
+        <div class="kpi-card ${crClass}"><div class="value">${crDisp}</div><div class="label">Overall CR% (benchmark: 15.4%)</div></div>
+        <div class="kpi-card"><div class="value">${gt[0]}</div><div class="label">Accounts Created</div></div>
+        <div class="kpi-card"><div class="value">${gt[6]}</div><div class="label">Shifts Completed</div></div>
+        <div class="kpi-card"><div class="value">${vnb}</div><div class="label">Verified but NOT Booking</div></div>`;
+
+    // Render summary
+    const vnbPct = gt[3]>0 ? (vnb/gt[3]*100).toFixed(0) : 0;
+    const mktsComp = marketAgg.filter(m=>m.total[6]>0).length;
+    document.getElementById('summary-box').innerHTML =
+        `<strong>Portfolio snapshot:</strong> ${gt[0]} accounts &rarr; ${gt[1]} verified &rarr; ${gt[3]} platform verified &rarr; ${gt[5]} booked &rarr; ${gt[6]} completed`+
+        `<br><strong>Markets with completions:</strong> ${mktsComp} of ${marketAgg.length}`+
+        ` &nbsp;|&nbsp; <strong>Verified workers not booking:</strong> ${vnb} (${vnbPct}% of pipeline wasted)`;
+
+    // Render table
+    let html = '';
+    const reqTd = (h) => HAS_REQS ? `<td>${h}</td>` : '';
+    function makeRow(label, v, rowClass, reqHtml) {
+        const [a,vr,ob,pv,rd,bk,co] = v;
+        const av=safeDiv(vr,a),vo=safeDiv(ob,vr),op=safeDiv(pv,ob),pb=safeDiv(bk,pv),bc=safeDiv(co,bk),crr=safeDiv(co,a);
+        const cls = rowClass ? ` class="${rowClass}"` : '';
+        return `<tr${cls}><td>${label}</td>`+
+            `<td class="num">${a}</td>`+
+            `<td class="num">${vr}</td><td>${fmtPct(av,'av')}</td>`+
+            `<td class="num">${ob}</td><td>${fmtPct(vo,'vo')}</td>`+
+            `<td class="num">${pv}</td><td>${fmtPct(op,'op')}</td>`+
+            `<td class="num">${rd}</td>`+
+            `<td class="num">${bk}</td><td>${fmtPct(pb,'pb')}</td>`+
+            `<td class="num">${co}</td><td>${fmtPct(bc,'bc')}</td>`+
+            `<td>${fmtPct(crr,'cr')}</td>`+
+            reqTd(reqHtml||'') + `</tr>\n`;
+    }
+
+    // Grand total row (sticky)
+    const totalReq = HAS_REQS ? fmtReq(REQ['__total__'], gt[3], true) : '';
+    html += makeRow(`<strong>${OWNER} TOTAL</strong>`, gt, 'total-row', totalReq);
+    html += `<tr class="spacer-after-total"><td colspan="${COLSPAN}"></td></tr>`;
+
+    // Per market
+    for (const m of marketAgg) {
+        const mReq = HAS_REQS ? fmtReq(REQ[`${m.loc}|__market__`], m.total[3], true) : '';
+        html += makeRow(`<strong>${m.loc.toUpperCase()}</strong>`, m.total, 'market-row', mReq);
+        for (const cl of m.clients) {
+            if (cl.vals[0]===0) continue;
+            const cReq = HAS_REQS ? fmtReq(REQ[`${m.loc}|${cl.name}`], cl.vals[3]) : '';
+            html += makeRow(`&nbsp;&nbsp;- ${cl.short}`, cl.vals, '', cReq);
+        }
+        html += `<tr class="spacer"><td colspan="${COLSPAN}"></td></tr>`;
+    }
+
+    document.getElementById('funnel-tbody').innerHTML = html;
+}
+
+// === Date range controls ===
+const dateStart = document.getElementById('date-start');
+const dateEnd = document.getElementById('date-end');
+
+if (DATES.length > 0) {
+    dateStart.min = DATES[0]; dateStart.max = DATES[DATES.length-1];
+    dateEnd.min = DATES[0]; dateEnd.max = DATES[DATES.length-1];
+    dateStart.value = DATES[0];
+    dateEnd.value = DATES[DATES.length-1];
+}
+
+function getDateIndices() {
+    const s = dateStart.value, e = dateEnd.value;
+    let si=0, ei=DATES.length-1;
+    for (let i=0;i<DATES.length;i++) { if(DATES[i]>=s){ si=i; break; } }
+    for (let i=DATES.length-1;i>=0;i--) { if(DATES[i]<=e){ ei=i; break; } }
+    return [si, ei];
+}
+
+function applyDateRange() {
+    const [si, ei] = getDateIndices();
+    const days = ei-si+1;
+    document.getElementById('range-info').textContent = `${days} day${days!==1?'s':''} selected`;
+    document.getElementById('period-display').textContent = `${dateStart.value} — ${dateEnd.value}`;
+    // Clear preset highlights
+    document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+    computeAndRender(si, ei);
+}
+
+function setPreset(key) {
+    const last = DATES.length-1;
+    let si=0;
+    if (key==='7d') si=Math.max(0, last-6);
+    else if (key==='14d') si=Math.max(0, last-13);
+    else si=0;
+    dateStart.value = DATES[si];
+    dateEnd.value = DATES[last];
+    document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+    if (key==='7d') document.querySelectorAll('.preset')[0].classList.add('active');
+    else if (key==='14d') document.querySelectorAll('.preset')[1].classList.add('active');
+    else document.getElementById('preset-30d').classList.add('active');
+    applyDateRange();
+}
+
+// Initial render with full range
+document.getElementById('preset-30d').classList.add('active');
+applyDateRange();
+
+// === Column tooltips ===
+(function() {
+    const tip = document.getElementById('col-tooltip');
+    document.querySelectorAll('#funnel-table th[data-tip]').forEach(th => {
+        th.addEventListener('mouseenter', e => {
+            const text = th.getAttribute('data-tip');
+            tip.textContent = text;
+            tip.style.display = 'block';
+            const rect = th.getBoundingClientRect();
+            let left = rect.left + rect.width/2 - 140;
+            if (left < 8) left = 8;
+            if (left + 340 > window.innerWidth) left = window.innerWidth - 350;
+            tip.style.left = left + 'px';
+            tip.style.top = (rect.bottom + 6) + 'px';
+        });
+        th.addEventListener('mouseleave', () => {
+            tip.style.display = 'none';
+        });
+    });
+})();
+</script>
+
+<div id="col-tooltip"></div>
+
+</body>
+</html>
