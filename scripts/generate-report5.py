@@ -1176,8 +1176,13 @@ def match_ob_funnel(client_short, location, ob_data, role=None):
     if _try_match(check_client=True, use_role=False):
         return total
 
-    # No location-only fallback for OB Funnel — summing all clients in a city
-    # would produce inflated numbers (e.g. all Chicago clients for a Compass request)
+    # 3. Fallback: location + role (any client) — only when client has zero match
+    if role:
+        if _try_match(check_client=False, use_role=True):
+            return total
+
+    # 4. Fallback: location + __total__ (any client) — last resort
+    _try_match(check_client=False, use_role=False)
     return total
 
 
