@@ -22,6 +22,7 @@ components:
     - ai-automation-specialist.md
     - funnel-specialist.md
     - data-scientist.md
+    - ad-test-specialist.md
   tasks:
     - ppc-campaign-management.md
     - seo-job-optimization.md
@@ -36,6 +37,7 @@ components:
     - google-ads-performance-analysis.md
     - google-ads-optimization-cycle.md
     - hospitality-campaign-launch.md
+    - ad-test-management.md
   workflows:
     - campaign-launch-workflow.md
   checklists:
@@ -54,6 +56,7 @@ components:
     - google-ads-campaign-brief-tmpl.md
     - google-ads-performance-review-tmpl.md
     - google-ads-ab-test-plan-tmpl.md
+    - ad-test-tracker-tmpl.md
     - spanish-ad-copy-tmpl.md
   tools:
     - cpa-calculator.js
@@ -133,6 +136,8 @@ dependencies:
 
 tags:
   - recruitment-marketing
+  - ad-testing
+  - experimentation
   - staffing
   - ppc
   - candidate-acquisition
