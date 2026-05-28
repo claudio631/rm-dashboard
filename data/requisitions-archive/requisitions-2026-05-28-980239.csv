@@ -1,0 +1,140 @@
+last_updated,requisition_id,job_id,job_title,agency,client,location,pay_rate_min,pay_rate_max,pay_type,rsvps,target_rsvps,status
+2026-05-28T09:17:38.479657-05:00,FLEX-26205,,Machine Operator,Indeed,Ingram Content Group,"La Vergne, TN, TN",17.0,19.0,PayType.HOURLY,0,,auto-paused
+2026-05-28T09:17:14.220078-05:00,FLEX-26204,,Machine Operator,Indeed,Ingram Content Group,"La Vergne, TN, TN",17.0,19.0,PayType.HOURLY,0,,auto-paused
+2026-05-28T09:15:32.621295-05:00,FLEX-26203,,Machine Operator,Indeed,Ingram Content Group,"La Vergne, TN, TN",17.0,19.0,PayType.HOURLY,0,,auto-paused
+2026-05-27T23:32:16.808890-05:00,FLEX-26182,10147908549,Warehouse Operative,Indeed,OnTrac Final Mile,"South Brunswick, NJ",17.5,18.5,PayType.HOURLY,0,100,open
+2026-05-27T18:51:34.817679-05:00,FLEX-26181,10147602270,Concession Stand Worker,Indeed,Indeed Flex Applications,"Dallas, TX",17.0,17.0,PayType.HOURLY,0,300,open
+2026-05-27T18:51:34.674178-05:00,FLEX-26180,10147598157,Concession Stand Worker,Indeed,Indeed Flex Applications,"Dallas, TX",17.0,17.0,PayType.HOURLY,0,100,open
+2026-05-27T18:51:34.401816-05:00,FLEX-26179,10147598156,Concession Stand Worker,Indeed,Indeed Flex Applications,"Dallas, TX",17.0,17.0,PayType.HOURLY,4,100,open
+2026-05-27T18:32:04.806597-05:00,FLEX-26178,10147586833,Warehouse Operative,Indeed,OnTrac Final Mile,"Paulsboro, NJ",17.5,18.5,PayType.HOURLY,0,200,open
+2026-05-27T18:32:04.665842-05:00,FLEX-26177,10147586825,Warehouse Operative,Indeed,OnTrac Final Mile,"Paulsboro, NJ",17.5,18.5,PayType.HOURLY,0,100,open
+2026-05-27T18:32:04.556406-05:00,FLEX-26176,10147585105,Warehouse Operative,Indeed,OnTrac Final Mile,"Paulsboro, NJ",17.5,18.5,PayType.HOURLY,2,100,open
+2026-05-27T18:32:04.397357-05:00,FLEX-26175,10147580513,Warehouse Operative,Indeed,CTDI,"Flower Mound, TX",13.0,14.0,PayType.HOURLY,0,50,open
+2026-05-27T18:12:05.725239-05:00,FLEX-26174,10147578779,Warehouse Operative,Indeed,CTDI,"Flower Mound, TX",13.0,14.0,PayType.HOURLY,2,50,open
+2026-05-27T18:12:05.507713-05:00,FLEX-26173,10147577888,Warehouse Operative,Indeed,CTDI,"Flower Mound, TX",13.0,14.0,PayType.HOURLY,2,50,open
+2026-05-27T18:02:51.056079-05:00,FLEX-26172,10147561945,Server,Indeed,Levy Restaurants,"Fort Worth, TX",18.0,25.0,PayType.HOURLY,2,,open
+2026-05-27T23:03:21.175182-05:00,FLEX-26171,10147543561,Industrial General Labor,Indeed,"Stord, Inc","St. Charles, IL",17.5,17.5,PayType.HOURLY,0,40,auto-paused
+2026-05-27T23:03:21.096025-05:00,FLEX-26170,10147542332,Industrial General Labor,Indeed,"Stord, Inc","St. Charles, IL",17.5,17.5,PayType.HOURLY,0,40,auto-paused
+2026-05-27T23:03:21.012118-05:00,FLEX-26169,10147538266,Industrial General Labor,Indeed,Indeed Flex Applications,"St. Charles, IL",17.5,17.5,PayType.HOURLY,0,40,auto-paused
+2026-05-27T16:52:05.490572-05:00,FLEX-26168,10147489050,Picker Packer,Indeed,Tennant Solutions,"Cincinnati, OH",15.0,15.0,PayType.HOURLY,0,,open
+2026-05-27T16:52:05.166803-05:00,FLEX-26167,10147488617,Picker Packer,Indeed,Tennant Solutions,"Cincinnati, OH",14.0,15.0,PayType.HOURLY,0,,open
+2026-05-27T16:52:04.892916-05:00,FLEX-26166,10147488254,Picker Packer,Indeed,Tennant Solutions,"Cincinnati, OH",14.0,15.0,PayType.HOURLY,1,,open
+2026-05-28T07:50:40.359421-05:00,FLEX-26165,10147396328,Prep Cook,Indeed,Levy Restaurants,"Dallas, TX",18.0,20.0,PayType.HOURLY,0,100,open
+2026-05-27T15:02:37.841605-05:00,FLEX-26164,10147394719,Prep Cook,Indeed,Levy Restaurants,"Dallas, TX",18.0,20.0,PayType.HOURLY,0,100,open
+2026-05-27T14:21:48.999333-05:00,FLEX-26163,10147380584,Forklift Driver,Indeed,"Stord, Inc","Atlanta, GA",18.0,18.0,PayType.HOURLY,0,100,open
+2026-05-27T14:21:48.902612-05:00,FLEX-26162,10147372219,Forklift Driver,Indeed,"Stord, Inc","Atlanta, GA",18.0,18.0,PayType.HOURLY,3,400,open
+2026-05-27T14:21:49.185728-05:00,FLEX-26161,10147362598,Picker Packer,Indeed,"Stord, Inc","Atlanta, GA",16.0,16.0,PayType.HOURLY,0,650,open
+2026-05-27T14:21:49.090895-05:00,FLEX-26160,10147361945,Picker Packer,Indeed,"Stord, Inc","Atlanta, GA",16.0,16.0,PayType.HOURLY,26,200,open
+2026-05-27T13:51:44.101123-05:00,FLEX-26159,10147348060,Hospitality Team lead,Indeed,Legends Hospitality,"Dallas, TX",21.5,21.5,PayType.HOURLY,0,,open
+2026-05-27T13:51:43.984874-05:00,FLEX-26158,10147341859,Hospitality Team lead,Indeed,Legends Hospitality,"Dallas, TX",21.5,21.5,PayType.HOURLY,0,,open
+2026-05-27T13:11:44.065332-05:00,FLEX-26157,10147298632,Hospitality Team lead,Indeed,Legends Hospitality,"Dallas, TX",21.5,21.5,PayType.HOURLY,4,,open
+2026-05-27T08:33:14.712401-05:00,FLEX-26155,10147042444,Forklift Driver,Indeed,Johnstone Supply,"Lancaster, TX",19.0,19.0,PayType.HOURLY,0,,open
+2026-05-27T08:33:14.592386-05:00,FLEX-26154,10147041907,Forklift Driver,Indeed,Johnstone Supply,"Lancaster, TX",19.0,19.0,PayType.HOURLY,0,,open
+2026-05-27T08:33:14.445414-05:00,FLEX-26153,10147039934,Forklift Driver,Indeed,Johnstone Supply,"Lancaster, TX",19.0,19.0,PayType.HOURLY,5,,open
+2026-05-26T20:02:38.924001-05:00,FLEX-26111,10146193767,Warehouse Operative,Indeed,OnTrac Final Mile,"Logan Township, NJ",21.0,21.0,PayType.HOURLY,15,30,open
+2026-05-26T19:21:49.450330-05:00,FLEX-26110,10146176774,Warehouse Operative,Indeed,CTDI,"Haslet, TX",15.0,16.5,PayType.HOURLY,4,25,open
+2026-05-26T18:09:13.839530-05:00,FLEX-26109,10146123444,Loader / Crew,Indeed,CORT,"Orlando, FL",16.5,16.5,PayType.HOURLY,31,200,open
+2026-05-26T18:09:13.744446-05:00,FLEX-26108,10146123445,Loader / Crew,Indeed,CORT,"Orlando, FL",16.5,16.5,PayType.HOURLY,0,200,open
+2026-05-26T18:09:13.655502-05:00,FLEX-26107,10146123443,Loader / Crew,Indeed,CORT,"Orlando, FL",16.5,16.5,PayType.HOURLY,0,200,open
+2026-05-26T18:09:14.635098-05:00,FLEX-26106,10146121909,Loader / Crew,Indeed,CORT,"Washington, DC, WA",17.0,17.0,PayType.HOURLY,0,200,open
+2026-05-26T18:09:14.547036-05:00,FLEX-26105,10146121910,Loader / Crew,Indeed,CORT,"Washington, DC, WA",17.0,17.0,PayType.HOURLY,0,200,open
+2026-05-26T18:09:14.455482-05:00,FLEX-26104,10146121448,Loader / Crew,Indeed,CORT,"Washington, DC, WA",17.0,17.0,PayType.HOURLY,0,200,open
+2026-05-26T18:09:14.377212-05:00,FLEX-26103,10146121447,Loader / Crew,Indeed,CORT,"Washington, DC, WA",17.0,17.0,PayType.HOURLY,0,200,open
+2026-05-26T18:09:14.283872-05:00,FLEX-26102,10146121449,Loader / Crew,Indeed,CORT,"Washington, DC, WA",17.0,17.0,PayType.HOURLY,11,200,open
+2026-05-26T18:09:14.992301-05:00,FLEX-26101,10146117373,Picker Packer,Indeed,"Stord, Inc","Las Vegas, NV",16.25,16.25,PayType.HOURLY,0,320,open
+2026-05-26T18:09:14.905619-05:00,FLEX-26100,10146117374,Picker Packer,Indeed,"Stord, Inc","Las Vegas, NV",16.25,16.25,PayType.HOURLY,0,320,open
+2026-05-26T18:09:14.786091-05:00,FLEX-26099,10146117105,Picker Packer,Indeed,"Stord, Inc","Las Vegas, NV",16.25,16.25,PayType.HOURLY,50,320,open
+2026-05-26T18:09:13.568416-05:00,FLEX-26098,10146116104,Warehouse Operative,Indeed,OnTrac Final Mile,"Reno, NV",18.0,18.0,PayType.HOURLY,0,200,open
+2026-05-26T18:09:13.487505-05:00,FLEX-26097,10146115486,Warehouse Operative,Indeed,OnTrac Final Mile,"Reno, NV",18.0,18.0,PayType.HOURLY,0,200,open
+2026-05-26T18:09:13.374707-05:00,FLEX-26096,10146115485,Warehouse Operative,Indeed,OnTrac Final Mile,"Reno, NV",18.0,18.0,PayType.HOURLY,0,200,open
+2026-05-26T17:22:06.412836-05:00,FLEX-26095,10146081314,Assembler,Indeed,Innomark Communications LLC,"West Chester, OH",14.0,14.0,PayType.HOURLY,0,440,open
+2026-05-26T17:22:06.245619-05:00,FLEX-26094,10146081315,Assembler,Indeed,Innomark Communications LLC,"West Chester, OH",14.0,14.0,PayType.HOURLY,0,440,open
+2026-05-26T16:51:41.107496-05:00,FLEX-26093,10146080827,Assembler,Indeed,Innomark Communications LLC,"West Chester, OH",14.0,14.0,PayType.HOURLY,0,440,open
+2026-05-26T16:51:40.983775-05:00,FLEX-26092,10146080828,Assembler,Indeed,Innomark Communications LLC,"West Chester, OH",14.0,14.0,PayType.HOURLY,8,440,open
+2026-05-28T07:46:32.500226-05:00,FLEX-26091,10145840613,Prep Cook,Indeed,World of Hyatt,"Dallas, TX",18.0,18.0,PayType.HOURLY,0,50,open
+2026-05-28T07:46:03.462986-05:00,FLEX-26090,10145838046,Prep Cook,Indeed,World of Hyatt,"Dallas, TX",18.0,18.0,PayType.HOURLY,3,100,open
+2026-05-26T11:21:42.256609-05:00,FLEX-26089,10145764487,Housekeeper,Indeed,World of Hyatt,"Dallas, TX",17.0,17.0,PayType.HOURLY,0,,open
+2026-05-26T11:21:42.133228-05:00,FLEX-26088,10145756574,Housekeeper,Indeed,World of Hyatt,"Dallas, TX",17.0,17.0,PayType.HOURLY,0,,open
+2026-05-26T11:22:50.560465-05:00,FLEX-26087,10145752022,Housekeeper,Indeed,World of Hyatt,"Dallas, TX",17.0,17.0,PayType.HOURLY,0,,open
+2026-05-26T10:41:48.859574-05:00,FLEX-26086,10145742283,Housekeeper,Indeed,World of Hyatt,"Dallas, TX",17.0,17.0,PayType.HOURLY,20,,open
+2026-05-26T09:42:07.380936-05:00,FLEX-26085,10145700756,Loader / Crew,Indeed,CORT,"Las Vegas, NV",16.0,16.0,PayType.HOURLY,0,500,open
+2026-05-26T09:42:07.180959-05:00,FLEX-26084,10145700153,Loader / Crew,Indeed,CORT,"Las Vegas, NV",16.0,16.0,PayType.HOURLY,23,140,open
+2026-05-22T20:12:05.505372-05:00,FLEX-26039,10143540920,Warehouse Operative,Indeed,OnTrac Final Mile,"Romeoville, IL",18.9,18.9,PayType.HOURLY,0,,open
+2026-05-22T20:12:05.198587-05:00,FLEX-26038,10143539860,Warehouse Operative,Indeed,OnTrac Final Mile,"Romeoville, IL",18.9,18.9,PayType.HOURLY,0,,open
+2026-05-22T20:12:04.950095-05:00,FLEX-26037,10143539585,Warehouse Operative,Indeed,OnTrac Final Mile,"Romeoville, IL",18.9,18.9,PayType.HOURLY,31,,open
+2026-05-22T19:44:31.867139-05:00,FLEX-26036,10143522087,Hospitality General Labor,Indeed,Levy Restaurants,"Chicago, IL",18.0,20.0,PayType.HOURLY,0,,open
+2026-05-22T19:45:52.464247-05:00,FLEX-26035,10143521583,Hospitality General Labor,Indeed,Levy Restaurants,"Chicago, IL",18.0,20.0,PayType.HOURLY,0,,open
+2026-05-22T19:44:07.488947-05:00,FLEX-26034,10143520656,Hospitality General Labor,Indeed,Levy Restaurants,"Chicago, IL",18.0,20.0,PayType.HOURLY,124,,open
+2026-05-22T19:48:30.135033-05:00,FLEX-26033,10143501180,Warehouse Operative,Indeed,CORT,"Bolingbrook, IL",18.0,19.0,PayType.HOURLY,0,200,open
+2026-05-22T19:04:46.355985-05:00,FLEX-26032,10143499768,Loader / Crew,Indeed,CORT,"Bolingbrook, IL",18.0,19.0,PayType.HOURLY,18,200,open
+2026-05-22T19:49:55.912922-05:00,FLEX-26031,10143488123,Warehouse Operative,Indeed,CORT,"Bolingbrook, IL",18.0,19.0,PayType.HOURLY,21,200,open
+2026-05-27T14:02:53.711149-05:00,FLEX-26030,10143125218,Industrial Team Lead,Indeed,OnTrac Final Mile,"Swedesboro, NJ",20.0,24.0,PayType.HOURLY,52,100,auto-paused
+2026-05-22T09:04:05.196550-05:00,FLEX-26012,10142239596,Forklift Driver,Indeed,AFC Industries,"Kennesaw, GA",21.0,22.0,PayType.HOURLY,20,,open
+2026-05-22T09:01:53.321277-05:00,FLEX-26011,10142238991,Forklift Driver,Indeed,AFC Industries,"Kennesaw, GA",21.0,22.0,PayType.HOURLY,0,,open
+2026-05-22T09:03:32.636715-05:00,FLEX-26010,10142238023,Forklift Driver,Indeed,AFC Industries,"Kennesaw, GA",21.0,22.0,PayType.HOURLY,1,,open
+2026-05-21T11:18:23.760317-05:00,FLEX-25991,10141119926,Forklift Driver,Indeed,"Stord, Inc","Mesquite, TX",16.0,16.0,PayType.HOURLY,0,,open
+2026-05-21T11:19:12.869409-05:00,FLEX-25990,10141119358,Forklift Driver,Indeed,"Stord, Inc","Mesquite, TX",16.0,16.0,PayType.HOURLY,15,,open
+2026-05-21T11:16:56.487922-05:00,FLEX-25989,10141118430,Forklift Driver,Indeed,"Stord, Inc","Mesquite, TX",16.0,16.0,PayType.HOURLY,1,,open
+2026-05-27T14:02:53.629808-05:00,FLEX-25988,10141098048,Warehouse Operative,Indeed,OnTrac Final Mile,"Swedesboro, NJ",18.0,18.0,PayType.HOURLY,0,100,auto-paused
+2026-05-27T14:02:53.542732-05:00,FLEX-25987,10141093644,Warehouse Operative,Indeed,OnTrac Final Mile,"Swedesboro, NJ",18.0,18.0,PayType.HOURLY,0,100,auto-paused
+2026-05-27T14:02:53.454877-05:00,FLEX-25986,10141087779,Warehouse Operative,Indeed,OnTrac Final Mile,"Swedesboro, NJ",18.0,24.0,PayType.HOURLY,46,100,auto-paused
+2026-05-27T14:02:53.059046-05:00,FLEX-25982,10141019150,Warehouse Operative,Indeed,CTDI,"Haslet, TX",15.5,17.5,PayType.HOURLY,0,,auto-paused
+2026-05-27T14:02:52.972842-05:00,FLEX-25981,10141007977,Warehouse Operative,Indeed,CTDI,"Haslet, TX",15.5,17.5,PayType.HOURLY,0,,auto-paused
+2026-05-27T14:02:52.869411-05:00,FLEX-25980,10140989245,Warehouse Operative,Indeed,CTDI,"Haslet, TX",15.5,17.5,PayType.HOURLY,51,,auto-paused
+2026-05-19T17:51:32.741384-05:00,FLEX-25974,10139835280,Bartender,Indeed,Legends Hospitality,"Dallas, TX",17.0,20.0,PayType.HOURLY,2,50,open
+2026-05-19T16:30:55.248404-05:00,FLEX-25973,10139797441,Hospitality Team lead,Indeed,Levy Restaurants,"Chicago, IL",20.0,25.0,PayType.HOURLY,0,100,auto-paused
+2026-05-19T16:30:54.867617-05:00,FLEX-25972,10139797443,Hospitality Team lead,Indeed,Levy Restaurants,"Chicago, IL",20.0,25.0,PayType.HOURLY,0,100,auto-paused
+2026-05-19T16:30:55.320285-05:00,FLEX-25971,10139797442,Hospitality Team lead,Indeed,Levy Restaurants,"Chicago, IL",20.0,25.0,PayType.HOURLY,0,100,auto-paused
+2026-05-19T16:32:00.878689-05:00,FLEX-25970,10139791302,Warehouse Operative,Indeed,OnTrac Final Mile,"Reno, NV",18.0,18.0,PayType.HOURLY,0,200,open
+2026-05-27T23:03:20.927280-05:00,FLEX-25967,10139763829,Loader / Crew,Indeed,CORT,"Woodbridge, IL",18.0,18.0,PayType.HOURLY,0,200,auto-paused
+2026-05-27T23:03:20.843085-05:00,FLEX-25966,10139763827,Loader / Crew,Indeed,CORT,"Woodbridge, IL",18.0,18.0,PayType.HOURLY,0,200,auto-paused
+2026-05-27T23:03:20.749831-05:00,FLEX-25965,10139763828,Loader / Crew,Indeed,CORT,"Woodbridge, IL",18.0,18.0,PayType.HOURLY,101,200,auto-paused
+2026-05-19T15:51:32.463780-05:00,FLEX-25961,10139754522,Forklift Driver,Indeed,CTDI,"Monroe, OH",18.0,18.0,PayType.HOURLY,0,100,open
+2026-05-19T15:51:32.369542-05:00,FLEX-25960,10139754520,Forklift Driver,Indeed,CTDI,"Monroe, OH",18.0,18.0,PayType.HOURLY,0,100,open
+2026-05-19T15:51:32.273689-05:00,FLEX-25959,10139753649,Forklift Driver,Indeed,CTDI,"Monroe, OH",18.0,18.0,PayType.HOURLY,16,100,open
+2026-05-19T15:51:32.191369-05:00,FLEX-25958,10139746539,Material Handler,Indeed,CTDI,"Monroe, OH",15.0,16.0,PayType.HOURLY,0,200,open
+2026-05-19T15:51:30.822615-05:00,FLEX-25957,10139746533,Material Handler,Indeed,CTDI,"Monroe, OH",15.0,16.0,PayType.HOURLY,0,100,open
+2026-05-19T15:51:32.099435-05:00,FLEX-25956,10139740547,Material Handler,Indeed,CTDI,"Monroe, OH",15.0,16.0,PayType.HOURLY,18,200,open
+2026-05-19T15:21:54.111988-05:00,FLEX-25935,10139695857,Warehouse Operative,Indeed,Cort Housewares,"Fairfield, OH",16.5,16.5,PayType.HOURLY,0,140,open
+2026-05-19T15:21:54.015950-05:00,FLEX-25934,10139695856,Warehouse Operative,Indeed,Cort Housewares,"Fairfield, OH",16.5,16.5,PayType.HOURLY,0,140,open
+2026-05-19T15:21:53.905177-05:00,FLEX-25933,10139695858,Warehouse Operative,Indeed,Cort Housewares,"Fairfield, OH",16.5,16.5,PayType.HOURLY,0,140,open
+2026-05-19T15:21:53.811490-05:00,FLEX-25932,10139695855,Warehouse Operative,Indeed,Cort Housewares,"Fairfield, OH",16.5,16.5,PayType.HOURLY,52,140,open
+2026-05-19T15:21:53.721482-05:00,FLEX-25925,10139687663,Dishwasher,Indeed,Legends Hospitality,"Dallas, TX",17.0,19.0,PayType.HOURLY,0,260,open
+2026-05-19T15:21:53.619053-05:00,FLEX-25924,10139687664,Dishwasher,Indeed,Legends Hospitality,"Dallas, TX",17.0,19.0,PayType.HOURLY,0,260,open
+2026-05-19T15:21:53.527001-05:00,FLEX-25923,10139687665,Dishwasher,Indeed,Legends Hospitality,"Dallas, TX",17.0,19.0,PayType.HOURLY,27,260,open
+2026-05-26T13:16:07.231491-05:00,FLEX-25873,10136248184,Warehouse Operative,Indeed,OnTrac Final Mile,"South Brunswick, NJ",17.5,17.5,PayType.HOURLY,0,100,open
+2026-05-26T13:16:40.903113-05:00,FLEX-25872,10136239191,Warehouse Operative,Indeed,OnTrac Final Mile,"South Brunswick, NJ",17.5,17.5,PayType.HOURLY,0,100,open
+2026-05-26T13:16:56.832437-05:00,FLEX-25871,10136236337,Warehouse Operative,Indeed,OnTrac Final Mile,"South Brunswick, NJ",17.5,17.5,PayType.HOURLY,0,100,open
+2026-05-26T13:17:15.146607-05:00,FLEX-25870,10136232620,Warehouse Operative,Indeed,OnTrac Final Mile,"South Brunswick, NJ",17.5,17.5,PayType.HOURLY,44,100,open
+2026-05-15T12:21:42.723339-05:00,FLEX-25869,10136120236,Server,Indeed,Pear Tree Catering ,"Lake Forest, IL",20.0,20.0,PayType.HOURLY,1,30,auto-paused
+2026-05-15T16:02:58.867055-05:00,FLEX-25868,10136118016,Server,Indeed,Pear Tree Catering ,"Lake Forest, IL",20.0,20.0,PayType.HOURLY,1,30,auto-paused
+2026-05-15T16:02:58.688168-05:00,FLEX-25867,10136114392,Server,Indeed,Pear Tree Catering ,"Lake Forest, IL",20.0,20.0,PayType.HOURLY,1,100,auto-paused
+2026-05-14T13:43:57.885691-05:00,FLEX-25848,10134889237,Barista,Indeed,Merritt Hospitality LLC,"Hapeville, GA",14.5,14.5,PayType.HOURLY,17,200,open
+2026-05-13T17:52:20.118490-05:00,FLEX-25829,10133875258,Server,Indeed,Indeed Flex Applications,"Atlanta, GA",17.0,17.0,PayType.HOURLY,82,200,open
+2026-05-13T17:12:21.605144-05:00,FLEX-25828,10133872862,Bartender,Indeed,Merritt Hospitality LLC,"Atlanta, GA",17.0,20.0,PayType.HOURLY,15,60,open
+2026-05-27T17:37:44.512777-05:00,FLEX-25667,10126923573,Warehouse Operative,Indeed,OnTrac Final Mile,"Lebanon, TN",18.0,18.0,PayType.HOURLY,28,100,open
+2026-05-27T17:37:35.729686-05:00,FLEX-25666,10126921661,Warehouse Operative,Indeed,OnTrac Final Mile,"Lebanon, TN",18.0,18.0,PayType.HOURLY,24,100,open
+2026-05-15T12:30:07.522606-05:00,FLEX-25558,10123790496,Warehouse Operative,Indeed,OnTrac Final Mile,"Middleburg Heights, OH",17.0,20.0,PayType.HOURLY,0,100,open
+2026-05-15T12:30:26.193595-05:00,FLEX-25554,10123789761,Warehouse Operative,Indeed,OnTrac Final Mile,"Middleburg Heights, OH",17.0,20.0,PayType.HOURLY,89,100,open
+2026-05-15T14:42:39.974674-05:00,FLEX-25261,10114817388,Material Handler,Indeed,CTDI,"Grove City, OH",15.0,15.0,PayType.HOURLY,181,300,open
+2026-05-27T23:03:20.651990-05:00,FLEX-25230,10113574565,Prep Cook,Indeed,Levy Restaurants,"Chicago, IL",17.0,20.0,PayType.HOURLY,144,,auto-paused
+2026-05-08T14:18:07.537324-05:00,FLEX-25229,10113574200,Line Cook,Indeed,"Bon Appetit Management Company, Inc","Chicago, IL",16.0,20.0,PayType.HOURLY,24,22,auto-paused
+2026-05-27T23:03:21.360964-05:00,FLEX-25228,10113573405,Server,Indeed,Levy Restaurants,"Chicago, IL",16.0,20.0,PayType.HOURLY,8,40,auto-paused
+2026-05-12T10:17:18.134115-05:00,FLEX-25227,10113571921,Dishwasher,Indeed,Levy Restaurants,"Chicago, IL",17.0,18.0,PayType.HOURLY,51,50,auto-paused
+2026-05-27T23:03:21.277566-05:00,FLEX-25225,10113564415,Server,Indeed,Levy Restaurants,"Chicago, IL",16.0,20.0,PayType.HOURLY,39,40,auto-paused
+2026-04-26T17:21:35.420910-05:00,FLEX-25222,10113549624,Prep Cook,Indeed,Levy Restaurants,"Dallas, TX",18.0,18.0,PayType.HOURLY,29,100,open
+2026-05-28T08:32:16.961939-05:00,FLEX-25220,10113549187,Dishwasher,Indeed,Legends Hospitality,"Dallas, TX",17.0,19.0,PayType.HOURLY,261,260,auto-paused
+2026-05-15T14:35:35.103927-05:00,FLEX-25035,10106963873,Loader / Crew,Indeed,CORT,"Nashville , TN",17.0,17.0,PayType.HOURLY,200,300,open
+2026-04-23T18:45:13.549120-05:00,FLEX-25030,10106617372,Line Cook,Indeed,Legends Hospitality,"Dallas , TX",17.0,17.0,PayType.HOURLY,24,100,open
+2026-05-01T15:02:59.490109-05:00,FLEX-24965,10102273885,Interview,Indeed,"Stord, Inc",,16.0,18.0,PayType.HOURLY,0,,open
+2026-05-07T14:32:02.314244-05:00,FLEX-24964,10102227606,Loader / Crew,Indeed,Levy Restaurants,"Chicago, IL",18.5,19.0,PayType.HOURLY,22,,auto-paused
+2026-05-11T09:54:31.721213-05:00,FLEX-24783,10096987454,Line Cook,Indeed,Indeed Flex Upskilling,"Dallas, TX",18.0,20.0,PayType.HOURLY,100,100,auto-paused
+2026-05-25T23:22:23.583846-05:00,FLEX-24637,10091799931,Server,Indeed,Levy Restaurants,"Chicago, IL",16.0,20.0,PayType.HOURLY,81,80,auto-paused
+2026-04-08T16:24:07.540601-05:00,FLEX-24570,10088422685,Server,Indeed,Levy Restaurants,"Dallas, TX",18.0,25.0,PayType.HOURLY,70,,open
+2026-05-27T23:03:21.453455-05:00,FLEX-24484,10082904132,Warehouse Operative,Indeed,Indeed Flex Applications,"Romeoville, IL",18.9,18.9,PayType.HOURLY,203,300,auto-paused
+2026-05-15T12:31:40.526755-05:00,FLEX-24329,10074423786,Warehouse Operative,Indeed,OnTrac Final Mile,"Paulsboro, NJ",17.5,18.5,PayType.HOURLY,181,200,open
+2026-05-01T14:51:50.132911-05:00,FLEX-23943,10057860091,Picker Packer,Indeed,Indeed Flex Applications,,14.0,18.0,PayType.HOURLY,27,,open
+2026-05-01T15:02:59.105557-05:00,FLEX-23942,10057858540,Interview,Indeed,Indeed Flex Applications,,14.0,18.0,PayType.HOURLY,23,,open
+2026-05-26T01:22:16.923898-05:00,FLEX-22746,9977268336,Line Cook,Indeed,Indeed Flex Upskilling,"Atlanta, GA",18.0,20.0,PayType.HOURLY,443,,auto-paused
+2026-05-26T01:22:16.712003-05:00,FLEX-22745,9977267812,Server,Indeed,Indeed Flex Upskilling,"Atlanta, GA",18.0,22.0,PayType.HOURLY,833,,auto-paused
+2026-05-26T01:22:16.362819-05:00,FLEX-22743,9977198693,Prep Cook,Indeed,Indeed Flex Upskilling,"Dallas, TX",18.0,20.0,PayType.HOURLY,397,,auto-paused

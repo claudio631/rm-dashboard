@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Recruitment Request Dashboard — 2026-05-13</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; margin: 0; padding: 16px; background: #f0f2f5; }
+  h1 { font-size: 22px; margin: 0 0 4px; color: #1a1a2e; }
+  p.sub { color: #666; font-size: 13px; margin: 0 0 16px; }
+  .table-wrap { overflow: auto; max-height: calc(100vh - 60px); background: white; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,.12); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 1400px; }
+  th { position: sticky; top: 0; background: #1a1a2e; color: white; padding: 10px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; z-index: 10; }
+  th.group { background: #0d47a1; text-align: center; }
+  td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; font-size: 14px; }
+  td:nth-child(5) { font-size: 15px; font-weight: bold; }
+  tr:hover td { background: rgba(0,0,0,.025); }
+  tr:last-child td { border-bottom: none; }
+  .section-header { background: #f8f9ff; font-weight: 600; font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: .5px; padding: 4px 10px; }
+</style>
+</head>
+<body>
+<h1>Recruitment Request Dashboard</h1>
+<p class="sub">May 13, 2026 · 57 total rows (Live + Declined) · Sorted by submission date</p>
+
+<div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+  <div style="background:white;border-radius:10px;padding:16px 24px;box-shadow:0 1px 4px rgba(0,0,0,.1);min-width:140px">
+    <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.5px">Live Requests</div>
+    <div style="font-size:32px;font-weight:700;color:#1a1a2e;margin-top:4px">27</div>
+  </div>
+  <div style="background:white;border-radius:10px;padding:16px 24px;box-shadow:0 1px 4px rgba(0,0,0,.1);min-width:140px">
+    <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.5px">Total HC</div>
+    <div style="font-size:32px;font-weight:700;color:#1a1a2e;margin-top:4px">443</div>
+  </div>
+  <div style="background:white;border-radius:10px;padding:16px 24px;box-shadow:0 1px 4px rgba(0,0,0,.1);min-width:140px">
+    <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.5px">No FHS</div>
+    <div style="font-size:32px;font-weight:700;color:#c62828;margin-top:4px">24</div>
+  </div>
+  <div style="background:white;border-radius:10px;padding:16px 24px;box-shadow:0 1px 4px rgba(0,0,0,.1);min-width:140px">
+    <div style="font-size:12px;color:#666;text-transform:uppercase;letter-spacing:.5px">Declined</div>
+    <div style="font-size:32px;font-weight:700;color:#666;margin-top:4px">30</div>
+  </div>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th rowspan="2">St</th>
+  <th rowspan="2">Client</th>
+  <th rowspan="2">Owner</th>
+  <th rowspan="2">Role</th>
+  <th rowspan="2">HC</th>
+  <th rowspan="2">Start</th>
+  <th rowspan="2">Shifts</th>
+  <th class="group" colspan="3">FHS</th>
+  <th class="group" colspan="3">Indeed Ads</th>
+  <th class="group" colspan="3">OB Funnel</th>
+  <th class="group" colspan="2">Fulfillment</th>
+</tr>
+<tr>
+  <th class="group">Open</th><th class="group">Interview</th><th class="group">Int. Target</th>
+  <th class="group">Status</th><th class="group">Camps</th><th class="group">Spend</th>
+  <th class="group">Created</th><th class="group">Verified</th><th class="group">RTB</th>
+  <th class="group">Target</th><th class="group">Fill%</th>
+</tr>
+</thead>
+<tbody>
+<tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Advanced Spice Farmer Branch Book Keeper</td><td>Claudio</td><td></td><td style="font-weight:bold">1</td>
+            <td>May/01/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Ontrac</td><td>Claudio</td><td>Warehouse Operator</td><td style="font-weight:bold;font-size:15px">24</td>
+            <td>May/01/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>2695</td><td>240</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>60</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Hyatt Regency</td><td>Claudio</td><td>Server</td><td style="font-weight:bold;font-size:15px">1</td>
+            <td>Apr/02/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>10</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>2</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Ashley Furniture</td><td>Megan</td><td></td><td style="font-weight:bold">3</td>
+            <td>Dec/02/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Culinaire</td><td>Claudio</td><td>Barista</td><td style="font-weight:bold">2</td>
+            <td>Apr/03/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>HEI Hotels</td><td>Megan</td><td></td><td style="font-weight:bold">5</td>
+            <td>Jun/03/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Lettuce</td><td>Craig</td><td></td><td style="font-weight:bold;font-size:15px">12</td>
+            <td>Apr/04/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>503</td><td>120</td>
+            <td>🟢 3 • $1,716</td><td></td><td></td>
+            <td>1</td><td>1</td><td>0</td>
+            <td>30</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>BOS</td><td>Craig</td><td>Tractor Trailer Driver and Box Truck Driver</td><td style="font-weight:bold">3</td>
+            <td>Aug/04/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Cort</td><td>Megan</td><td>Loader/Crew</td><td style="font-weight:bold">100</td>
+            <td>Feb/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Need Forklift drivers</td><td>Claudio</td><td>Forklift Driver</td><td style="font-weight:bold;font-size:15px">4</td>
+            <td>Mar/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>40</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>414</td><td>148</td><td>0</td>
+            <td>10</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>CTDI</td><td>Claudio</td><td></td><td style="font-weight:bold;font-size:15px">80</td>
+            <td>May/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>800</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>200</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Same Day Maids</td><td>Claudio</td><td></td><td style="font-weight:bold">5</td>
+            <td>May/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Indie Campers</td><td>Claudio</td><td></td><td style="font-weight:bold;font-size:15px">5</td>
+            <td>May/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>50</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>215</td><td>74</td><td>0</td>
+            <td>12</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Bon Appetit Management Company, Inc</td><td>Claudio</td><td>Server</td><td style="font-weight:bold;font-size:15px">8</td>
+            <td>May/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>80</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>20</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Bon Appetit Management Company, Inc</td><td>Claudio</td><td>Bartender</td><td style="font-weight:bold;font-size:15px">2</td>
+            <td>May/05/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>20</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>5</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>New Jersey</td><td>Angela</td><td>Loader/Crew</td><td style="font-weight:bold">3</td>
+            <td>Mar/06/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Culinaire</td><td>Claudio</td><td>Dishwasher</td><td style="font-weight:bold">2</td>
+            <td>Jan/07/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Barista</td><td>Megan</td><td>Barista</td><td style="font-weight:bold">3</td>
+            <td>Nov/07/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>NCR Voyix</td><td>Craig</td><td>Event Staff</td><td style="font-weight:bold">1</td>
+            <td>Jan/08/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>CORT</td><td>Megan</td><td></td><td style="font-weight:bold">10</td>
+            <td>Apr/09/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Legends Hospitality</td><td>Craig</td><td>Concession Stand Worker</td><td style="font-weight:bold;font-size:15px">35</td>
+            <td>Mar/10/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>350</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>319</td><td>105</td><td>0</td>
+            <td>88</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Legends Hospitality</td><td>Craig</td><td>Dishwasher</td><td style="font-weight:bold;font-size:15px">20</td>
+            <td>Mar/10/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>200</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>50</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Legends Hospitality</td><td>Craig</td><td>Hospitality Team Lead</td><td style="font-weight:bold;font-size:15px">6</td>
+            <td>Mar/10/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>60</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>319</td><td>105</td><td>0</td>
+            <td>15</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Stadium People</td><td>Megan</td><td>Event Staff</td><td style="font-weight:bold">50</td>
+            <td>Apr/10/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Foxconn</td><td>Megan</td><td></td><td style="font-weight:bold">8</td>
+            <td>Jun/12/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Eurest</td><td>Megan</td><td>Barista</td><td style="font-weight:bold">1</td>
+            <td>Feb/13/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>CTDI</td><td>Craig</td><td>Material Handler</td><td style="font-weight:bold;font-size:15px">30</td>
+            <td>Mar/13/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>300</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>75</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Ingram</td><td>Craig</td><td>Warehouse Operator</td><td style="font-weight:bold;font-size:15px">30</td>
+            <td>Mar/13/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>1081</td><td>300</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>60</td><td>21</td><td>0</td>
+            <td>75</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>KEX Express</td><td>Megan</td><td>Warehouse Operator</td><td style="font-weight:bold">1</td>
+            <td>May/16/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>JadeEx</td><td>Craig</td><td>Industrial General Laborer</td><td style="font-weight:bold">1</td>
+            <td>Jun/16/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Cort</td><td>Megan</td><td>Loader/Crew</td><td style="font-weight:bold">25</td>
+            <td>Dec/16/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Cort</td><td>Megan</td><td>Loader/Crew</td><td style="font-weight:bold">20</td>
+            <td>Dec/16/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Simply Catering</td><td>Craig</td><td></td><td style="font-weight:bold;font-size:15px">10</td>
+            <td>Apr/17/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>100</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>1</td><td>1</td><td>0</td>
+            <td>25</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Plano, Texas</td><td>Megan</td><td></td><td style="font-weight:bold">2</td>
+            <td>Sep/18/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Culinaire</td><td>Claudio</td><td>Team Lead/Captain/Server</td><td style="font-weight:bold;font-size:15px">30</td>
+            <td>Jan/19/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>300</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>75</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Line Cook</td><td>Craig</td><td>Line Cook</td><td style="font-weight:bold;font-size:15px">2</td>
+            <td>Apr/21/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>20</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>5</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>CORT</td><td>Claudio</td><td>Loader/Crew</td><td style="font-weight:bold">50</td>
+            <td>Feb/23/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>CORT</td><td>Claudio</td><td>Assembler</td><td style="font-weight:bold">10</td>
+            <td>Feb/23/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Material Handler</td><td>Craig</td><td>Material Handler</td><td style="font-weight:bold;font-size:15px">40</td>
+            <td>Mar/23/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>400</td>
+            <td>🟢 6 • $7,007</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>100</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Green WorldWide</td><td>Megan</td><td>Admin or Warehouse Clerk</td><td style="font-weight:bold">1</td>
+            <td>Jun/23/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Hanover Cold Storage</td><td>Megan</td><td>Forklift Driver</td><td style="font-weight:bold">4</td>
+            <td>Apr/24/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Ingram</td><td>Claudio</td><td>Machine Operator</td><td style="font-weight:bold;font-size:15px">20</td>
+            <td>Apr/24/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>200</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>50</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>CORT Housewares</td><td>Claudio</td><td>Warehouse Operator</td><td style="font-weight:bold;font-size:15px">25</td>
+            <td>Apr/24/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>250</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>414</td><td>148</td><td>0</td>
+            <td>62</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>CORT</td><td>Claudio</td><td>Loader/Crew</td><td style="font-weight:bold;font-size:15px">1</td>
+            <td>Feb/27/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td>4</td><td>687</td><td>10</td>
+            <td>🟢 10 • $7,900</td><td></td><td></td>
+            <td>223</td><td>68</td><td>0</td>
+            <td>2</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Freshella Catering</td><td>Craig</td><td>Prep Cook</td><td style="font-weight:bold;font-size:15px">10</td>
+            <td>Mar/27/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>100</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>25</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>FLIK</td><td>Craig</td><td>Cashier</td><td style="font-weight:bold">1</td>
+            <td>Jan/28/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Houskekeeper</td><td>Jessica</td><td>Housekeeper</td><td style="font-weight:bold;font-size:15px">1</td>
+            <td>Apr/28/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>10</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>2</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Culinaire</td><td>Claudio</td><td>Line Cook</td><td style="font-weight:bold;font-size:15px">9</td>
+            <td>Jan/29/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>90</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>22</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>American Dawn</td><td>Claudio</td><td>Forklift Driver</td><td style="font-weight:bold;font-size:15px">9</td>
+            <td>Apr/29/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>523</td><td>90</td>
+            <td>🟢 11 • $6,707</td><td></td><td></td>
+            <td>104</td><td>43</td><td>0</td>
+            <td>22</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>FLIK Hospitality Group</td><td>Claudio</td><td>Barista</td><td style="font-weight:bold;font-size:15px">1</td>
+            <td>Apr/29/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td style="color:#c62828;font-weight:bold">0</td><td>0</td><td>10</td>
+            <td>🔴 0 • $0</td><td></td><td></td>
+            <td>1</td><td>0</td><td>0</td>
+            <td>2</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Nurse America</td><td>Megan</td><td>Brand Ambassador</td><td style="font-weight:bold">1</td>
+            <td>May/29/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>CORT</td><td>Claudio</td><td>Loader/Crew</td><td style="font-weight:bold">10</td>
+            <td>Apr/30/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Legends Hospitality</td><td>Claudio</td><td>Line Cook</td><td style="font-weight:bold">4</td>
+            <td>Apr/30/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>CTDI</td><td>Claudio</td><td>Forklift Driver</td><td style="font-weight:bold;font-size:15px">10</td>
+            <td>Apr/30/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td>4</td><td>865</td><td>100</td>
+            <td>🟢 18 • $15,134</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>25</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Stord</td><td>Craig</td><td>Admin Assistant</td><td style="font-weight:bold">1</td>
+            <td>Sep/30/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr style="opacity:0.6">
+            <td><span style="background:#ffebee;color:#c62828;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">D</span></td><td>Stord</td><td>Craig</td><td></td><td style="font-weight:bold">7</td>
+            <td>Sep/30/2025</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td><td></td>
+            <td></td><td></td>
+        </tr><tr>
+            <td><span style="background:#e8f5e9;color:#1b5e20;font-weight:700;border-radius:4px;padding:3px 8px;font-size:13px">O</span></td><td>Cort</td><td>Claudio</td><td>Loader/Crew</td><td style="font-weight:bold;font-size:15px">18</td>
+            <td>Jan/31/2026</td><td><span style="background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:600">Yes</span></td>
+            <td>1</td><td>1098</td><td>180</td>
+            <td>🟢 6 • $2,570</td><td></td><td></td>
+            <td>0</td><td>0</td><td>0</td>
+            <td>45</td><td><div style="display:flex;align-items:center;gap:6px">
+            <div style="flex:1;background:#eee;border-radius:4px;height:8px">
+              <div style="width:0%;background:#c62828;height:8px;border-radius:4px"></div>
+            </div>
+            <span style="color:#c62828;font-weight:700;font-size:14px;min-width:38px">0%</span>
+        </div></td>
+        </tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

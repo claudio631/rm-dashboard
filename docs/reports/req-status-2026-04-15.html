@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Req Status — Apr 15, 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #f5f5f5; }
+  .header { background: #1a1a2e; color: white; padding: 16px 24px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
+  .header h1 { font-size: 18px; font-weight: 600; }
+  .header .subtitle { font-size: 12px; opacity: 0.7; }
+  .container { padding: 16px; }
+  .legend { display: flex; gap: 20px; margin-bottom: 16px; font-size: 12px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #ccc; }
+  .table-wrap { overflow: auto; max-height: calc(100vh - 120px); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  table { border-collapse: collapse; width: 100%; min-width: 900px; background: white; }
+  thead tr { background: #1a1a2e; color: white; position: sticky; top: 0; z-index: 10; }
+  thead th { padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  tbody td { padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+  tbody tr:hover { filter: brightness(0.97); }
+  .num { font-size: 15px; font-weight: bold; }
+  .stats { display: flex; gap: 16px; margin-bottom: 16px; }
+  .stat-card { background: white; border-radius: 8px; padding: 16px 20px; flex: 1; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .stat-card .value { font-size: 28px; font-weight: 700; color: #1a1a2e; }
+  .stat-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>Requisition Status — Apr 15, 2026</h1>
+    <div class="subtitle">Active reqs (open + auto-paused + draft) · All markets · Sorted by RSVPs ascending</div>
+  </div>
+  <div style="font-size:12px; opacity:0.7;">vs Apr 8 (last week)</div>
+</div>
+<div class="container">
+<div class="stats">
+  <div class="stat-card"><div class="value">69</div><div class="label">Active Role Groups</div></div>
+  <div class="stat-card"><div class="value">119</div><div class="label">Open Reqs</div></div>
+  <div class="stat-card"><div class="value">35</div><div class="label">Auto-Paused</div></div>
+  <div class="stat-card"><div class="value">8</div><div class="label">Draft</div></div>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:#fff0f0; border-color:#ffcccc;"></div><span>RSVPs &lt; 50 (critical)</span></div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fff8e6; border-color:#ffdd99;"></div><span>RSVPs 50–99 (watch)</span></div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fffde7; border-color:#ffee88;"></div><span>Draft / Auto-Paused present</span></div>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+  <tr>
+    <th>State</th><th>Metro</th><th>Client</th><th>Role</th>
+    <th>RSVPs</th><th>Last Wk RSVPs</th><th>Target</th><th>Fill%</th>
+    <th>Open</th><th>Auto-Paused</th><th>Draft</th><th>Total</th>
+  </tr>
+</thead>
+<tbody>
+
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Manor</td>
+      <td>POK-E-JO'S SMOKEHOUSE, INC.</td>
+      <td>Server</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>—</td>
+      <td>40</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>FL</td>
+      <td>Tampa</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>—</td>
+      <td>120</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Austin</td>
+      <td>Austin Arena Company, LLC</td>
+      <td>Hospitality General Labor</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>—</td>
+      <td>140</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TN</td>
+      <td>Nashville</td>
+      <td>Lettuce Entertain You Enterprises, Inc</td>
+      <td>Hospitality General Labor</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>—</td>
+      <td>100</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>FL</td>
+      <td>Boca Raton</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>—</td>
+      <td>100</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>FL</td>
+      <td>Hollywood</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>0</td>
+      <td>60</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>OH</td>
+      <td>Grove City</td>
+      <td>CTDI</td>
+      <td>Industrial General Labor</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>0</td>
+      <td>80</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>NJ</td>
+      <td>Dayton</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>0</td>
+      <td>520</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style="">0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Lancaster</td>
+      <td>Johnstone Supply</td>
+      <td>Forklift Driver</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>29</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Levy Restaurants</td>
+      <td>Server</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>0</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>NJ</td>
+      <td>Logan Township</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>0</td>
+      <td>400</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>1</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Fort Worth</td>
+      <td>Levy Restaurants</td>
+      <td>Server</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>—</td>
+      <td>40</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>OH</td>
+      <td>West Chester</td>
+      <td>AFC Industries</td>
+      <td>Assembler</td>
+      <td style="color:#cc0000; font-weight:bold;">0</td>
+      <td>0</td>
+      <td>80</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Levy Restaurants</td>
+      <td>Bartender</td>
+      <td style="color:#cc0000; font-weight:bold;">1</td>
+      <td>0</td>
+      <td>220</td>
+      <td style="color:#cc0000;">0%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>KY</td>
+      <td>Hebron</td>
+      <td>Stord, Inc</td>
+      <td>Forklift Driver</td>
+      <td style="color:#cc0000; font-weight:bold;">3</td>
+      <td>2</td>
+      <td>50</td>
+      <td style="color:#cc0000;">6%</td>
+      <td>1</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Levy Restaurants</td>
+      <td>Prep Cook</td>
+      <td style="color:#cc0000; font-weight:bold;">4</td>
+      <td>3</td>
+      <td>300</td>
+      <td style="color:#cc0000;">1%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TN</td>
+      <td>Mt. Juliet</td>
+      <td>CTDI</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">4</td>
+      <td>19</td>
+      <td>200</td>
+      <td style="color:#cc0000;">2%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Dishwasher</td>
+      <td style="color:#cc0000; font-weight:bold;">4</td>
+      <td>—</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Legends Hospitality</td>
+      <td>Line Cook</td>
+      <td style="color:#cc0000; font-weight:bold;">5</td>
+      <td>—</td>
+      <td>200</td>
+      <td style="color:#cc0000;">2%</td>
+      <td>2</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Austin</td>
+      <td>Chartwells Higher Education</td>
+      <td>Cashier</td>
+      <td style="color:#cc0000; font-weight:bold;">7</td>
+      <td>2</td>
+      <td>300</td>
+      <td style="color:#cc0000;">2%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TN</td>
+      <td>La Vergne</td>
+      <td>Ingram Content Group</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">8</td>
+      <td>38</td>
+      <td>100</td>
+      <td style="color:#cc0000;">8%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Legends Hospitality</td>
+      <td>Hospitality Team lead</td>
+      <td style="color:#cc0000; font-weight:bold;">8</td>
+      <td>30</td>
+      <td>100</td>
+      <td style="color:#cc0000;">8%</td>
+      <td>1</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>CORT</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">9</td>
+      <td>—</td>
+      <td>600</td>
+      <td style="color:#cc0000;">2%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">3</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Bartender</td>
+      <td style="color:#cc0000; font-weight:bold;">9</td>
+      <td>—</td>
+      <td>100</td>
+      <td style="color:#cc0000;">9%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>NV</td>
+      <td>Reno</td>
+      <td>Continental Battery Systems, Inc.</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">10</td>
+      <td>10</td>
+      <td>400</td>
+      <td style="color:#cc0000;">2%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Prep Cook</td>
+      <td style="color:#cc0000; font-weight:bold;">10</td>
+      <td>52</td>
+      <td>100</td>
+      <td style="color:#cc0000;">10%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>WA</td>
+      <td>Washington</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">13</td>
+      <td>5</td>
+      <td>800</td>
+      <td style="color:#cc0000;">2%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Hospitality Team lead</td>
+      <td style="color:#cc0000; font-weight:bold;">16</td>
+      <td>0</td>
+      <td>100</td>
+      <td style="color:#cc0000;">16%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>OH</td>
+      <td>Middleburg Heights</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">17</td>
+      <td>73</td>
+      <td>400</td>
+      <td style="color:#cc0000;">4%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>NV</td>
+      <td>McCarran</td>
+      <td>Stord, Inc</td>
+      <td>Picker Packer</td>
+      <td style="color:#cc0000; font-weight:bold;">17</td>
+      <td>11</td>
+      <td>400</td>
+      <td style="color:#cc0000;">4%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>KY</td>
+      <td>Hebron</td>
+      <td>Stord, Inc</td>
+      <td>Picker Packer</td>
+      <td style="color:#cc0000; font-weight:bold;">17</td>
+      <td>—</td>
+      <td>100</td>
+      <td style="color:#cc0000;">17%</td>
+      <td>1</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>GA</td>
+      <td>Mcdonough</td>
+      <td>Continental Battery Systems, Inc.</td>
+      <td>Forklift Driver</td>
+      <td style="color:#cc0000; font-weight:bold;">20</td>
+      <td>20</td>
+      <td>80</td>
+      <td style="color:#cc0000;">25%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Bolingbrook</td>
+      <td>CORT</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">21</td>
+      <td>—</td>
+      <td>800</td>
+      <td style="color:#cc0000;">3%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Concession Stand Worker</td>
+      <td style="color:#cc0000; font-weight:bold;">22</td>
+      <td>0</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Server</td>
+      <td style="color:#cc0000; font-weight:bold;">22</td>
+      <td>0</td>
+      <td>140</td>
+      <td style="color:#cc0000;">16%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">2</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TN</td>
+      <td>Nashville</td>
+      <td>Lettuce Entertain You Enterprises, Inc</td>
+      <td>Dishwasher</td>
+      <td style="color:#cc0000; font-weight:bold;">24</td>
+      <td>46</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>NV</td>
+      <td>Sparks</td>
+      <td>Stord, Inc</td>
+      <td>Picker Packer</td>
+      <td style="color:#cc0000; font-weight:bold;">24</td>
+      <td>24</td>
+      <td>100</td>
+      <td style="color:#cc0000;">24%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TN</td>
+      <td>Nashville</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">25</td>
+      <td>43</td>
+      <td>400</td>
+      <td style="color:#cc0000;">6%</td>
+      <td>2</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>NC</td>
+      <td>Charlotte</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">30</td>
+      <td>108</td>
+      <td>600</td>
+      <td style="color:#cc0000;">5%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>TN</td>
+      <td>Lebanon</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="color:#cc0000; font-weight:bold;">45</td>
+      <td>3</td>
+      <td>400</td>
+      <td style="color:#cc0000;">11%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>Levy Restaurants</td>
+      <td>Event Staff</td>
+      <td style="color:#cc0000; font-weight:bold;">47</td>
+      <td>—</td>
+      <td>100</td>
+      <td style="color:#cc7700;">47%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>IL</td>
+      <td>Chicago</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="color:#cc0000; font-weight:bold;">48</td>
+      <td>7</td>
+      <td>200</td>
+      <td style="color:#cc0000;">24%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff0f0;">
+      <td>KY</td>
+      <td>Hebron</td>
+      <td>Stord, Inc</td>
+      <td>Industrial General Labor</td>
+      <td style="color:#cc0000; font-weight:bold;">49</td>
+      <td>37</td>
+      <td>120</td>
+      <td style="color:#cc7700;">41%</td>
+      <td>2</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>OH</td>
+      <td>Cincinnati</td>
+      <td>Tennant Solutions</td>
+      <td>Picker Packer</td>
+      <td style="">55</td>
+      <td>—</td>
+      <td>100</td>
+      <td style="color:#cc7700;">55%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>TX</td>
+      <td>Carrollton</td>
+      <td>Jayna</td>
+      <td>Machine Operator</td>
+      <td style="">56</td>
+      <td>—</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>2</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>KY</td>
+      <td>Hebron</td>
+      <td>Stord, Inc</td>
+      <td>Warehouse Operative</td>
+      <td style="">57</td>
+      <td>55</td>
+      <td>120</td>
+      <td style="color:#cc7700;">48%</td>
+      <td>1</td>
+      <td style=" background:#fffde7;">2</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>NV</td>
+      <td>Las Vegas</td>
+      <td>Stord, Inc</td>
+      <td>Picker Packer</td>
+      <td style="">60</td>
+      <td>44</td>
+      <td>1460</td>
+      <td style="color:#cc0000;">4%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>TX</td>
+      <td>Irving</td>
+      <td>Green Worldwide Shipping</td>
+      <td>Forklift Driver</td>
+      <td style="">60</td>
+      <td>18</td>
+      <td>60</td>
+      <td style="color:#00aa00;">100%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>TX</td>
+      <td>Arlington</td>
+      <td>Smurfit Kappa</td>
+      <td>Forklift Driver</td>
+      <td style="">64</td>
+      <td>60</td>
+      <td>80</td>
+      <td style="color:#00aa00;">80%</td>
+      <td>1</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#fff8e6;">
+      <td>TN</td>
+      <td>Nashville</td>
+      <td>Solaren Risk Management</td>
+      <td>Event Staff</td>
+      <td style="">97</td>
+      <td>60</td>
+      <td>300</td>
+      <td style="color:#cc7700;">32%</td>
+      <td>5</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>5</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>OH</td>
+      <td>Lockbourne</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="">100</td>
+      <td>100</td>
+      <td>100</td>
+      <td style="color:#00aa00;">100%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>TX</td>
+      <td>Flower Mound</td>
+      <td>CTDI</td>
+      <td>Warehouse Operative</td>
+      <td style="">101</td>
+      <td>84</td>
+      <td>165</td>
+      <td style="color:#cc7700;">61%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>GA</td>
+      <td>Hapeville</td>
+      <td>Merritt Hospitality LLC</td>
+      <td>Barista</td>
+      <td style="">101</td>
+      <td>68</td>
+      <td>100</td>
+      <td style="color:#00aa00;">101%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Culinaire</td>
+      <td>Server</td>
+      <td style="">124</td>
+      <td>88</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>FL</td>
+      <td>Orlando</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="">150</td>
+      <td>4</td>
+      <td>800</td>
+      <td style="color:#cc0000;">19%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">4</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>GA</td>
+      <td>Atlanta</td>
+      <td>Stord, Inc</td>
+      <td>Forklift Driver</td>
+      <td style="">150</td>
+      <td>119</td>
+      <td>150</td>
+      <td style="color:#00aa00;">100%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">2</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>NV</td>
+      <td>Reno</td>
+      <td>Stord, Inc</td>
+      <td>Picker Packer</td>
+      <td style="">168</td>
+      <td>134</td>
+      <td>700</td>
+      <td style="color:#cc0000;">24%</td>
+      <td>6</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>6</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>NJ</td>
+      <td>Paulsboro</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="">168</td>
+      <td>119</td>
+      <td>400</td>
+      <td style="color:#cc7700;">42%</td>
+      <td>3</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>PA</td>
+      <td>Chester</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="">184</td>
+      <td>153</td>
+      <td>300</td>
+      <td style="color:#cc7700;">61%</td>
+      <td>1</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>NJ</td>
+      <td>South Brunswick</td>
+      <td>OnTrac Final Mile</td>
+      <td>Warehouse Operative</td>
+      <td style="">185</td>
+      <td>147</td>
+      <td>500</td>
+      <td style="color:#cc7700;">37%</td>
+      <td>4</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>5</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>OH</td>
+      <td>Grove City</td>
+      <td>CTDI</td>
+      <td>Material Handler</td>
+      <td style="">290</td>
+      <td>116</td>
+      <td>900</td>
+      <td style="color:#cc7700;">32%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>TX</td>
+      <td>Dallas</td>
+      <td>Legends Hospitality</td>
+      <td>Concession Stand Worker</td>
+      <td style="">321</td>
+      <td>226</td>
+      <td>1800</td>
+      <td style="color:#cc0000;">18%</td>
+      <td>4</td>
+      <td style=" background:#fffde7;">2</td>
+      <td style="">0</td>
+      <td>6</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>TX</td>
+      <td>Haslet</td>
+      <td>CTDI</td>
+      <td>Warehouse Operative</td>
+      <td style="">323</td>
+      <td>325</td>
+      <td>400</td>
+      <td style="color:#00aa00;">81%</td>
+      <td>4</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>4</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>IL</td>
+      <td>Bedford Park</td>
+      <td>Power Stop</td>
+      <td>Warehouse Operative</td>
+      <td style="">347</td>
+      <td>294</td>
+      <td>400</td>
+      <td style="color:#00aa00;">87%</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>TX</td>
+      <td>Austin</td>
+      <td>CORT</td>
+      <td>Assembler</td>
+      <td style="">351</td>
+      <td>300</td>
+      <td>100</td>
+      <td style="color:#00aa00;">351%</td>
+      <td>2</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>TX</td>
+      <td>Houston</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="">468</td>
+      <td>366</td>
+      <td>600</td>
+      <td style="color:#00aa00;">78%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>GA</td>
+      <td>Atlanta</td>
+      <td>Stord, Inc</td>
+      <td>Picker Packer</td>
+      <td style="">618</td>
+      <td>512</td>
+      <td>700</td>
+      <td style="color:#00aa00;">88%</td>
+      <td>1</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>2</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>NV</td>
+      <td>Las Vegas</td>
+      <td>CORT</td>
+      <td>Loader / Crew</td>
+      <td style="">687</td>
+      <td>600</td>
+      <td>940</td>
+      <td style="color:#00aa00;">73%</td>
+      <td>3</td>
+      <td style="">0</td>
+      <td style="">0</td>
+      <td>3</td>
+    </tr>
+    <tr style="background:#ffffff;">
+      <td>GA</td>
+      <td>Atlanta</td>
+      <td>CORT</td>
+      <td>Assembler</td>
+      <td style="">700</td>
+      <td>700</td>
+      <td>—</td>
+      <td style="color:#cc0000;">—</td>
+      <td>0</td>
+      <td style=" background:#fffde7;">1</td>
+      <td style="">0</td>
+      <td>1</td>
+    </tr>
+</tbody>
+</table>
+</div>
+</div>
+</body>
+</html>
