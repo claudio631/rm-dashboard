@@ -1,0 +1,32 @@
+last_updated,requisition_id,job_id,job_title,agency,client,location,pay_rate_min,pay_rate_max,pay_type,rsvps,target_rsvps,status
+2026-05-31T23:44:33.903809-05:00,FLEX-26297,10152215529,Loader / Crew,Indeed,Indeed Flex Applications,"Fort Worth, TX",18.0,18.0,PayType.HOURLY,0,100,draft
+2026-05-31T23:44:34.970886-05:00,FLEX-26286,10152214893,Warehouse Operative,Indeed,OnTrac Final Mile,"Groveport, OH",18.0,18.0,PayType.HOURLY,0,140,draft
+2026-05-31T23:44:27.181612-05:00,FLEX-26277,10152214900,Cleaner,Indeed,Indeed Flex Applications,"Atlanta, GA",16.0,16.0,PayType.HOURLY,0,40,draft
+2026-05-29T00:08:34.408267-05:00,FLEX-26236,10149392253,Warehouse Operative,Indeed,OnTrac Final Mile,"Dayton, NJ",17.5,17.5,PayType.HOURLY,0,320,draft
+2026-05-29T00:08:35.902549-05:00,FLEX-26235,10149392252,Warehouse Operative,Indeed,Mattress Firm,"Louisville, KY",17.0,17.0,PayType.HOURLY,0,80,draft
+2026-05-29T00:08:44.848336-05:00,FLEX-26229,10149392257,Barista,Indeed,Indeed Flex Applications,"Chicago, IL",18.0,19.0,PayType.HOURLY,0,60,draft
+2026-05-29T00:08:45.543856-05:00,FLEX-26225,10149392258,Line Cook,Indeed,Legends Hospitality,"Irving, TX",17.0,17.0,PayType.HOURLY,0,220,draft
+2026-05-29T00:08:13.657238-05:00,FLEX-26222,10149391465,Assembler,Indeed,Indeed Flex Applications,"West Chester Oh, OH",16.5,17.0,PayType.HOURLY,0,80,draft
+2026-05-29T00:08:11.005172-05:00,FLEX-26218,10149391466,Picker Packer,Indeed,Indeed Flex Applications,"North Las Vegas, NV",16.25,18.0,PayType.HOURLY,0,320,draft
+2026-05-28T00:07:20.847084-05:00,FLEX-26194,10147939431,Warehouse Operative,Indeed,KEX Express (US) LLC,"Bensenville, IL",12.0,12.0,PayType.HOURLY,0,120,draft
+2026-05-26T23:57:34.394023-05:00,FLEX-26148,10146373525,FM General Labor,Indeed,"Stord, Inc","North Las Vegas, NV",16.25,16.25,PayType.HOURLY,0,40,draft
+2026-05-26T23:57:33.710788-05:00,FLEX-26146,10146372662,Dishwasher,Indeed,Indeed Flex Applications,"Austin, TX",16.0,18.0,PayType.HOURLY,0,60,draft
+2026-05-26T23:57:34.382735-05:00,FLEX-26142,10146372665,Warehouse Operative,Indeed,Indeed Flex Applications,"Fort Mill, SC",18.0,18.0,PayType.HOURLY,0,60,draft
+2026-05-26T23:57:44.301849-05:00,FLEX-26140,10146372670,Warehouse Operative,Indeed,Indeed Flex Applications,"Hamilton Township, NJ",18.0,18.0,PayType.HOURLY,0,60,draft
+2026-05-26T23:57:47.520731-05:00,FLEX-26137,10146372654,Server,Indeed,Indeed Flex Applications,"Austin, TX",12.0,17.0,PayType.HOURLY,0,40,draft
+2026-05-26T23:57:47.539343-05:00,FLEX-26116,10146372674,Warehouse Operative,Indeed,Indeed Flex Applications,"Austin, TX",18.0,18.0,PayType.HOURLY,0,80,draft
+2026-05-21T23:58:04.660465-05:00,FLEX-26023,10142491459,Warehouse Operative,Indeed,"Stord, Inc","Hebron, KY",15.5,15.5,PayType.HOURLY,0,60,draft
+2026-05-20T00:25:10.694665-05:00,FLEX-25975,10140123313,Bartender,Indeed,Indeed Flex Applications,"Chicago, IL",18.0,22.0,PayType.HOURLY,0,180,draft
+2026-05-13T00:26:15.853876-05:00,FLEX-25815,10132736656,Loader / Crew,Indeed,CORT,"Columbus, OH",18.0,18.0,PayType.HOURLY,0,40,draft
+2026-05-12T00:17:02.228706-05:00,FLEX-25724,10131148853,Warehouse Operative,Indeed,Indeed Flex Applications,"Las Vegas, NV",17.25,17.25,PayType.HOURLY,0,80,draft
+2026-05-10T23:53:39.897434-05:00,FLEX-25703,10129549881,Busser,Indeed,Indeed Flex Applications,"Chicago, IL",18.0,18.0,PayType.HOURLY,0,60,draft
+2026-05-10T23:53:40.682326-05:00,FLEX-25698,10129549885,Concession Stand Worker,Indeed,Indeed Flex Applications,"Arlington, TX",15.0,15.0,PayType.HOURLY,0,100,draft
+2026-05-10T23:53:52.702679-05:00,FLEX-25697,10129549874,Warehouse Operative,Indeed,Indeed Flex Applications,"Charlotte, NC",18.0,18.0,PayType.HOURLY,0,40,draft
+2026-05-10T23:54:01.925383-05:00,FLEX-25694,10129549879,Hospitality General Labor,Indeed,Indeed Flex Applications,"Austin, TX",15.0,15.0,PayType.HOURLY,0,60,draft
+2026-05-10T23:53:49.969359-05:00,FLEX-25689,10129549588,Event Staff,Indeed,Indeed Flex Applications,"Austin, TX",18.0,18.0,PayType.HOURLY,0,780,draft
+2026-05-08T00:08:42.237190-05:00,FLEX-25670,10127199569,Loader / Crew,Indeed,Indeed Flex Applications,"Coppell, TX",17.0,17.0,PayType.HOURLY,0,40,draft
+2026-05-06T23:47:38.662501-05:00,FLEX-25650,10125591223,Warehouse Operative,Indeed,Carrier Enterprise,"Stratford, CT",22.0,22.0,PayType.HOURLY,0,100,draft
+2026-05-06T23:47:39.151497-05:00,FLEX-25649,10125591222,Picker Packer,Indeed,Indeed Flex Applications,"Las Vegas, NV",16.25,18.0,PayType.HOURLY,0,300,draft
+2026-05-06T23:47:52.465686-05:00,FLEX-25648,10125589992,Industrial Admin Assistant,Indeed,Indeed Flex Applications,"Atlanta, GA",20.0,20.0,PayType.HOURLY,0,40,draft
+2026-05-05T23:36:55.975653-05:00,FLEX-25637,10124309809,Assembler,Indeed,CORT,"Las Vegas, NV",16.0,16.0,PayType.HOURLY,0,160,draft
+2026-05-05T23:36:46.673824-05:00,FLEX-25628,10124308701,Picker Packer,Indeed,Indeed Flex Applications,"Hebron, KY",15.5,15.5,PayType.HOURLY,0,540,draft
