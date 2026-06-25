@@ -32,6 +32,15 @@ except ImportError:
     print("Error: openpyxl is required. Install with: pip3 install openpyxl")
     sys.exit(1)
 
+try:
+    from google.ads.googleads.client import GoogleAdsClient
+    GOOGLE_ADS_AVAILABLE = True
+except ImportError:
+    GOOGLE_ADS_AVAILABLE = False
+
+GOOGLE_ADS_YAML = str(Path(__file__).resolve().parent.parent.parent / "google-ads.yaml")
+US_ACCOUNT = "7236100723"
+
 
 # --- Configuration ---
 
@@ -132,9 +141,13 @@ def process_ob_funnel(filepath: Path, today: datetime) -> dict:
     comp_col = next((i for i, d in date_cols.items() if d == comparison_date), None)
 
     # Parse rows
+    # Structure: col0=client, col1=location, col2=segment(Total/role), col3=metric, col4+=dates
     current_client = None
     current_location = None
+    current_segment = None  # carries forward: "Total", "Loader / Crew", etc.
     results = {}
+    # Track first-occurrence per (client, location, metric) to skip second Total blocks
+    seen = set()
 
     for row in ws.iter_rows(min_row=2, values_only=True):
         vals = list(row)
@@ -142,12 +155,22 @@ def process_ob_funnel(filepath: Path, today: datetime) -> dict:
             current_client = vals[0]
         if vals[1]:
             current_location = vals[1]
+        if vals[2] is not None:
+            current_segment = vals[2]  # update when non-None: "Total", "Loader / Crew", etc.
         if not current_client or not current_location:
             continue
 
-        metric = vals[2]
+        if current_segment != "Total":
+            continue
+
+        metric = vals[3]  # actual metric name
         if metric not in ("Worker Accounts Created", "1st Role Verified (# Workers)"):
             continue
+
+        dedup_key = (current_client, current_location, metric)
+        if dedup_key in seen:
+            continue  # skip second Total block for same (client, location, metric)
+        seen.add(dedup_key)
 
         key = (current_client, current_location)
         if key not in results:
@@ -254,11 +277,55 @@ def format_section1(data: dict) -> str:
 # --- Section 2: Indeed Spend ---
 
 def process_indeed_spend(filepath: Path) -> float:
-    """Sum the Spend column from JobsCampaigns CSV."""
+    """Sum the Spend column from JobsCampaigns CSV, current month only.
+
+    Parses start/end dates from the filename:
+      JobsCampaigns_YYYYMMDD_YYYYMMDD.csv
+
+    - If both dates are in a prior month → file has no current-month data → return 0.
+    - If the file starts in the current month → all rows are MTD → sum everything.
+    - If the file spans months (start = prior, end = current) → filter by campaign
+      name: include only campaigns whose first 8-digit date is in the current month,
+      plus campaigns with no date in the name.
+    """
+    import re as _re
+    today = datetime.now()
+    current_ym = today.strftime("%Y%m")  # e.g. "202606"
+
+    # Parse start and end dates from filename
+    fname = filepath.stem  # e.g. "JobsCampaigns_20260501_20260526"
+    m = _re.match(r"JobsCampaigns_(\d{6})\d{2}_(\d{6})\d{2}", fname)
+    file_start_ym = m.group(1) if m else None   # "202605"
+    file_end_ym   = m.group(2) if m else None   # "202605"
+
+    # File is entirely in a prior month — no current-month data at all
+    if file_end_ym and file_end_ym < current_ym:
+        print(f"Warning: {filepath.name} only covers through {file_end_ym[:4]}-{file_end_ym[4:]} "
+              f"— no {today.strftime('%B %Y')} data. Indeed June spend shown as $0.00. "
+              f"Download a JobsCampaigns_{current_ym}01_*.csv for accurate figures.")
+        return 0.0
+
+    is_current_month_file = file_start_ym == current_ym
+
+    # Pattern to find the first 8-digit date in a campaign name
+    date_in_name = _re.compile(r"(\d{8})")
+
     total = 0.0
     with open(filepath, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            if not is_current_month_file:
+                # Spans months: only include campaigns whose first 8-digit date
+                # falls in the current month. Campaigns with NO date in the name
+                # are EXCLUDED — their spend spans the full file period, not just
+                # the current month, so including them inflates MTD figures.
+                campaign_name = row.get("Campaign Name", "") or row.get("Campaign", "") or ""
+                dates = date_in_name.findall(campaign_name)
+                if not dates:
+                    continue  # no date → can't attribute to current month → skip
+                first_date_ym = dates[0][:6]  # first 6 chars = YYYYMM
+                if first_date_ym != current_ym:
+                    continue  # started in a prior month → skip
             try:
                 total += float(row.get("Spend", 0))
             except (ValueError, TypeError):
@@ -266,30 +333,74 @@ def process_indeed_spend(filepath: Path) -> float:
     return total
 
 
-def load_last_spend() -> Optional[float]:
-    """Load last report spend from JSON file."""
+
+def save_current_spend(indeed_spend: float, google_ads_spend: Optional[float] = None):
+    """Save current spend for next report's comparison, preserving existing fields."""
+    SPEND_HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+    existing = {}
     if SPEND_HISTORY_FILE.exists():
         with open(SPEND_HISTORY_FILE, "r") as f:
-            data = json.load(f)
-            return data.get("last_spend")
-    return None
-
-
-def save_current_spend(spend: float):
-    """Save current spend for next report's comparison."""
-    SPEND_HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                existing = json.load(f)
+            except json.JSONDecodeError:
+                pass
+    existing["last_spend"] = indeed_spend
+    existing["last_spend_month"] = datetime.now().strftime("%Y-%m")
+    existing["updated_at"] = datetime.now().isoformat()
+    if google_ads_spend is not None:
+        existing["last_google_ads_spend"] = google_ads_spend
     with open(SPEND_HISTORY_FILE, "w") as f:
-        json.dump({"last_spend": spend, "updated_at": datetime.now().isoformat()}, f, indent=2)
+        json.dump(existing, f, indent=2)
 
 
-def format_section2(current_spend: float, last_spend: Optional[float]) -> str:
-    """Format Indeed spend comparison line."""
+def get_google_ads_spend_mtd() -> Optional[float]:
+    """Pull MTD spend from Google Ads API for US account."""
+    if not GOOGLE_ADS_AVAILABLE:
+        print("Warning: google-ads library not installed. Skipping Google Ads spend.")
+        return None
+    if not Path(GOOGLE_ADS_YAML).exists():
+        print(f"Warning: {GOOGLE_ADS_YAML} not found. Skipping Google Ads spend.")
+        return None
+    try:
+        client = GoogleAdsClient.load_from_storage(GOOGLE_ADS_YAML)
+        ga_service = client.get_service("GoogleAdsService")
+        today = datetime.now()
+        month_start = today.replace(day=1).strftime("%Y-%m-%d")
+        today_str = today.strftime("%Y-%m-%d")
+        query = f"""
+            SELECT metrics.cost_micros
+            FROM campaign
+            WHERE segments.date BETWEEN '{month_start}' AND '{today_str}'
+              AND campaign.status != 'REMOVED'
+        """
+        response = ga_service.search(customer_id=US_ACCOUNT, query=query)
+        total_micros = sum(row.metrics.cost_micros for row in response)
+        return total_micros / 1_000_000
+    except Exception as e:
+        print(f"Warning: Google Ads API error: {e}")
+        return None
+
+
+def format_section2(current_spend: float, last_spend: Optional[float],
+                    google_spend: Optional[float], last_google_spend: Optional[float]) -> str:
+    """Format Indeed and Google Ads spend lines."""
     month_name = datetime.now().strftime("%B")
-    line = f"*Indeed Spend Comparison:* Indeed {month_name} so far: ${current_spend:,.2f}"
+    lines = []
+    indeed_line = f"*Indeed Spend Comparison:* Indeed {month_name} so far: ${current_spend:,.2f}"
     if last_spend is not None:
         delta = current_spend - last_spend
-        line += f" (+${delta:,.2f} since last report)"
-    return line
+        indeed_line += f" (+${delta:,.2f} since last report)"
+    lines.append(indeed_line)
+
+    if google_spend is not None:
+        google_line = f"*Google Ads Spend:* Google Ads {month_name} so far: ${google_spend:,.2f}"
+        if last_google_spend is not None:
+            delta = google_spend - last_google_spend
+            google_line += f" (+${delta:,.2f} since last report)"
+        lines.append(google_line)
+
+    return "\n".join(lines)
+
 
 
 # --- Section 3: Open Campaigns ---
@@ -325,9 +436,12 @@ def format_section3(data: dict) -> str:
     """Format open campaigns section."""
     lines = ["*Open Campaigns (Status: Open Only)*", ""]
     for client in sorted(data.keys()):
-        locations = sorted(data[client])
+        locations = [l for l in sorted(data[client]) if l.strip()]
+        if not locations:
+            continue
         lines.append(f"{client}: {'; '.join(locations)}")
-    return "\n".join(lines)
+        lines.append("")
+    return "\n".join(lines).rstrip()
 
 
 # --- Main ---
@@ -351,10 +465,29 @@ def generate_report(downloads_dir: Path) -> str:
     ob_data = process_ob_funnel(files["ob_funnel"], today)
     section1 = format_section1(ob_data)
 
-    # Section 2: Indeed Spend
+    # Section 2: Indeed Spend + Google Ads
     current_spend = process_indeed_spend(files["jobs_campaigns"])
-    last_spend = load_last_spend()
-    section2 = format_section2(current_spend, last_spend)
+    spend_history = {}
+    if SPEND_HISTORY_FILE.exists():
+        with open(SPEND_HISTORY_FILE, "r") as f:
+            try:
+                spend_history = json.load(f)
+            except json.JSONDecodeError:
+                pass
+    # Only use last_spend for delta if it's from the same calendar month
+    current_month = datetime.now().strftime("%Y-%m")
+    stored_month = spend_history.get("last_spend_month", "")
+    last_spend = spend_history.get("last_spend") if stored_month == current_month else None
+    last_google_spend = spend_history.get("last_google_ads_spend")
+
+    print("Pulling Google Ads MTD spend from API...")
+    google_spend = get_google_ads_spend_mtd()
+    if google_spend is not None:
+        print(f"Google Ads MTD spend: ${google_spend:,.2f}")
+    else:
+        print("Google Ads spend unavailable — skipping from report.")
+
+    section2 = format_section2(current_spend, last_spend, google_spend, last_google_spend)
 
     # Section 3: Open Campaigns
     req_data = process_requisitions(files["requisitions"])
@@ -372,7 +505,7 @@ def generate_report(downloads_dir: Path) -> str:
     )
 
     # Save spend for next run
-    save_current_spend(current_spend)
+    save_current_spend(current_spend, google_spend)
 
     return report
 
